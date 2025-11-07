@@ -59,15 +59,20 @@ const Footer = () => {
             <ul className="space-y-3">
               <li className="flex items-start gap-2 text-sm text-muted-foreground">
                 <MapPin className="h-4 w-4 mt-0.5 text-primary flex-shrink-0" />
-                <span>Bamenda, Cameroon</span>
+                <div className="flex flex-col gap-1">
+                  <span>Buea, CM (Main)</span>
+                  <span>Douala, CM (Branch)</span>
+                  <span>Yaoundé, CM (Branch)</span>
+                  <span>Online</span>
+                </div>
               </li>
               <li className="flex items-center gap-2 text-sm text-muted-foreground">
                 <Phone className="h-4 w-4 text-primary" />
-                <span>+237 XXX XXX XXX</span>
+                <span>+237 678 88 10 39</span>
               </li>
               <li className="flex items-center gap-2 text-sm text-muted-foreground">
                 <Mail className="h-4 w-4 text-primary" />
-                <span>info@mtechacademy.cm</span>
+                <span>admin@mtecsolutions.org</span>
               </li>
             </ul>
           </div>
