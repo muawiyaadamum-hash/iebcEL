@@ -10,12 +10,34 @@ export const courses: Course[] = [
     level: 'Beginner',
     price: 15000,
     image: '/placeholder.svg',
+    learningOutcomes: [
+      'Create responsive websites using HTML5 and CSS3',
+      'Apply modern UI/UX design principles',
+      'Use professional design tools like Figma',
+      'Build a professional portfolio website',
+      'Understand web accessibility standards'
+    ],
     modules: [
-      'HTML & CSS Fundamentals',
-      'Responsive Design',
-      'UI/UX Principles',
-      'Design Tools (Figma)',
-      'Portfolio Project'
+      {
+        title: 'HTML & CSS Fundamentals',
+        topics: ['HTML Structure', 'CSS Styling', 'Box Model', 'Flexbox & Grid']
+      },
+      {
+        title: 'Responsive Design',
+        topics: ['Mobile-First Approach', 'Media Queries', 'Responsive Images']
+      },
+      {
+        title: 'UI/UX Principles',
+        topics: ['User Research', 'Wireframing', 'Design Systems', 'Accessibility']
+      },
+      {
+        title: 'Design Tools (Figma)',
+        topics: ['Interface Basics', 'Components', 'Prototyping', 'Collaboration']
+      },
+      {
+        title: 'Portfolio Project',
+        topics: ['Project Planning', 'Implementation', 'Deployment', 'Portfolio Presentation']
+      }
     ],
     featured: true
   },
@@ -28,12 +50,34 @@ export const courses: Course[] = [
     level: 'Beginner',
     price: 15000,
     image: '/placeholder.svg',
+    learningOutcomes: [
+      'Master Adobe Photoshop and Illustrator',
+      'Create professional brand identities',
+      'Design logos and marketing materials',
+      'Work with typography and color theory',
+      'Build a professional design portfolio'
+    ],
     modules: [
-      'Design Fundamentals',
-      'Adobe Photoshop',
-      'Adobe Illustrator',
-      'Brand Identity Design',
-      'Client Projects'
+      {
+        title: 'Design Fundamentals',
+        topics: ['Color Theory', 'Typography', 'Composition', 'Visual Hierarchy']
+      },
+      {
+        title: 'Adobe Photoshop',
+        topics: ['Interface & Tools', 'Layers & Masks', 'Photo Editing', 'Digital Art']
+      },
+      {
+        title: 'Adobe Illustrator',
+        topics: ['Vector Graphics', 'Pen Tool', 'Shapes & Paths', 'Logo Design']
+      },
+      {
+        title: 'Brand Identity Design',
+        topics: ['Brand Strategy', 'Logo Creation', 'Brand Guidelines', 'Marketing Materials']
+      },
+      {
+        title: 'Client Projects',
+        topics: ['Client Communication', 'Project Workflow', 'Revisions', 'Final Delivery']
+      }
     ],
     featured: true
   },
@@ -46,12 +90,34 @@ export const courses: Course[] = [
     level: 'Intermediate',
     price: 15000,
     image: '/placeholder.svg',
+    learningOutcomes: [
+      'Design and implement network infrastructures',
+      'Configure routers, switches, and firewalls',
+      'Troubleshoot network connectivity issues',
+      'Perform system maintenance and upgrades',
+      'Implement network security measures'
+    ],
     modules: [
-      'Network Fundamentals',
-      'TCP/IP & Protocols',
-      'Hardware Maintenance',
-      'Troubleshooting',
-      'Network Security'
+      {
+        title: 'Network Fundamentals',
+        topics: ['OSI Model', 'Network Topologies', 'IP Addressing', 'Subnetting']
+      },
+      {
+        title: 'TCP/IP & Protocols',
+        topics: ['TCP/IP Suite', 'DNS', 'DHCP', 'HTTP/HTTPS']
+      },
+      {
+        title: 'Hardware Maintenance',
+        topics: ['PC Assembly', 'Component Testing', 'Hardware Upgrades', 'Preventive Maintenance']
+      },
+      {
+        title: 'Troubleshooting',
+        topics: ['Diagnostic Tools', 'Problem Solving', 'System Recovery', 'Documentation']
+      },
+      {
+        title: 'Network Security',
+        topics: ['Firewall Configuration', 'VPN Setup', 'Security Best Practices', 'Monitoring']
+      }
     ]
   },
   {
@@ -63,12 +129,34 @@ export const courses: Course[] = [
     level: 'Intermediate',
     price: 15000,
     image: '/placeholder.svg',
+    learningOutcomes: [
+      'Install and configure CCTV systems',
+      'Select appropriate cameras for different scenarios',
+      'Set up recording and monitoring systems',
+      'Perform routine maintenance and repairs',
+      'Understand legal and privacy considerations'
+    ],
     modules: [
-      'CCTV System Basics',
-      'Camera Types & Selection',
-      'Installation Techniques',
-      'System Configuration',
-      'Maintenance & Troubleshooting'
+      {
+        title: 'CCTV System Basics',
+        topics: ['System Components', 'Analog vs IP Cameras', 'DVR/NVR Systems', 'Power Requirements']
+      },
+      {
+        title: 'Camera Types & Selection',
+        topics: ['Indoor/Outdoor Cameras', 'Resolution & Quality', 'Lens Selection', 'Night Vision']
+      },
+      {
+        title: 'Installation Techniques',
+        topics: ['Site Survey', 'Cable Running', 'Mounting', 'Cable Management']
+      },
+      {
+        title: 'System Configuration',
+        topics: ['Camera Settings', 'Recording Setup', 'Remote Access', 'Mobile App Setup']
+      },
+      {
+        title: 'Maintenance & Troubleshooting',
+        topics: ['Regular Maintenance', 'Common Issues', 'Testing Procedures', 'System Upgrades']
+      }
     ]
   },
   {
@@ -80,12 +168,34 @@ export const courses: Course[] = [
     level: 'Advanced',
     price: 15000,
     image: '/placeholder.svg',
+    learningOutcomes: [
+      'Identify and mitigate security threats',
+      'Perform penetration testing and vulnerability assessments',
+      'Implement security policies and procedures',
+      'Use cybersecurity tools and techniques',
+      'Understand ethical hacking principles'
+    ],
     modules: [
-      'Security Fundamentals',
-      'Threat Analysis',
-      'Penetration Testing',
-      'Ethical Hacking',
-      'Security Best Practices'
+      {
+        title: 'Security Fundamentals',
+        topics: ['CIA Triad', 'Security Principles', 'Risk Management', 'Compliance']
+      },
+      {
+        title: 'Threat Analysis',
+        topics: ['Threat Intelligence', 'Attack Vectors', 'Malware Analysis', 'Social Engineering']
+      },
+      {
+        title: 'Penetration Testing',
+        topics: ['Testing Methodology', 'Scanning Tools', 'Exploitation', 'Reporting']
+      },
+      {
+        title: 'Ethical Hacking',
+        topics: ['Reconnaissance', 'Web Application Testing', 'Network Exploitation', 'Post-Exploitation']
+      },
+      {
+        title: 'Security Best Practices',
+        topics: ['Incident Response', 'Security Monitoring', 'Defense Strategies', 'Security Awareness']
+      }
     ]
   },
   {
@@ -97,12 +207,34 @@ export const courses: Course[] = [
     level: 'Intermediate',
     price: 15000,
     image: '/placeholder.svg',
+    learningOutcomes: [
+      'Manage full recruitment lifecycle',
+      'Develop performance management systems',
+      'Handle employee relations effectively',
+      'Ensure HR legal compliance',
+      'Create HR policies and procedures'
+    ],
     modules: [
-      'HR Fundamentals',
-      'Recruitment & Selection',
-      'Performance Management',
-      'Employee Relations',
-      'HR Legal Compliance'
+      {
+        title: 'HR Fundamentals',
+        topics: ['HR Function Overview', 'HR Strategy', 'Organizational Structure', 'HR Metrics']
+      },
+      {
+        title: 'Recruitment & Selection',
+        topics: ['Job Analysis', 'Sourcing Candidates', 'Interview Techniques', 'Onboarding']
+      },
+      {
+        title: 'Performance Management',
+        topics: ['Goal Setting', 'Performance Reviews', 'Feedback', 'Development Plans']
+      },
+      {
+        title: 'Employee Relations',
+        topics: ['Communication', 'Conflict Resolution', 'Employee Engagement', 'Retention Strategies']
+      },
+      {
+        title: 'HR Legal Compliance',
+        topics: ['Employment Law', 'Labor Regulations', 'Documentation', 'Risk Management']
+      }
     ]
   },
   {
@@ -114,12 +246,34 @@ export const courses: Course[] = [
     level: 'Intermediate',
     price: 15000,
     image: '/placeholder.svg',
+    learningOutcomes: [
+      'Manage business operations effectively',
+      'Create financial reports and budgets',
+      'Develop strategic business plans',
+      'Lead teams and projects',
+      'Make data-driven business decisions'
+    ],
     modules: [
-      'Business Fundamentals',
-      'Operations Management',
-      'Financial Management',
-      'Strategic Planning',
-      'Leadership Skills'
+      {
+        title: 'Business Fundamentals',
+        topics: ['Business Models', 'Market Analysis', 'Business Ethics', 'Communication']
+      },
+      {
+        title: 'Operations Management',
+        topics: ['Process Optimization', 'Quality Management', 'Supply Chain', 'Project Management']
+      },
+      {
+        title: 'Financial Management',
+        topics: ['Accounting Basics', 'Budgeting', 'Financial Analysis', 'Cost Control']
+      },
+      {
+        title: 'Strategic Planning',
+        topics: ['SWOT Analysis', 'Goal Setting', 'Implementation', 'Performance Monitoring']
+      },
+      {
+        title: 'Leadership Skills',
+        topics: ['Team Building', 'Decision Making', 'Conflict Management', 'Change Management']
+      }
     ]
   },
   {
@@ -131,12 +285,34 @@ export const courses: Course[] = [
     level: 'Intermediate',
     price: 15000,
     image: '/placeholder.svg',
+    learningOutcomes: [
+      'Manage supply chain operations',
+      'Optimize transportation routes',
+      'Oversee warehouse operations',
+      'Implement inventory control systems',
+      'Use logistics management software'
+    ],
     modules: [
-      'Supply Chain Basics',
-      'Transportation Management',
-      'Warehouse Operations',
-      'Inventory Control',
-      'Logistics Technology'
+      {
+        title: 'Supply Chain Basics',
+        topics: ['Supply Chain Overview', 'Procurement', 'Supplier Management', 'Distribution']
+      },
+      {
+        title: 'Transportation Management',
+        topics: ['Mode Selection', 'Route Planning', 'Cost Optimization', 'Carrier Management']
+      },
+      {
+        title: 'Warehouse Operations',
+        topics: ['Layout Design', 'Receiving & Storage', 'Order Picking', 'Safety Standards']
+      },
+      {
+        title: 'Inventory Control',
+        topics: ['Inventory Methods', 'Stock Management', 'Forecasting', 'ABC Analysis']
+      },
+      {
+        title: 'Logistics Technology',
+        topics: ['WMS Systems', 'TMS Software', 'Tracking Systems', 'Automation']
+      }
     ]
   }
 ];

@@ -1,3 +1,8 @@
+export interface CourseModule {
+  title: string;
+  topics: string[];
+}
+
 export interface Course {
   id: string;
   title: string;
@@ -7,7 +12,8 @@ export interface Course {
   level: 'Beginner' | 'Intermediate' | 'Advanced';
   price: number;
   image: string;
-  modules: string[];
+  modules: CourseModule[];
+  learningOutcomes: string[];
   featured?: boolean;
 }
 

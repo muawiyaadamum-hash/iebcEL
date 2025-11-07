@@ -2,9 +2,11 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { courses } from "@/data/courses";
 import { useParams, Link, Navigate } from "react-router-dom";
-import { Clock, TrendingUp, CheckCircle2, ArrowRight } from "lucide-react";
+import { Clock, TrendingUp, CheckCircle2, ArrowRight, FileText, Award } from "lucide-react";
 
 const CourseDetail = () => {
   const { id } = useParams();
@@ -37,11 +39,11 @@ const CourseDetail = () => {
                   {course.title}
                 </h1>
                 
-                <p className="text-lg text-muted-foreground">
+                <p className="text-lg text-muted-foreground mb-6">
                   {course.description}
                 </p>
 
-                <div className="flex items-center gap-6 mt-6 text-muted-foreground">
+                <div className="flex items-center gap-6 text-muted-foreground">
                   <div className="flex items-center gap-2">
                     <Clock className="h-5 w-5" />
                     <span>{course.duration}</span>
@@ -49,6 +51,10 @@ const CourseDetail = () => {
                   <div className="flex items-center gap-2">
                     <TrendingUp className="h-5 w-5" />
                     <span>{course.modules.length} Modules</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <FileText className="h-5 w-5" />
+                    <span>PDF Format</span>
                   </div>
                 </div>
               </div>
@@ -61,23 +67,67 @@ const CourseDetail = () => {
                 />
               </div>
 
-              <div>
-                <h2 className="text-2xl font-bold mb-6">Course Modules</h2>
-                <div className="space-y-4">
-                  {course.modules.map((module, index) => (
-                    <div 
-                      key={index}
-                      className="flex items-start gap-3 p-4 rounded-lg bg-muted/30 border border-border"
-                    >
-                      <CheckCircle2 className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
-                      <div>
-                        <h3 className="font-semibold">Module {index + 1}</h3>
-                        <p className="text-muted-foreground">{module}</p>
+              {/* Tabs for Course Content */}
+              <Tabs defaultValue="modules" className="w-full">
+                <TabsList className="grid w-full grid-cols-2">
+                  <TabsTrigger value="modules">Course Modules</TabsTrigger>
+                  <TabsTrigger value="outcomes">Learning Outcomes</TabsTrigger>
+                </TabsList>
+                
+                <TabsContent value="modules" className="space-y-4 mt-6">
+                  <h2 className="text-2xl font-bold mb-4">What You'll Learn</h2>
+                  <p className="text-muted-foreground mb-6">
+                    This course is structured into comprehensive modules, each covering essential topics. 
+                    All materials are provided in PDF format for self-paced learning.
+                  </p>
+                  
+                  <Accordion type="single" collapsible className="w-full">
+                    {course.modules.map((module, index) => (
+                      <AccordionItem key={index} value={`module-${index}`}>
+                        <AccordionTrigger className="text-left">
+                          <div className="flex items-center gap-3">
+                            <div className="flex items-center justify-center w-8 h-8 rounded-full bg-primary/10 text-primary font-semibold text-sm flex-shrink-0">
+                              {index + 1}
+                            </div>
+                            <div>
+                              <h3 className="font-semibold">{module.title}</h3>
+                            </div>
+                          </div>
+                        </AccordionTrigger>
+                        <AccordionContent>
+                          <div className="pl-11 space-y-2">
+                            {module.topics.map((topic, topicIndex) => (
+                              <div key={topicIndex} className="flex items-start gap-2 py-2">
+                                <CheckCircle2 className="h-4 w-4 text-primary flex-shrink-0 mt-0.5" />
+                                <span className="text-muted-foreground text-sm">{topic}</span>
+                              </div>
+                            ))}
+                          </div>
+                        </AccordionContent>
+                      </AccordionItem>
+                    ))}
+                  </Accordion>
+                </TabsContent>
+                
+                <TabsContent value="outcomes" className="space-y-4 mt-6">
+                  <h2 className="text-2xl font-bold mb-4">What You Will Learn in This Course</h2>
+                  <p className="text-muted-foreground mb-6">
+                    Upon completing this course, you will have gained the following skills and knowledge:
+                  </p>
+                  
+                  <div className="grid md:grid-cols-2 gap-4">
+                    {course.learningOutcomes.map((outcome, index) => (
+                      <div 
+                        key={index}
+                        className="flex items-start gap-3 p-4 rounded-lg bg-muted/30 border border-border hover:border-primary/50 transition-colors"
+                      >
+                        <CheckCircle2 className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
+                        <p className="text-sm">{outcome}</p>
                       </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
+                    ))}
+                  </div>
+                </TabsContent>
+              </Tabs>
             </div>
 
             <div>
@@ -103,6 +153,10 @@ const CourseDetail = () => {
                       </li>
                       <li className="flex items-center gap-2 text-sm">
                         <CheckCircle2 className="h-4 w-4 text-primary" />
+                        <span>PDF course materials</span>
+                      </li>
+                      <li className="flex items-center gap-2 text-sm">
+                        <CheckCircle2 className="h-4 w-4 text-primary" />
                         <span>Certificate of completion</span>
                       </li>
                       <li className="flex items-center gap-2 text-sm">
@@ -119,9 +173,12 @@ const CourseDetail = () => {
                     </Button>
                   </Link>
 
-                  <div className="text-center text-sm text-muted-foreground">
-                    <p>Registration fee: 5,000 XAF</p>
-                    <p className="mt-1">Required before enrolling</p>
+                  <div className="text-center text-sm text-muted-foreground border-t border-border pt-4">
+                    <div className="flex items-center justify-center gap-2 mb-2">
+                      <Award className="h-4 w-4" />
+                      <p className="font-semibold">Registration fee: 5,000 XAF</p>
+                    </div>
+                    <p>Required before enrolling in courses</p>
                   </div>
                 </div>
               </div>

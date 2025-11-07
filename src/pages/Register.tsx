@@ -33,14 +33,18 @@ const Register = () => {
       return;
     }
 
-    // For now, just show a success message
-    // Backend integration will be added later
+    // Store form data (in production, this would save to backend)
+    localStorage.setItem('registrationData', JSON.stringify(formData));
+    
     toast({
       title: "Registration Submitted!",
-      description: "We'll contact you shortly with payment instructions.",
+      description: "Redirecting to payment...",
     });
     
-    console.log("Registration submitted:", formData);
+    // Redirect to Fapshi payment link
+    setTimeout(() => {
+      window.location.href = "https://checkout.fapshi.com/link/99485088";
+    }, 1500);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
