@@ -1,4 +1,12 @@
 import { Course } from '@/types/course';
+import webDesignImg from '@/assets/web-design.jpg';
+import graphicsDesignImg from '@/assets/graphics-design.jpg';
+import computerNetworkImg from '@/assets/computer-network.jpg';
+import cctvInstallationImg from '@/assets/cctv-installation.jpg';
+import cyberSecurityImg from '@/assets/cyber-security.jpg';
+import humanResourcesImg from '@/assets/human-resources.jpg';
+import businessAdminImg from '@/assets/business-admin.jpg';
+import transportLogisticsImg from '@/assets/transport-logistics.jpg';
 
 export const courses: Course[] = [
   {
@@ -9,7 +17,7 @@ export const courses: Course[] = [
     duration: '8 weeks',
     level: 'Beginner',
     price: 15000,
-    image: '/placeholder.svg',
+    image: webDesignImg,
     learningOutcomes: [
       'Create responsive websites using HTML5 and CSS3',
       'Apply modern UI/UX design principles',
@@ -49,7 +57,7 @@ export const courses: Course[] = [
     duration: '8 weeks',
     level: 'Beginner',
     price: 15000,
-    image: '/placeholder.svg',
+    image: graphicsDesignImg,
     learningOutcomes: [
       'Master Adobe Photoshop and Illustrator',
       'Create professional brand identities',
@@ -89,7 +97,7 @@ export const courses: Course[] = [
     duration: '10 weeks',
     level: 'Intermediate',
     price: 15000,
-    image: '/placeholder.svg',
+    image: computerNetworkImg,
     learningOutcomes: [
       'Design and implement network infrastructures',
       'Configure routers, switches, and firewalls',
@@ -128,7 +136,7 @@ export const courses: Course[] = [
     duration: '6 weeks',
     level: 'Intermediate',
     price: 15000,
-    image: '/placeholder.svg',
+    image: cctvInstallationImg,
     learningOutcomes: [
       'Install and configure CCTV systems',
       'Select appropriate cameras for different scenarios',
@@ -167,7 +175,7 @@ export const courses: Course[] = [
     duration: '12 weeks',
     level: 'Advanced',
     price: 15000,
-    image: '/placeholder.svg',
+    image: cyberSecurityImg,
     learningOutcomes: [
       'Identify and mitigate security threats',
       'Perform penetration testing and vulnerability assessments',
@@ -206,7 +214,7 @@ export const courses: Course[] = [
     duration: '10 weeks',
     level: 'Intermediate',
     price: 15000,
-    image: '/placeholder.svg',
+    image: humanResourcesImg,
     learningOutcomes: [
       'Manage full recruitment lifecycle',
       'Develop performance management systems',
@@ -245,7 +253,7 @@ export const courses: Course[] = [
     duration: '12 weeks',
     level: 'Intermediate',
     price: 15000,
-    image: '/placeholder.svg',
+    image: businessAdminImg,
     learningOutcomes: [
       'Manage business operations effectively',
       'Create financial reports and budgets',
@@ -284,7 +292,7 @@ export const courses: Course[] = [
     duration: '10 weeks',
     level: 'Intermediate',
     price: 15000,
-    image: '/placeholder.svg',
+    image: transportLogisticsImg,
     learningOutcomes: [
       'Manage supply chain operations',
       'Optimize transportation routes',
