@@ -2,6 +2,7 @@ import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import CourseCard from "@/components/CourseCard";
 import Footer from "@/components/Footer";
+import InstallBanner from "@/components/InstallBanner";
 import { courses } from "@/data/courses";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
@@ -14,6 +15,7 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <Navbar />
       <Hero />
+      <InstallBanner />
       
       {/* Featured Courses Section */}
       <section className="py-20">

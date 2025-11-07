@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { GraduationCap, Menu, X } from "lucide-react";
+import { GraduationCap, Menu, X, Download } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -27,6 +27,10 @@ const Navbar = () => {
             </Link>
             <Link to="/about" className="text-sm font-medium text-foreground hover:text-primary transition-colors">
               About
+            </Link>
+            <Link to="/install" className="text-sm font-medium text-foreground hover:text-primary transition-colors flex items-center gap-1">
+              <Download className="h-4 w-4" />
+              Install App
             </Link>
             <Link to="/register">
               <Button className="bg-gradient-to-r from-secondary to-secondary/90 hover:from-secondary/90 hover:to-secondary">
@@ -71,6 +75,14 @@ const Navbar = () => {
               onClick={() => setMobileMenuOpen(false)}
             >
               About
+            </Link>
+            <Link
+              to="/install"
+              className="block text-sm font-medium text-foreground hover:text-primary transition-colors flex items-center gap-2"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              <Download className="h-4 w-4" />
+              Install App
             </Link>
             <Link to="/register" onClick={() => setMobileMenuOpen(false)}>
               <Button className="w-full bg-gradient-to-r from-secondary to-secondary/90">
