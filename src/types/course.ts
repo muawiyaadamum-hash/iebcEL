@@ -18,4 +18,4 @@ export interface Course {
 }
 
 export const REGISTRATION_FEE = 5000;
-export const COURSE_FEE = 15000;
+export const COURSE_FEE = 35000;

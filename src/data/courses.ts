@@ -11,12 +11,12 @@ import transportLogisticsImg from '@/assets/transport-logistics.jpg';
 export const courses: Course[] = [
   {
     id: 'web-design',
-    title: 'Web Design',
-    description: 'Master modern web design principles, UI/UX best practices, and create stunning websites that engage users.',
+    title: 'Web Design & Development',
+    description: 'Master modern web design principles, UI/UX best practices, and create stunning websites that engage users. Learn HTML, CSS, JavaScript and modern frameworks.',
     category: 'Technology',
     duration: '8 weeks',
     level: 'Beginner',
-    price: 15000,
+    price: 35000,
     image: webDesignImg,
     learningOutcomes: [
       'Create responsive websites using HTML5 and CSS3',
@@ -52,11 +52,11 @@ export const courses: Course[] = [
   {
     id: 'graphics-design',
     title: 'Graphics Design',
-    description: 'Learn professional graphic design techniques, branding, and digital illustration using industry-standard tools.',
+    description: 'Learn professional graphic design techniques, branding, and digital illustration using industry-standard tools like Adobe Photoshop and Illustrator.',
     category: 'Technology',
     duration: '8 weeks',
     level: 'Beginner',
-    price: 15000,
+    price: 35000,
     image: graphicsDesignImg,
     learningOutcomes: [
       'Master Adobe Photoshop and Illustrator',
@@ -96,7 +96,7 @@ export const courses: Course[] = [
     category: 'Technology',
     duration: '10 weeks',
     level: 'Intermediate',
-    price: 15000,
+    price: 35000,
     image: computerNetworkImg,
     learningOutcomes: [
       'Design and implement network infrastructures',
@@ -135,7 +135,7 @@ export const courses: Course[] = [
     category: 'Technology',
     duration: '6 weeks',
     level: 'Intermediate',
-    price: 15000,
+    price: 35000,
     image: cctvInstallationImg,
     learningOutcomes: [
       'Install and configure CCTV systems',
@@ -174,7 +174,7 @@ export const courses: Course[] = [
     category: 'Technology',
     duration: '12 weeks',
     level: 'Advanced',
-    price: 15000,
+    price: 35000,
     image: cyberSecurityImg,
     learningOutcomes: [
       'Identify and mitigate security threats',
@@ -213,7 +213,7 @@ export const courses: Course[] = [
     category: 'Human Resources',
     duration: '10 weeks',
     level: 'Intermediate',
-    price: 15000,
+    price: 35000,
     image: humanResourcesImg,
     learningOutcomes: [
       'Manage full recruitment lifecycle',
@@ -252,7 +252,7 @@ export const courses: Course[] = [
     category: 'Business',
     duration: '12 weeks',
     level: 'Intermediate',
-    price: 15000,
+    price: 35000,
     image: businessAdminImg,
     learningOutcomes: [
       'Manage business operations effectively',
@@ -291,7 +291,7 @@ export const courses: Course[] = [
     category: 'Logistics',
     duration: '10 weeks',
     level: 'Intermediate',
-    price: 15000,
+    price: 35000,
     image: transportLogisticsImg,
     learningOutcomes: [
       'Manage supply chain operations',
