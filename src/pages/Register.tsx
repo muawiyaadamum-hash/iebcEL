@@ -43,7 +43,7 @@ const Register = () => {
     
     // Redirect to Fapshi payment link
     setTimeout(() => {
-      window.location.href = "https://checkout.fapshi.com/link/99485088";
+      window.location.href = "https://checkout.fapshi.com/link/64137255";
     }, 1500);
   };
 
