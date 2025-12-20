@@ -1,10 +1,19 @@
 import { Button } from "@/components/ui/button";
-import { GraduationCap, Menu, X, Download } from "lucide-react";
+import { GraduationCap, Menu, X, Download, User, LogOut } from "lucide-react";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { user, signOut } = useAuth();
+  const navigate = useNavigate();
+
+  const handleSignOut = async () => {
+    await signOut();
+    navigate("/");
+    setMobileMenuOpen(false);
+  };
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -32,11 +41,32 @@ const Navbar = () => {
               <Download className="h-4 w-4" />
               Install App
             </Link>
-            <Link to="/register">
-              <Button className="bg-gradient-to-r from-secondary to-secondary/90 hover:from-secondary/90 hover:to-secondary">
-                Register Now
-              </Button>
-            </Link>
+            
+            {user ? (
+              <>
+                <Link to="/dashboard" className="text-sm font-medium text-foreground hover:text-primary transition-colors flex items-center gap-1">
+                  <User className="h-4 w-4" />
+                  Dashboard
+                </Link>
+                <Button variant="outline" size="sm" onClick={handleSignOut}>
+                  <LogOut className="h-4 w-4 mr-2" />
+                  Sign Out
+                </Button>
+              </>
+            ) : (
+              <>
+                <Link to="/auth">
+                  <Button variant="outline" size="sm">
+                    Login
+                  </Button>
+                </Link>
+                <Link to="/register">
+                  <Button className="bg-gradient-to-r from-secondary to-secondary/90 hover:from-secondary/90 hover:to-secondary">
+                    Register Now
+                  </Button>
+                </Link>
+              </>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -84,11 +114,36 @@ const Navbar = () => {
               <Download className="h-4 w-4" />
               Install App
             </Link>
-            <Link to="/register" onClick={() => setMobileMenuOpen(false)}>
-              <Button className="w-full bg-gradient-to-r from-secondary to-secondary/90">
-                Register Now
-              </Button>
-            </Link>
+            
+            {user ? (
+              <>
+                <Link
+                  to="/dashboard"
+                  className="block text-sm font-medium text-foreground hover:text-primary transition-colors flex items-center gap-2"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  <User className="h-4 w-4" />
+                  Dashboard
+                </Link>
+                <Button variant="outline" className="w-full" onClick={handleSignOut}>
+                  <LogOut className="h-4 w-4 mr-2" />
+                  Sign Out
+                </Button>
+              </>
+            ) : (
+              <>
+                <Link to="/auth" onClick={() => setMobileMenuOpen(false)}>
+                  <Button variant="outline" className="w-full mb-2">
+                    Login
+                  </Button>
+                </Link>
+                <Link to="/register" onClick={() => setMobileMenuOpen(false)}>
+                  <Button className="w-full bg-gradient-to-r from-secondary to-secondary/90">
+                    Register Now
+                  </Button>
+                </Link>
+              </>
+            )}
           </div>
         )}
       </div>
