@@ -17,9 +17,12 @@ import {
   GraduationCap,
   User,
   LogOut,
-  ChevronRight
+  ChevronRight,
+  Bell
 } from "lucide-react";
 import { courses } from "@/data/courses";
+import { useScrollToTop } from "@/hooks/useScrollToTop";
+import { usePushNotifications } from "@/hooks/usePushNotifications";
 
 interface Profile {
   full_name: string;
@@ -38,8 +41,10 @@ interface Enrollment {
 }
 
 const Dashboard = () => {
+  useScrollToTop();
   const navigate = useNavigate();
   const { user, loading, signOut } = useAuth();
+  const { requestPermission, isEnabled, isSupported } = usePushNotifications();
   const [profile, setProfile] = useState<Profile | null>(null);
   const [enrollments, setEnrollments] = useState<Enrollment[]>([]);
   const [loadingData, setLoadingData] = useState(true);
@@ -126,6 +131,12 @@ const Dashboard = () => {
               </p>
             </div>
             <div className="flex gap-2">
+              {isSupported && !isEnabled && (
+                <Button variant="outline" size="sm" onClick={requestPermission}>
+                  <Bell className="h-4 w-4 mr-2" />
+                  Enable Notifications
+                </Button>
+              )}
               <Button variant="outline" size="sm" onClick={handleSignOut}>
                 <LogOut className="h-4 w-4 mr-2" />
                 Sign Out

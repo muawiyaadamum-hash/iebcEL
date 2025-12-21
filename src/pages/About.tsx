@@ -1,9 +1,13 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Card, CardContent } from "@/components/ui/card";
-import { Target, Users, Award, BookOpen } from "lucide-react";
+import { Target, Users, Award, BookOpen, MessageCircle, Headphones } from "lucide-react";
+import { useScrollToTop } from "@/hooks/useScrollToTop";
+import { Button } from "@/components/ui/button";
+import { getWhatsAppLink } from "@/components/WhatsAppButton";
 
 const About = () => {
+  useScrollToTop();
   return (
     <div className="min-h-screen bg-background">
       <Navbar />

@@ -4,8 +4,10 @@ import CourseCard from "@/components/CourseCard";
 import { courses } from "@/data/courses";
 import { useState } from "react";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useScrollToTop } from "@/hooks/useScrollToTop";
 
 const Courses = () => {
+  useScrollToTop();
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
   
   const categories = ["All", "Technology", "Human Resources", "Business", "Logistics"];

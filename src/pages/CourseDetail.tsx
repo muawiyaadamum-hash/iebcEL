@@ -5,27 +5,33 @@ import { Badge } from "@/components/ui/badge";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { courses } from "@/data/courses";
-import { useParams, Navigate } from "react-router-dom";
-import { Clock, TrendingUp, CheckCircle2, ArrowRight, FileText, Award, CreditCard, MessageCircle } from "lucide-react";
-import { REGISTRATION_FEE } from "@/types/course";
+import { useParams, Navigate, Link } from "react-router-dom";
+import { Clock, TrendingUp, CheckCircle2, ArrowRight, FileText, Award, CreditCard, MessageCircle, User, LogIn } from "lucide-react";
+import { REGISTRATION_FEE, COURSE_FEE } from "@/types/course";
+import { useScrollToTop } from "@/hooks/useScrollToTop";
+import { useAuth } from "@/contexts/AuthContext";
+import { getWhatsAppLink } from "@/components/WhatsAppButton";
 
 const PAYMENT_LINK = "https://checkout.fapshi.com/link/64137255";
-const WHATSAPP_NUMBER = "237678881039";
 
 const CourseDetail = () => {
+  useScrollToTop();
   const { id } = useParams();
+  const { user } = useAuth();
   const course = courses.find(c => c.id === id);
 
   if (!course) {
     return <Navigate to="/courses" replace />;
   }
 
-  const whatsappMessage = encodeURIComponent(
-    `Hello MTech Academy! I'm interested in enrolling for the ${course.title} course (${course.price.toLocaleString()} XAF). Please provide more information about the enrollment process.`
-  );
-  const whatsappLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${whatsappMessage}`;
+  const whatsappEnrollMessage = `Hello MTech Academy! I want to enroll in the ${course.title} course (${course.price.toLocaleString()} XAF). My name is ____________. Please assist me with the enrollment process.`;
+  const whatsappConsultMessage = `Hello MTech Academy! I have questions about the ${course.title} course. Can you help me understand if this is right for me?`;
 
   const handleEnrollNow = () => {
+    if (!user) {
+      // Redirect to register if not logged in
+      return;
+    }
     window.open(PAYMENT_LINK, '_blank');
   };
 
@@ -173,43 +179,109 @@ const CourseDetail = () => {
                     </li>
                     <li className="flex items-center gap-2 text-sm">
                       <CheckCircle2 className="h-4 w-4 text-primary" />
-                      <span>Expert instructor support</span>
+                      <span>24/7 support access</span>
                     </li>
                   </ul>
                 </div>
 
-                <Button 
-                  size="lg" 
-                  className="w-full bg-gradient-to-r from-secondary to-secondary/90 hover:from-secondary/90 hover:to-secondary group"
-                  onClick={handleEnrollNow}
-                >
-                  <CreditCard className="mr-2 h-4 w-4" />
-                  Pay & Enroll Now
-                  <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                </Button>
+                {user ? (
+                  <>
+                    <Button 
+                      size="lg" 
+                      className="w-full bg-gradient-to-r from-secondary to-secondary/90 hover:from-secondary/90 hover:to-secondary group"
+                      onClick={handleEnrollNow}
+                    >
+                      <CreditCard className="mr-2 h-4 w-4" />
+                      Pay & Enroll Now
+                      <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                    </Button>
+
+                    <a 
+                      href={getWhatsAppLink(whatsappEnrollMessage)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="block"
+                    >
+                      <Button 
+                        size="lg" 
+                        variant="outline"
+                        className="w-full border-green-500 text-green-600 hover:bg-green-50 dark:hover:bg-green-950"
+                      >
+                        <MessageCircle className="mr-2 h-4 w-4" />
+                        Enroll via WhatsApp
+                      </Button>
+                    </a>
+                  </>
+                ) : (
+                  <>
+                    <div className="bg-muted/50 rounded-lg p-4 text-center">
+                      <User className="h-8 w-8 mx-auto mb-2 text-muted-foreground" />
+                      <p className="text-sm text-muted-foreground mb-3">
+                        Create an account to enroll in this course
+                      </p>
+                      <div className="space-y-2">
+                        <Link to="/register" className="block">
+                          <Button 
+                            size="lg" 
+                            className="w-full bg-gradient-to-r from-secondary to-secondary/90 hover:from-secondary/90 hover:to-secondary"
+                          >
+                            <User className="mr-2 h-4 w-4" />
+                            Create Free Account
+                          </Button>
+                        </Link>
+                        <Link to="/auth" className="block">
+                          <Button 
+                            size="lg" 
+                            variant="outline"
+                            className="w-full"
+                          >
+                            <LogIn className="mr-2 h-4 w-4" />
+                            Already have account? Login
+                          </Button>
+                        </Link>
+                      </div>
+                    </div>
+
+                    <a 
+                      href={getWhatsAppLink(whatsappEnrollMessage)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="block"
+                    >
+                      <Button 
+                        size="lg" 
+                        variant="outline"
+                        className="w-full border-green-500 text-green-600 hover:bg-green-50 dark:hover:bg-green-950"
+                      >
+                        <MessageCircle className="mr-2 h-4 w-4" />
+                        Enroll via WhatsApp
+                      </Button>
+                    </a>
+                  </>
+                )}
 
                 <a 
-                  href={whatsappLink}
+                  href={getWhatsAppLink(whatsappConsultMessage)}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="block"
                 >
                   <Button 
                     size="lg" 
-                    variant="outline"
-                    className="w-full border-green-500 text-green-600 hover:bg-green-50 dark:hover:bg-green-950"
+                    variant="ghost"
+                    className="w-full text-muted-foreground hover:text-foreground"
                   >
                     <MessageCircle className="mr-2 h-4 w-4" />
-                    WhatsApp Consultation
+                    Need help choosing? Consult us
                   </Button>
                 </a>
 
                 <div className="text-center text-sm text-muted-foreground border-t border-border pt-4">
                   <div className="flex items-center justify-center gap-2 mb-2">
                     <Award className="h-4 w-4" />
-                    <p className="font-semibold">Registration fee: {REGISTRATION_FEE.toLocaleString()} XAF</p>
+                    <p className="font-semibold">All courses: {COURSE_FEE.toLocaleString()} XAF</p>
                   </div>
-                  <p>Required before enrolling in courses</p>
+                  <p>Registration: {REGISTRATION_FEE.toLocaleString()} XAF (one-time)</p>
                 </div>
               </div>
             </div>
