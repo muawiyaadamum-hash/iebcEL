@@ -7,8 +7,49 @@ import cyberSecurityImg from '@/assets/cyber-security.jpg';
 import humanResourcesImg from '@/assets/human-resources.jpg';
 import businessAdminImg from '@/assets/business-admin.jpg';
 import transportLogisticsImg from '@/assets/transport-logistics.jpg';
+import aiBasicsImg from '@/assets/ai-basics.jpg';
 
 export const courses: Course[] = [
+  {
+    id: 'ai-basics',
+    title: 'AI & Artificial Intelligence Basics',
+    description: 'Discover the world of Artificial Intelligence and Machine Learning. Learn fundamental concepts, practical applications, and how AI is transforming industries across the globe.',
+    category: 'Technology',
+    duration: '10 weeks',
+    level: 'Beginner',
+    price: 35000,
+    image: aiBasicsImg,
+    learningOutcomes: [
+      'Understand core AI and Machine Learning concepts',
+      'Build simple AI models using Python',
+      'Apply AI to solve real-world problems',
+      'Use popular AI tools and platforms',
+      'Understand ethical AI considerations'
+    ],
+    modules: [
+      {
+        title: 'Introduction to AI',
+        topics: ['What is AI?', 'History of AI', 'Types of AI', 'AI vs Machine Learning']
+      },
+      {
+        title: 'Machine Learning Fundamentals',
+        topics: ['Supervised Learning', 'Unsupervised Learning', 'Training Models', 'Evaluation Metrics']
+      },
+      {
+        title: 'Python for AI',
+        topics: ['Python Basics', 'NumPy & Pandas', 'Data Visualization', 'Jupyter Notebooks']
+      },
+      {
+        title: 'Practical AI Applications',
+        topics: ['Image Recognition', 'Natural Language Processing', 'Chatbots', 'Recommendation Systems']
+      },
+      {
+        title: 'AI Tools & Future Trends',
+        topics: ['ChatGPT & LLMs', 'AI Ethics', 'Career Opportunities', 'Building AI Projects']
+      }
+    ],
+    featured: true
+  },
   {
     id: 'web-design',
     title: 'Web Design & Development',

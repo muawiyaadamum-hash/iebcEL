@@ -1,8 +1,10 @@
 import { Button } from "@/components/ui/button";
-import { GraduationCap, Menu, X, Download, User, LogOut } from "lucide-react";
+import { GraduationCap, Menu, X, Download, User, LogOut, MessageCircle } from "lucide-react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import NotificationBell from "./NotificationBell";
+import { getWhatsAppLink } from "./WhatsAppButton";
 
 const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -27,7 +29,7 @@ const Navbar = () => {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-6">
+          <div className="hidden md:flex items-center gap-4">
             <Link to="/" className="text-sm font-medium text-foreground hover:text-primary transition-colors">
               Home
             </Link>
@@ -39,8 +41,19 @@ const Navbar = () => {
             </Link>
             <Link to="/install" className="text-sm font-medium text-foreground hover:text-primary transition-colors flex items-center gap-1">
               <Download className="h-4 w-4" />
-              Install App
+              Install
             </Link>
+            <a
+              href={getWhatsAppLink()}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm font-medium text-green-600 hover:text-green-700 transition-colors flex items-center gap-1"
+            >
+              <MessageCircle className="h-4 w-4" />
+              WhatsApp
+            </a>
+            
+            <NotificationBell />
             
             {user ? (
               <>
@@ -114,6 +127,16 @@ const Navbar = () => {
               <Download className="h-4 w-4" />
               Install App
             </Link>
+            <a
+              href={getWhatsAppLink()}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block text-sm font-medium text-green-600 hover:text-green-700 transition-colors flex items-center gap-2"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              <MessageCircle className="h-4 w-4" />
+              WhatsApp Support
+            </a>
             
             {user ? (
               <>

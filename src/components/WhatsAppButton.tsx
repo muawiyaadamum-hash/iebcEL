@@ -1,52 +1,45 @@
 import { MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
-const WHATSAPP_NUMBER = "237678881039";
-const DEFAULT_MESSAGE = "Hello MTech Academy! I'm interested in your courses and would like to learn more about enrollment options. Please assist me.";
+export const WHATSAPP_NUMBER = "237678881039";
+export const DEFAULT_WHATSAPP_MESSAGE = "Hello MTech Academy! I'm interested in your courses and would like to learn more about enrollment options. Please assist me.";
 
 interface WhatsAppButtonProps {
   message?: string;
   className?: string;
-  variant?: "floating" | "inline";
+  variant?: "default" | "outline" | "ghost";
+  size?: "default" | "sm" | "lg" | "icon";
+  children?: React.ReactNode;
 }
 
-const WhatsAppButton = ({ 
-  message = DEFAULT_MESSAGE, 
-  className = "",
-  variant = "floating" 
-}: WhatsAppButtonProps) => {
-  const whatsappLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+export const getWhatsAppLink = (message: string = DEFAULT_WHATSAPP_MESSAGE) => {
+  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+};
 
-  if (variant === "inline") {
-    return (
-      <a 
-        href={whatsappLink}
-        target="_blank"
-        rel="noopener noreferrer"
-        className={className}
-      >
-        <Button 
-          variant="outline"
-          className="border-green-500 text-green-600 hover:bg-green-50 dark:hover:bg-green-950"
-        >
-          <MessageCircle className="mr-2 h-4 w-4" />
-          WhatsApp Us
-        </Button>
-      </a>
-    );
-  }
+const WhatsAppButton = ({ 
+  message = DEFAULT_WHATSAPP_MESSAGE, 
+  className = "",
+  variant = "outline",
+  size = "default",
+  children
+}: WhatsAppButtonProps) => {
+  const whatsappLink = getWhatsAppLink(message);
 
   return (
     <a 
       href={whatsappLink}
       target="_blank"
       rel="noopener noreferrer"
-      className={`fixed bottom-6 left-6 z-40 ${className}`}
+      className={cn("inline-block", className)}
     >
       <Button 
-        className="h-14 w-14 rounded-full shadow-lg bg-green-500 hover:bg-green-600 text-white"
+        variant={variant}
+        size={size}
+        className="border-green-500 text-green-600 hover:bg-green-50 dark:hover:bg-green-950 gap-2"
       >
-        <MessageCircle className="h-6 w-6" />
+        <MessageCircle className="h-4 w-4" />
+        {children || "Chat on WhatsApp"}
       </Button>
     </a>
   );

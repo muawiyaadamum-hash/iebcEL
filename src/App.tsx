@@ -6,7 +6,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import AIChatbot from "@/components/AIChatbot";
-import WhatsAppButton from "@/components/WhatsAppButton";
 import Index from "./pages/Index";
 import Courses from "./pages/Courses";
 import CourseDetail from "./pages/CourseDetail";
@@ -43,7 +42,6 @@ const App = () => (
             <Route path="*" element={<NotFound />} />
           </Routes>
           <AIChatbot />
-          <WhatsAppButton />
         </BrowserRouter>
       </TooltipProvider>
     </AuthProvider>
