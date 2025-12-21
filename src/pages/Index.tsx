@@ -7,8 +7,11 @@ import { courses } from "@/data/courses";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useScrollToTop } from "@/hooks/useScrollToTop";
+import { COURSE_FEE, REGISTRATION_FEE } from "@/types/course";
 
 const Index = () => {
+  useScrollToTop();
   const featuredCourses = courses.filter(course => course.featured);
 
   return (
@@ -29,7 +32,7 @@ const Index = () => {
             </p>
           </div>
           
-          <div className="grid md:grid-cols-2 gap-8 mb-12">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
             {featuredCourses.map((course) => (
               <CourseCard key={course.id} course={course} />
             ))}
@@ -75,7 +78,7 @@ const Index = () => {
               </div>
               <h3 className="text-xl font-semibold mb-3">Affordable Pricing</h3>
               <p className="text-muted-foreground">
-                Pay only 5,000 XAF registration fee and 15,000 XAF per course. No hidden costs.
+                Pay only {REGISTRATION_FEE.toLocaleString()} XAF registration fee and {COURSE_FEE.toLocaleString()} XAF per course. No hidden costs.
               </p>
             </div>
 
@@ -83,9 +86,9 @@ const Index = () => {
               <div className="h-12 w-12 bg-gradient-to-br from-primary to-accent rounded-xl flex items-center justify-center mb-6">
                 <CheckCircle2 className="h-6 w-6 text-white" />
               </div>
-              <h3 className="text-xl font-semibold mb-3">Expert Instructors</h3>
+              <h3 className="text-xl font-semibold mb-3">24/7 Support</h3>
               <p className="text-muted-foreground">
-                Learn from industry professionals with years of practical experience.
+                Get help anytime with our AI chatbot or connect with our team on WhatsApp.
               </p>
             </div>
           </div>

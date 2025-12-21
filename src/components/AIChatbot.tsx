@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -11,9 +11,12 @@ import {
   User, 
   Loader2,
   Sparkles,
-  GraduationCap
+  GraduationCap,
+  Headphones,
+  Volume2
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { getWhatsAppLink } from "./WhatsAppButton";
 
 interface Message {
   role: "user" | "assistant";
@@ -26,28 +29,79 @@ const FAQ_PROMPTS = [
   "What courses do you offer?",
   "How do I register?",
   "What is the course fee?",
-  "How long are the courses?",
+  "I need help with my enrollment",
+  "Chat with support on WhatsApp",
 ];
 
-const GREETING_MESSAGE = `👋 Hi there! I'm MTech Bot, your friendly assistant.
+const GREETING_MESSAGE = `👋 Hi there! I'm MTech Bot, your 24/7 AI support assistant.
 
-I can help you with:
-• Finding the right course for you
-• Registration and enrollment
-• Course details and pricing
-• Platform navigation
+I'm here to help you with:
+• Finding the right course for your goals
+• Registration and enrollment process
+• Course details, pricing & payment
+• Technical support & navigation
+• Connecting you with human support
 
 How can I assist you today?`;
 
+const AUTO_POPUP_MESSAGE = "Need help? I'm here 24/7! 🎓";
+
+// Simple notification sound using Web Audio API
+const playNotificationSound = () => {
+  try {
+    const audioContext = new (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)();
+    const oscillator = audioContext.createOscillator();
+    const gainNode = audioContext.createGain();
+    
+    oscillator.connect(gainNode);
+    gainNode.connect(audioContext.destination);
+    
+    oscillator.frequency.value = 800;
+    oscillator.type = 'sine';
+    gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+    
+    oscillator.start(audioContext.currentTime);
+    oscillator.stop(audioContext.currentTime + 0.3);
+  } catch (error) {
+    console.log('Audio not supported');
+  }
+};
+
 const AIChatbot = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
     { role: "assistant", content: GREETING_MESSAGE }
   ]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [hasAutoGreeted, setHasAutoGreeted] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
+
+  // Auto-popup greeting after 5 seconds on first visit
+  useEffect(() => {
+    const hasSeenGreeting = sessionStorage.getItem('mtech-chatbot-greeted');
+    
+    if (!hasSeenGreeting && !hasAutoGreeted) {
+      const timer = setTimeout(() => {
+        setShowPopup(true);
+        setHasAutoGreeted(true);
+        sessionStorage.setItem('mtech-chatbot-greeted', 'true');
+        playNotificationSound();
+      }, 5000);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [hasAutoGreeted]);
+
+  // Hide popup when chat is opened
+  useEffect(() => {
+    if (isOpen) {
+      setShowPopup(false);
+    }
+  }, [isOpen]);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -118,8 +172,18 @@ const AIChatbot = () => {
     }
   };
 
-  const sendMessage = async (text: string) => {
+  const sendMessage = useCallback(async (text: string) => {
     if (!text.trim() || isLoading) return;
+
+    // Handle WhatsApp redirect
+    if (text.toLowerCase().includes('whatsapp')) {
+      window.open(getWhatsAppLink("Hello MTech Academy! I need assistance and would like to chat with your support team."), '_blank');
+      setMessages(prev => [...prev, 
+        { role: "user", content: text },
+        { role: "assistant", content: "I'm opening WhatsApp for you to chat with our human support team! They're available to help you with any questions. 💬" }
+      ]);
+      return;
+    }
 
     const userMessage: Message = { role: "user", content: text };
     setMessages(prev => [...prev, userMessage]);
@@ -127,7 +191,7 @@ const AIChatbot = () => {
     setIsLoading(true);
 
     try {
-      await streamChat([...messages.slice(1), userMessage]); // Skip greeting for context
+      await streamChat([...messages.slice(1), userMessage]);
     } catch (error) {
       console.error("Chat error:", error);
       toast({
@@ -135,7 +199,6 @@ const AIChatbot = () => {
         description: error instanceof Error ? error.message : "Failed to send message",
         variant: "destructive",
       });
-      // Remove the failed message placeholder if exists
       setMessages(prev => {
         if (prev[prev.length - 1]?.role === "assistant" && prev[prev.length - 1]?.content === "") {
           return prev.slice(0, -1);
@@ -145,14 +208,47 @@ const AIChatbot = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [isLoading, messages, toast]);
 
   const handleFAQClick = (prompt: string) => {
     sendMessage(prompt);
   };
 
+  const dismissPopup = () => {
+    setShowPopup(false);
+  };
+
   return (
     <>
+      {/* Auto Popup Greeting */}
+      {showPopup && !isOpen && (
+        <div 
+          className="fixed bottom-24 right-6 z-50 animate-in slide-in-from-right-5 fade-in duration-300"
+        >
+          <div className="bg-gradient-to-r from-primary to-accent text-primary-foreground rounded-2xl rounded-br-md p-4 shadow-lg max-w-[250px] relative">
+            <button 
+              onClick={dismissPopup}
+              className="absolute -top-2 -right-2 h-6 w-6 bg-background border border-border rounded-full flex items-center justify-center hover:bg-muted"
+            >
+              <X className="h-3 w-3 text-foreground" />
+            </button>
+            <div className="flex items-center gap-2 mb-2">
+              <Volume2 className="h-4 w-4" />
+              <span className="font-semibold text-sm">MTech Bot</span>
+            </div>
+            <p className="text-sm">{AUTO_POPUP_MESSAGE}</p>
+            <Button 
+              size="sm" 
+              variant="secondary"
+              className="mt-3 w-full"
+              onClick={() => setIsOpen(true)}
+            >
+              Chat Now
+            </Button>
+          </div>
+        </div>
+      )}
+
       {/* Chat Toggle Button */}
       <Button
         onClick={() => setIsOpen(!isOpen)}
@@ -181,12 +277,16 @@ const AIChatbot = () => {
         <div className="bg-gradient-to-r from-primary to-accent p-4 text-primary-foreground">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-white/20 rounded-full">
+              <div className="p-2 bg-white/20 rounded-full relative">
                 <GraduationCap className="h-5 w-5" />
+                <span className="absolute -bottom-0.5 -right-0.5 h-3 w-3 bg-green-400 rounded-full border-2 border-white" />
               </div>
               <div>
-                <h3 className="font-semibold">MTech Bot</h3>
-                <p className="text-xs opacity-90">AI Assistant</p>
+                <h3 className="font-semibold flex items-center gap-1">
+                  MTech Bot
+                  <Headphones className="h-3.5 w-3.5" />
+                </h3>
+                <p className="text-xs opacity-90">24/7 AI Support</p>
               </div>
             </div>
             <Button
@@ -250,7 +350,7 @@ const AIChatbot = () => {
             <div className="mt-4 space-y-2">
               <p className="text-xs text-muted-foreground flex items-center gap-1">
                 <Sparkles className="h-3 w-3" />
-                Quick questions:
+                Quick actions:
               </p>
               <div className="flex flex-wrap gap-2">
                 {FAQ_PROMPTS.map((prompt, index) => (
@@ -281,7 +381,7 @@ const AIChatbot = () => {
             <Input
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="Type your message..."
+              placeholder="Ask me anything..."
               className="flex-1"
               disabled={isLoading}
             />
@@ -293,6 +393,17 @@ const AIChatbot = () => {
               <Send className="h-4 w-4" />
             </Button>
           </form>
+          <p className="text-[10px] text-muted-foreground text-center mt-2">
+            Need human support?{" "}
+            <a 
+              href={getWhatsAppLink("Hello! I need to speak with a human support agent.")}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-primary hover:underline"
+            >
+              Chat on WhatsApp
+            </a>
+          </p>
         </div>
       </div>
     </>

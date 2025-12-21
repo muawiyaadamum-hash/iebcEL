@@ -1,5 +1,7 @@
-import { GraduationCap, Mail, MapPin, Phone } from "lucide-react";
+import { GraduationCap, Mail, MapPin, Phone, MessageCircle, Headphones } from "lucide-react";
 import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { getWhatsAppLink } from "./WhatsAppButton";
 
 const Footer = () => {
   return (
@@ -16,6 +18,18 @@ const Footer = () => {
             <p className="text-sm text-muted-foreground">
               Empowering learners with professional online courses in technology, business, and more.
             </p>
+            <div className="flex gap-2">
+              <a
+                href={getWhatsAppLink("Hello MTech Academy! I'd like to learn more about your courses.")}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Button size="sm" variant="outline" className="border-green-500 text-green-600 hover:bg-green-50 dark:hover:bg-green-950 gap-1">
+                  <MessageCircle className="h-4 w-4" />
+                  WhatsApp
+                </Button>
+              </a>
+            </div>
           </div>
 
           <div>
@@ -45,12 +59,33 @@ const Footer = () => {
           </div>
 
           <div>
-            <h3 className="font-semibold mb-4">Course Categories</h3>
+            <h3 className="font-semibold mb-4">Support</h3>
             <ul className="space-y-2">
-              <li className="text-sm text-muted-foreground">Technology</li>
-              <li className="text-sm text-muted-foreground">Human Resources</li>
-              <li className="text-sm text-muted-foreground">Business</li>
-              <li className="text-sm text-muted-foreground">Logistics</li>
+              <li className="text-sm text-muted-foreground flex items-center gap-2">
+                <Headphones className="h-4 w-4 text-primary" />
+                24/7 AI Chat Support
+              </li>
+              <li>
+                <a
+                  href={getWhatsAppLink("Hello! I need help with MTech Academy.")}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm text-muted-foreground hover:text-primary transition-colors flex items-center gap-2"
+                >
+                  <MessageCircle className="h-4 w-4 text-green-500" />
+                  WhatsApp Support
+                </a>
+              </li>
+              <li>
+                <Link to="/dashboard" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                  Student Dashboard
+                </Link>
+              </li>
+              <li>
+                <Link to="/install" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                  Install App
+                </Link>
+              </li>
             </ul>
           </div>
 
@@ -66,9 +101,16 @@ const Footer = () => {
                   <span>Online</span>
                 </div>
               </li>
-              <li className="flex items-center gap-2 text-sm text-muted-foreground">
-                <Phone className="h-4 w-4 text-primary" />
-                <span>+237 678 88 10 39</span>
+              <li>
+                <a
+                  href={getWhatsAppLink()}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors"
+                >
+                  <Phone className="h-4 w-4 text-primary" />
+                  <span>+237 678 88 10 39</span>
+                </a>
               </li>
               <li className="flex items-center gap-2 text-sm text-muted-foreground">
                 <Mail className="h-4 w-4 text-primary" />
