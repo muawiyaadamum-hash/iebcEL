@@ -9,6 +9,7 @@ import AIChatbot from "@/components/AIChatbot";
 import Index from "./pages/Index";
 import Courses from "./pages/Courses";
 import CourseDetail from "./pages/CourseDetail";
+import CourseViewer from "./pages/CourseViewer";
 import Register from "./pages/Register";
 import About from "./pages/About";
 import Install from "./pages/Install";
@@ -29,6 +30,11 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/courses" element={<Courses />} />
             <Route path="/courses/:id" element={<CourseDetail />} />
+            <Route path="/learn/:id" element={
+              <ProtectedRoute>
+                <CourseViewer />
+              </ProtectedRoute>
+            } />
             <Route path="/register" element={<Register />} />
             <Route path="/about" element={<About />} />
             <Route path="/install" element={<Install />} />
