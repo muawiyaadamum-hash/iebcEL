@@ -16,6 +16,7 @@ import {
   Volume2
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { parseMarkdown } from "@/lib/markdown";
 import { getWhatsAppLink } from "./WhatsAppButton";
 
 interface Message {
@@ -71,9 +72,8 @@ const playNotificationSound = () => {
 const AIChatbot = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
-  const [messages, setMessages] = useState<Message[]>([
-    { role: "assistant", content: GREETING_MESSAGE }
-  ]);
+const [messages, setMessages] = useState<Message[]>([]);
+  const [hasStartedConversation, setHasStartedConversation] = useState(false);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [hasAutoGreeted, setHasAutoGreeted] = useState(false);
@@ -175,6 +175,9 @@ const AIChatbot = () => {
   const sendMessage = useCallback(async (text: string) => {
     if (!text.trim() || isLoading) return;
 
+    // Mark conversation as started
+    setHasStartedConversation(true);
+
     // Handle WhatsApp redirect
     if (text.toLowerCase().includes('whatsapp')) {
       window.open(getWhatsAppLink("Hello MTech Academy! I need assistance and would like to chat with your support team."), '_blank');
@@ -191,7 +194,7 @@ const AIChatbot = () => {
     setIsLoading(true);
 
     try {
-      await streamChat([...messages.slice(1), userMessage]);
+      await streamChat([...messages, userMessage]);
     } catch (error) {
       console.error("Chat error:", error);
       toast({
@@ -303,6 +306,20 @@ const AIChatbot = () => {
         {/* Messages */}
         <ScrollArea className="flex-1 p-4" ref={scrollRef}>
           <div className="space-y-4">
+            {/* Show greeting only if no conversation started */}
+            {!hasStartedConversation && messages.length === 0 && (
+              <div className="flex gap-3 justify-start">
+                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                  <Bot className="h-4 w-4 text-primary" />
+                </div>
+                <div className="max-w-[80%] rounded-2xl rounded-bl-md px-4 py-3 text-sm bg-muted">
+                  <div 
+                    className="whitespace-pre-wrap"
+                    dangerouslySetInnerHTML={{ __html: parseMarkdown(GREETING_MESSAGE) }}
+                  />
+                </div>
+              </div>
+            )}
             {messages.map((message, index) => (
               <div
                 key={index}
@@ -324,7 +341,10 @@ const AIChatbot = () => {
                       : "bg-muted rounded-bl-md"
                   )}
                 >
-                  <p className="whitespace-pre-wrap">{message.content}</p>
+                  <div 
+                    className="whitespace-pre-wrap"
+                    dangerouslySetInnerHTML={{ __html: parseMarkdown(message.content) }}
+                  />
                 </div>
                 {message.role === "user" && (
                   <div className="flex-shrink-0 w-8 h-8 rounded-full bg-secondary/10 flex items-center justify-center">
@@ -333,7 +353,7 @@ const AIChatbot = () => {
                 )}
               </div>
             ))}
-            {isLoading && messages[messages.length - 1]?.role === "user" && (
+            {isLoading && (messages.length === 0 || messages[messages.length - 1]?.role === "user") && (
               <div className="flex gap-3">
                 <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
                   <Bot className="h-4 w-4 text-primary" />
@@ -345,8 +365,8 @@ const AIChatbot = () => {
             )}
           </div>
 
-          {/* FAQ Prompts - Show only at start */}
-          {messages.length === 1 && (
+          {/* FAQ Prompts - Show only when no conversation started */}
+          {!hasStartedConversation && messages.length === 0 && (
             <div className="mt-4 space-y-2">
               <p className="text-xs text-muted-foreground flex items-center gap-1">
                 <Sparkles className="h-3 w-3" />

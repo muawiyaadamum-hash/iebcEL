@@ -262,8 +262,8 @@ const Dashboard = () => {
                               Enrolled: {new Date(enrollment.enrolled_at).toLocaleDateString()}
                             </span>
                             <Button variant="ghost" size="sm" asChild>
-                              <Link to={`/course/${course!.id}`}>
-                                Continue Learning
+                              <Link to={enrollment.payment_status === 'completed' ? `/learn/${course!.id}` : `/course/${course!.id}`}>
+                                {enrollment.payment_status === 'completed' ? 'Continue Learning' : 'Complete Payment'}
                                 <ChevronRight className="h-4 w-4 ml-1" />
                               </Link>
                             </Button>
