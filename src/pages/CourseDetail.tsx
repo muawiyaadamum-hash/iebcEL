@@ -1,3 +1,4 @@
+import { useState } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -6,11 +7,13 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { courses } from "@/data/courses";
 import { useParams, Navigate, Link } from "react-router-dom";
-import { Clock, TrendingUp, CheckCircle2, ArrowRight, FileText, Award, CreditCard, MessageCircle, User, LogIn } from "lucide-react";
+import { Clock, TrendingUp, CheckCircle2, ArrowRight, FileText, Award, CreditCard, MessageCircle, User, LogIn, Loader2 } from "lucide-react";
 import { REGISTRATION_FEE, COURSE_FEE } from "@/types/course";
 import { useScrollToTop } from "@/hooks/useScrollToTop";
 import { useAuth } from "@/contexts/AuthContext";
 import { getWhatsAppLink } from "@/components/WhatsAppButton";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 const PAYMENT_LINK = "https://checkout.fapshi.com/link/64137255";
 
@@ -18,6 +21,7 @@ const CourseDetail = () => {
   useScrollToTop();
   const { id } = useParams();
   const { user } = useAuth();
+  const [enrolling, setEnrolling] = useState(false);
   const course = courses.find(c => c.id === id);
 
   if (!course) {
@@ -27,12 +31,62 @@ const CourseDetail = () => {
   const whatsappEnrollMessage = `Hello MTech Academy! I want to enroll in the ${course.title} course (${course.price.toLocaleString()} XAF). My name is ____________. Please assist me with the enrollment process.`;
   const whatsappConsultMessage = `Hello MTech Academy! I have questions about the ${course.title} course. Can you help me understand if this is right for me?`;
 
-  const handleEnrollNow = () => {
-    if (!user) {
-      // Redirect to register if not logged in
-      return;
+  const handleEnrollNow = async () => {
+    if (!user || !course) return;
+    
+    setEnrolling(true);
+    
+    try {
+      // Check if already enrolled
+      const { data: existingEnrollment } = await supabase
+        .from("enrollments")
+        .select("id, payment_status")
+        .eq("user_id", user.id)
+        .eq("course_id", course.id)
+        .maybeSingle();
+
+      if (existingEnrollment) {
+        if (existingEnrollment.payment_status === "completed") {
+          toast.info("You're already enrolled in this course!");
+          setEnrolling(false);
+          return;
+        }
+        // Has pending enrollment, open payment link
+        window.open(PAYMENT_LINK, '_blank');
+        toast.success("Opening payment page. Complete payment to access the course.");
+        setEnrolling(false);
+        return;
+      }
+
+      // Create new enrollment with pending status
+      const { data: enrollment, error } = await supabase
+        .from("enrollments")
+        .insert({
+          user_id: user.id,
+          course_id: course.id,
+          payment_status: "pending",
+          progress: 0,
+        })
+        .select()
+        .single();
+
+      if (error) {
+        console.error("Error creating enrollment:", error);
+        toast.error("Failed to create enrollment. Please try again.");
+        setEnrolling(false);
+        return;
+      }
+
+      // Open payment link with enrollment ID as reference
+      // Note: In production, you'd create a custom Fapshi payment with externalId
+      window.open(PAYMENT_LINK, '_blank');
+      toast.success("Opening payment page. Complete payment to access the course.");
+    } catch (error) {
+      console.error("Enrollment error:", error);
+      toast.error("Something went wrong. Please try again.");
+    } finally {
+      setEnrolling(false);
     }
-    window.open(PAYMENT_LINK, '_blank');
   };
 
   return (
@@ -190,10 +244,20 @@ const CourseDetail = () => {
                       size="lg" 
                       className="w-full bg-gradient-to-r from-secondary to-secondary/90 hover:from-secondary/90 hover:to-secondary group"
                       onClick={handleEnrollNow}
+                      disabled={enrolling}
                     >
-                      <CreditCard className="mr-2 h-4 w-4" />
-                      Pay & Enroll Now
-                      <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                      {enrolling ? (
+                        <>
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                          Processing...
+                        </>
+                      ) : (
+                        <>
+                          <CreditCard className="mr-2 h-4 w-4" />
+                          Pay & Enroll Now
+                          <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                        </>
+                      )}
                     </Button>
 
                     <a 
