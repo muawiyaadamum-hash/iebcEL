@@ -1,1 +1,7 @@
 project_id = "ozukfrksvwaqmmsdmlbu"
+
+[functions.ai-chat]
+verify_jwt = true
+
+[functions.fapshi-webhook]
+verify_jwt = false
