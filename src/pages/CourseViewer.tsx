@@ -415,33 +415,50 @@ const CourseViewer = () => {
           </div>
 
           {/* Content Slide */}
-          <div className="flex-1 p-8 flex items-center justify-center">
-            <Card className="w-full max-w-4xl min-h-[400px] bg-gradient-to-br from-muted/50 to-background border-2">
-              <CardContent className="p-8 md:p-12 flex flex-col items-center justify-center h-full">
-                <div className="text-center space-y-6">
-                  <Badge className="text-lg px-4 py-1">
-                    Topic {currentTopicIndex + 1} of {currentModule.topics.length}
-                  </Badge>
+          <div className="flex-1 p-4 md:p-8 overflow-y-auto">
+            <Card className="w-full max-w-4xl mx-auto min-h-[400px] bg-gradient-to-br from-muted/50 to-background border-2">
+              <CardContent className="p-6 md:p-10">
+                <div className="space-y-6">
+                  <div className="flex items-center justify-between flex-wrap gap-2">
+                    <Badge className="text-sm px-3 py-1">
+                      Topic {currentTopicIndex + 1} of {currentModule.topics.length}
+                    </Badge>
+                    <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                      <span className="flex items-center gap-1"><BookOpen className="h-4 w-4" />{course.duration}</span>
+                      <span className="flex items-center gap-1"><Award className="h-4 w-4" />{course.level}</span>
+                    </div>
+                  </div>
                   
-                  <h2 className="text-3xl md:text-4xl font-bold">
+                  <h2 className="text-2xl md:text-3xl font-bold">
                     {currentTopic}
                   </h2>
                   
-                  <p className="text-muted-foreground max-w-2xl mx-auto">
-                    This topic covers essential concepts and practical applications.
-                    Review the material carefully and proceed when ready.
-                  </p>
-
-                  <div className="flex items-center justify-center gap-4 pt-8">
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                      <BookOpen className="h-4 w-4" />
-                      <span>{course.duration}</span>
+                  {currentModule.content ? (
+                    <div className="prose prose-sm md:prose-base dark:prose-invert max-w-none">
+                      <div dangerouslySetInnerHTML={{ 
+                        __html: currentModule.content
+                          .replace(/^# (.*$)/gim, '<h1 class="text-2xl font-bold mt-6 mb-4">$1</h1>')
+                          .replace(/^## (.*$)/gim, '<h2 class="text-xl font-semibold mt-5 mb-3">$1</h2>')
+                          .replace(/^### (.*$)/gim, '<h3 class="text-lg font-medium mt-4 mb-2">$1</h3>')
+                          .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                          .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                          .replace(/```(\w+)?\n([\s\S]*?)```/g, '<pre class="bg-muted p-4 rounded-lg overflow-x-auto my-4"><code>$2</code></pre>')
+                          .replace(/`([^`]+)`/g, '<code class="bg-muted px-1.5 py-0.5 rounded text-sm">$1</code>')
+                          .replace(/^- (.*$)/gim, '<li class="ml-4">$1</li>')
+                          .replace(/^\d+\. (.*$)/gim, '<li class="ml-4 list-decimal">$1</li>')
+                          .replace(/\n\n/g, '</p><p class="my-3">')
+                          .replace(/\|(.+)\|/g, (match) => {
+                            const cells = match.split('|').filter(c => c.trim());
+                            return '<tr>' + cells.map(c => `<td class="border px-3 py-2">${c.trim()}</td>`).join('') + '</tr>';
+                          })
+                      }} />
                     </div>
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                      <Award className="h-4 w-4" />
-                      <span>{course.level}</span>
-                    </div>
-                  </div>
+                  ) : (
+                    <p className="text-muted-foreground">
+                      This topic covers essential concepts and practical applications.
+                      Review the material carefully and proceed when ready.
+                    </p>
+                  )}
                 </div>
               </CardContent>
             </Card>

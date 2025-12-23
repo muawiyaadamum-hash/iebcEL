@@ -1,6 +1,7 @@
 export interface CourseModule {
   title: string;
   topics: string[];
+  content?: string;
 }
 
 export interface Course {
