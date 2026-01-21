@@ -6,21 +6,19 @@ import { Badge } from "@/components/ui/badge";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { courses } from "@/data/courses";
-import { useParams, Navigate, Link } from "react-router-dom";
-import { Clock, TrendingUp, CheckCircle2, ArrowRight, FileText, Award, CreditCard, MessageCircle, User, LogIn, Loader2 } from "lucide-react";
-import { REGISTRATION_FEE, COURSE_FEE } from "@/types/course";
+import { useParams, Navigate, Link, useNavigate } from "react-router-dom";
+import { Clock, TrendingUp, CheckCircle2, ArrowRight, FileText, Award, MessageCircle, User, LogIn, Loader2, BookOpen } from "lucide-react";
 import { useScrollToTop } from "@/hooks/useScrollToTop";
 import { useAuth } from "@/contexts/AuthContext";
 import { getWhatsAppLink } from "@/components/WhatsAppButton";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
-const PAYMENT_LINK = "https://checkout.fapshi.com/link/64137255";
-
 const CourseDetail = () => {
   useScrollToTop();
   const { id } = useParams();
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [enrolling, setEnrolling] = useState(false);
   const course = courses.find(c => c.id === id);
 
@@ -28,7 +26,6 @@ const CourseDetail = () => {
     return <Navigate to="/courses" replace />;
   }
 
-  const whatsappEnrollMessage = `Hello MTech Academy! I want to enroll in the ${course.title} course (${course.price.toLocaleString()} XAF). My name is ____________. Please assist me with the enrollment process.`;
   const whatsappConsultMessage = `Hello MTech Academy! I have questions about the ${course.title} course. Can you help me understand if this is right for me?`;
 
   const handleEnrollNow = async () => {
@@ -47,40 +44,40 @@ const CourseDetail = () => {
 
       if (existingEnrollment) {
         if (existingEnrollment.payment_status === "completed") {
-          toast.info("You're already enrolled in this course!");
-          setEnrolling(false);
+          toast.info("You're already enrolled! Redirecting to course...");
+          navigate(`/learn/${course.id}`);
           return;
         }
-        // Has pending enrollment, open payment link
-        window.open(PAYMENT_LINK, '_blank');
-        toast.success("Opening payment page. Complete payment to access the course.");
-        setEnrolling(false);
+        // Update existing enrollment to completed (free enrollment)
+        await supabase
+          .from("enrollments")
+          .update({ payment_status: "completed" })
+          .eq("id", existingEnrollment.id);
+        
+        toast.success("Enrollment completed! Starting your course...");
+        navigate(`/learn/${course.id}`);
         return;
       }
 
-      // Create new enrollment with pending status
-      const { data: enrollment, error } = await supabase
+      // Create new enrollment with completed status (free enrollment)
+      const { error } = await supabase
         .from("enrollments")
         .insert({
           user_id: user.id,
           course_id: course.id,
-          payment_status: "pending",
+          payment_status: "completed",
           progress: 0,
-        })
-        .select()
-        .single();
+        });
 
       if (error) {
         console.error("Error creating enrollment:", error);
-        toast.error("Failed to create enrollment. Please try again.");
+        toast.error("Failed to enroll. Please try again.");
         setEnrolling(false);
         return;
       }
 
-      // Open payment link with enrollment ID as reference
-      // Note: In production, you'd create a custom Fapshi payment with externalId
-      window.open(PAYMENT_LINK, '_blank');
-      toast.success("Opening payment page. Complete payment to access the course.");
+      toast.success("Successfully enrolled! Starting your course...");
+      navigate(`/learn/${course.id}`);
     } catch (error) {
       console.error("Enrollment error:", error);
       toast.error("Something went wrong. Please try again.");
@@ -206,10 +203,11 @@ const CourseDetail = () => {
             <div>
               <div className="sticky top-24 bg-card rounded-2xl p-8 shadow-[var(--shadow-elevated)] border border-border space-y-6">
                 <div>
+                  <Badge className="bg-green-500 text-white mb-2">FREE ACCESS</Badge>
                   <p className="text-3xl font-bold text-primary mb-2">
-                    {course.price.toLocaleString()} XAF
+                    Free
                   </p>
-                  <p className="text-sm text-muted-foreground">Course fee (one-time payment)</p>
+                  <p className="text-sm text-muted-foreground">Start learning today - no payment required</p>
                 </div>
 
                 <div className="border-t border-border pt-6">
@@ -225,7 +223,7 @@ const CourseDetail = () => {
                     </li>
                     <li className="flex items-center gap-2 text-sm">
                       <CheckCircle2 className="h-4 w-4 text-primary" />
-                      <span>PDF course materials</span>
+                      <span>Interactive PDF materials</span>
                     </li>
                     <li className="flex items-center gap-2 text-sm">
                       <CheckCircle2 className="h-4 w-4 text-primary" />
@@ -249,39 +247,23 @@ const CourseDetail = () => {
                       {enrolling ? (
                         <>
                           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                          Processing...
+                          Enrolling...
                         </>
                       ) : (
                         <>
-                          <CreditCard className="mr-2 h-4 w-4" />
-                          Pay & Enroll Now
+                          <BookOpen className="mr-2 h-4 w-4" />
+                          Start Learning Now
                           <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
                         </>
                       )}
                     </Button>
-
-                    <a 
-                      href={getWhatsAppLink(whatsappEnrollMessage)}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="block"
-                    >
-                      <Button 
-                        size="lg" 
-                        variant="outline"
-                        className="w-full border-green-500 text-green-600 hover:bg-green-50 dark:hover:bg-green-950"
-                      >
-                        <MessageCircle className="mr-2 h-4 w-4" />
-                        Enroll via WhatsApp
-                      </Button>
-                    </a>
                   </>
                 ) : (
                   <>
                     <div className="bg-muted/50 rounded-lg p-4 text-center">
                       <User className="h-8 w-8 mx-auto mb-2 text-muted-foreground" />
                       <p className="text-sm text-muted-foreground mb-3">
-                        Create an account to enroll in this course
+                        Create an account to start learning
                       </p>
                       <div className="space-y-2">
                         <Link to="/register" className="block">
@@ -305,22 +287,6 @@ const CourseDetail = () => {
                         </Link>
                       </div>
                     </div>
-
-                    <a 
-                      href={getWhatsAppLink(whatsappEnrollMessage)}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="block"
-                    >
-                      <Button 
-                        size="lg" 
-                        variant="outline"
-                        className="w-full border-green-500 text-green-600 hover:bg-green-50 dark:hover:bg-green-950"
-                      >
-                        <MessageCircle className="mr-2 h-4 w-4" />
-                        Enroll via WhatsApp
-                      </Button>
-                    </a>
                   </>
                 )}
 
@@ -341,11 +307,10 @@ const CourseDetail = () => {
                 </a>
 
                 <div className="text-center text-sm text-muted-foreground border-t border-border pt-4">
-                  <div className="flex items-center justify-center gap-2 mb-2">
+                  <div className="flex items-center justify-center gap-2">
                     <Award className="h-4 w-4" />
-                    <p className="font-semibold">All courses: {COURSE_FEE.toLocaleString()} XAF</p>
+                    <p className="font-semibold">100% Free Access</p>
                   </div>
-                  <p>Registration: {REGISTRATION_FEE.toLocaleString()} XAF (one-time)</p>
                 </div>
               </div>
             </div>

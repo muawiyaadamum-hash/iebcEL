@@ -12,6 +12,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { toast } from "sonner";
 import { courses } from "@/data/courses";
 import { useScrollToTop } from "@/hooks/useScrollToTop";
+import PDFViewer from "@/components/PDFViewer";
 import {
   Loader2,
   ChevronLeft,
@@ -21,9 +22,9 @@ import {
   Lock,
   Award,
   BookOpen,
-  Download,
   ArrowLeft,
-  GraduationCap
+  GraduationCap,
+  FileText
 } from "lucide-react";
 
 interface ModuleProgress {
@@ -123,11 +124,11 @@ const CourseViewer = () => {
             <Lock className="h-16 w-16 mx-auto text-muted-foreground mb-6" />
             <h1 className="text-3xl font-bold mb-4">Course Not Accessible</h1>
             <p className="text-muted-foreground mb-6 max-w-md mx-auto">
-              You need to enroll and complete payment to access this course content.
+              You need to enroll in this course to access the content.
             </p>
             <div className="flex gap-4 justify-center">
               <Button asChild>
-                <Link to={`/course/${course.id}`}>Enroll Now</Link>
+                <Link to={`/course/${course.id}`}>Enroll Now - Free</Link>
               </Button>
               <Button variant="outline" asChild>
                 <Link to="/dashboard">Go to Dashboard</Link>
@@ -414,54 +415,46 @@ const CourseViewer = () => {
             </div>
           </div>
 
-          {/* Content Slide */}
-          <div className="flex-1 p-4 md:p-8 overflow-y-auto">
-            <Card className="w-full max-w-4xl mx-auto min-h-[400px] bg-gradient-to-br from-muted/50 to-background border-2">
-              <CardContent className="p-6 md:p-10">
-                <div className="space-y-6">
-                  <div className="flex items-center justify-between flex-wrap gap-2">
-                    <Badge className="text-sm px-3 py-1">
-                      Topic {currentTopicIndex + 1} of {currentModule.topics.length}
-                    </Badge>
-                    <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                      <span className="flex items-center gap-1"><BookOpen className="h-4 w-4" />{course.duration}</span>
-                      <span className="flex items-center gap-1"><Award className="h-4 w-4" />{course.level}</span>
+          {/* Content Slide - PDF Viewer Style */}
+          <div className="flex-1 overflow-hidden">
+            {currentModule.content ? (
+              <PDFViewer 
+                content={currentModule.content} 
+                title={`${currentModule.title} - ${currentTopic}`}
+              />
+            ) : (
+              <div className="h-full p-4 md:p-8 overflow-y-auto">
+                <Card className="w-full max-w-4xl mx-auto min-h-[400px] bg-gradient-to-br from-muted/50 to-background border-2">
+                  <CardContent className="p-6 md:p-10">
+                    <div className="space-y-6">
+                      <div className="flex items-center justify-between flex-wrap gap-2">
+                        <Badge className="text-sm px-3 py-1">
+                          Topic {currentTopicIndex + 1} of {currentModule.topics.length}
+                        </Badge>
+                        <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                          <span className="flex items-center gap-1"><BookOpen className="h-4 w-4" />{course.duration}</span>
+                          <span className="flex items-center gap-1"><Award className="h-4 w-4" />{course.level}</span>
+                        </div>
+                      </div>
+                      
+                      <h2 className="text-2xl md:text-3xl font-bold">
+                        {currentTopic}
+                      </h2>
+                      
+                      <div className="flex items-center gap-3 p-4 bg-muted/50 rounded-lg">
+                        <FileText className="h-8 w-8 text-primary" />
+                        <div>
+                          <p className="font-medium">Module Content</p>
+                          <p className="text-sm text-muted-foreground">
+                            Review the material and mark as complete when ready.
+                          </p>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                  
-                  <h2 className="text-2xl md:text-3xl font-bold">
-                    {currentTopic}
-                  </h2>
-                  
-                  {currentModule.content ? (
-                    <div className="prose prose-sm md:prose-base dark:prose-invert max-w-none">
-                      <div dangerouslySetInnerHTML={{ 
-                        __html: currentModule.content
-                          .replace(/^# (.*$)/gim, '<h1 class="text-2xl font-bold mt-6 mb-4">$1</h1>')
-                          .replace(/^## (.*$)/gim, '<h2 class="text-xl font-semibold mt-5 mb-3">$1</h2>')
-                          .replace(/^### (.*$)/gim, '<h3 class="text-lg font-medium mt-4 mb-2">$1</h3>')
-                          .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                          .replace(/\*(.*?)\*/g, '<em>$1</em>')
-                          .replace(/```(\w+)?\n([\s\S]*?)```/g, '<pre class="bg-muted p-4 rounded-lg overflow-x-auto my-4"><code>$2</code></pre>')
-                          .replace(/`([^`]+)`/g, '<code class="bg-muted px-1.5 py-0.5 rounded text-sm">$1</code>')
-                          .replace(/^- (.*$)/gim, '<li class="ml-4">$1</li>')
-                          .replace(/^\d+\. (.*$)/gim, '<li class="ml-4 list-decimal">$1</li>')
-                          .replace(/\n\n/g, '</p><p class="my-3">')
-                          .replace(/\|(.+)\|/g, (match) => {
-                            const cells = match.split('|').filter(c => c.trim());
-                            return '<tr>' + cells.map(c => `<td class="border px-3 py-2">${c.trim()}</td>`).join('') + '</tr>';
-                          })
-                      }} />
-                    </div>
-                  ) : (
-                    <p className="text-muted-foreground">
-                      This topic covers essential concepts and practical applications.
-                      Review the material carefully and proceed when ready.
-                    </p>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
+                  </CardContent>
+                </Card>
+              </div>
+            )}
           </div>
 
           {/* Navigation Footer */}

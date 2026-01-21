@@ -242,10 +242,8 @@ const Dashboard = () => {
                               <h3 className="font-semibold text-lg">{course!.title}</h3>
                               <p className="text-sm text-muted-foreground">{course!.duration}</p>
                             </div>
-                            <Badge 
-                              variant={enrollment.payment_status === 'completed' ? 'default' : 'secondary'}
-                            >
-                              {enrollment.payment_status === 'completed' ? 'Active' : 'Pending Payment'}
+                            <Badge variant="default">
+                              Active
                             </Badge>
                           </div>
                           
@@ -262,8 +260,8 @@ const Dashboard = () => {
                               Enrolled: {new Date(enrollment.enrolled_at).toLocaleDateString()}
                             </span>
                             <Button variant="ghost" size="sm" asChild>
-                              <Link to={enrollment.payment_status === 'completed' ? `/learn/${course!.id}` : `/course/${course!.id}`}>
-                                {enrollment.payment_status === 'completed' ? 'Continue Learning' : 'Complete Payment'}
+                              <Link to={`/learn/${course!.id}`}>
+                                Continue Learning
                                 <ChevronRight className="h-4 w-4 ml-1" />
                               </Link>
                             </Button>
