@@ -120,13 +120,18 @@ const Auth = () => {
     }
     
     setIsSubmitting(true);
-    const { error } = await signUp(signupData.email, signupData.password, {
-      full_name: signupData.fullName,
-      phone: signupData.phone,
-      date_of_birth: signupData.dateOfBirth,
-      address: signupData.address,
-      education: signupData.education
-    });
+
+    // Only send metadata fields that have values.
+    // (Avoid sending empty strings like date_of_birth="" which can break backend parsing.)
+    const metadata: Record<string, string> = {
+      full_name: signupData.fullName.trim(),
+    };
+    if (signupData.phone.trim()) metadata.phone = signupData.phone.trim();
+    if (signupData.dateOfBirth) metadata.date_of_birth = signupData.dateOfBirth;
+    if (signupData.address.trim()) metadata.address = signupData.address.trim();
+    if (signupData.education.trim()) metadata.education = signupData.education.trim();
+
+    const { error } = await signUp(signupData.email.trim(), signupData.password, metadata);
     setIsSubmitting(false);
     
     if (error) {

@@ -71,17 +71,23 @@ const Register = () => {
     setIsLoading(true);
 
     try {
+      // Only send metadata fields that have values.
+      // (Avoid sending empty strings like date_of_birth="" which can break backend parsing.)
+      const metadata: Record<string, string> = {
+        full_name: formData.fullName.trim(),
+        phone: formData.phone.trim(),
+      };
+      if (formData.dateOfBirth) metadata.date_of_birth = formData.dateOfBirth;
+      if (formData.address.trim()) metadata.address = formData.address.trim();
+      if (formData.education.trim()) metadata.education = formData.education.trim();
+
       const { data, error } = await supabase.auth.signUp({
         email: formData.email,
         password: formData.password,
         options: {
           emailRedirectTo: `${window.location.origin}/dashboard`,
           data: {
-            full_name: formData.fullName,
-            phone: formData.phone,
-            date_of_birth: formData.dateOfBirth,
-            address: formData.address,
-            education: formData.education,
+            ...metadata,
           }
         }
       });
