@@ -8,6 +8,16 @@ import humanResourcesImg from '@/assets/human-resources.jpg';
 import businessAdminImg from '@/assets/business-admin.jpg';
 import transportLogisticsImg from '@/assets/transport-logistics.jpg';
 import aiBasicsImg from '@/assets/ai-basics.jpg';
+import digitalMarketingImg from '@/assets/digital-marketing.jpg';
+import dataAnalyticsImg from '@/assets/data-analytics.jpg';
+import cloudComputingImg from '@/assets/cloud-computing.jpg';
+import mobileDevImg from '@/assets/mobile-dev.jpg';
+import projectManagementImg from '@/assets/project-management.jpg';
+import uiUxDesignImg from '@/assets/ui-ux-design.jpg';
+import blockchainImg from '@/assets/blockchain.jpg';
+import devopsImg from '@/assets/devops.jpg';
+import ecommerceImg from '@/assets/ecommerce.jpg';
+import videoEditingImg from '@/assets/video-editing.jpg';
 
 export const courses: Course[] = [
   // ============ TECHNOLOGY COURSES ============
@@ -3734,6 +3744,1839 @@ All the goods and materials a business holds for sale or use.
 - Fewer errors
 - Real-time visibility
 - Better decisions
+        `
+      }
+    ]
+  },
+  // ============ NEW TECH-ERA SKILLS COURSES ============
+  {
+    id: 'digital-marketing',
+    title: 'Digital Marketing Mastery',
+    description: 'Master social media marketing, SEO, content strategy, and paid advertising to grow businesses online in the digital age.',
+    category: 'Technology',
+    duration: '10 weeks',
+    level: 'Beginner',
+    price: 35000,
+    image: digitalMarketingImg,
+    featured: true,
+    learningOutcomes: [
+      'Create effective social media marketing campaigns',
+      'Optimize websites for search engines (SEO)',
+      'Run paid advertising on Google and Facebook',
+      'Analyze marketing data and ROI',
+      'Build email marketing funnels'
+    ],
+    modules: [
+      {
+        title: 'Introduction to Digital Marketing',
+        topics: ['Digital Marketing Landscape', 'Marketing Channels', 'Customer Journey', 'Setting Goals'],
+        content: `
+# Introduction to Digital Marketing
+
+## What is Digital Marketing?
+Digital marketing encompasses all marketing efforts that use electronic devices or the internet. It includes channels like search engines, social media, email, and websites.
+
+## Key Channels
+- **Search Engine Marketing (SEM)**: Paid ads on search engines
+- **Search Engine Optimization (SEO)**: Organic search visibility
+- **Social Media Marketing**: Facebook, Instagram, LinkedIn, TikTok
+- **Email Marketing**: Direct communication with subscribers
+- **Content Marketing**: Blogs, videos, podcasts
+
+## The Customer Journey
+1. Awareness - Customer discovers your brand
+2. Consideration - Customer evaluates options
+3. Decision - Customer makes a purchase
+4. Retention - Customer becomes loyal
+5. Advocacy - Customer refers others
+        `
+      },
+      {
+        title: 'Social Media Marketing',
+        topics: ['Platform Strategy', 'Content Creation', 'Community Management', 'Analytics'],
+        content: `
+# Social Media Marketing
+
+## Platform Selection
+Choose platforms based on your audience:
+- **Facebook**: Broad demographics, great for ads
+- **Instagram**: Visual content, younger audience
+- **LinkedIn**: B2B, professional networking
+- **TikTok**: Short-form video, Gen Z audience
+- **Twitter/X**: News, real-time engagement
+
+## Content Strategy
+- 80/20 Rule: 80% value, 20% promotion
+- Consistency is key
+- Use a content calendar
+- Mix formats: images, videos, stories, reels
+
+## Engagement Best Practices
+- Respond to comments quickly
+- Ask questions to spark conversation
+- Use hashtags strategically
+- Collaborate with influencers
+        `
+      },
+      {
+        title: 'Search Engine Optimization',
+        topics: ['On-Page SEO', 'Off-Page SEO', 'Technical SEO', 'Local SEO'],
+        content: `
+# Search Engine Optimization (SEO)
+
+## On-Page SEO
+Optimize elements on your website:
+- Title tags and meta descriptions
+- Header tags (H1, H2, H3)
+- Keyword placement
+- Image alt text
+- Internal linking
+
+## Off-Page SEO
+Build authority through:
+- Backlink building
+- Social signals
+- Brand mentions
+- Guest posting
+
+## Technical SEO
+- Site speed optimization
+- Mobile-friendly design
+- XML sitemaps
+- Schema markup
+- HTTPS security
+        `
+      },
+      {
+        title: 'Paid Advertising',
+        topics: ['Google Ads', 'Facebook Ads', 'Retargeting', 'Budget Management'],
+        content: `
+# Paid Advertising
+
+## Google Ads
+- Search ads: Target keywords
+- Display ads: Visual banners
+- Shopping ads: Product listings
+- YouTube ads: Video advertising
+
+## Facebook/Meta Ads
+- Detailed audience targeting
+- Lookalike audiences
+- Multiple ad formats
+- Instagram integration
+
+## Key Metrics
+- **CPC**: Cost Per Click
+- **CPM**: Cost Per 1000 Impressions
+- **CTR**: Click-Through Rate
+- **ROAS**: Return On Ad Spend
+- **CPA**: Cost Per Acquisition
+        `
+      },
+      {
+        title: 'Analytics & Reporting',
+        topics: ['Google Analytics', 'Social Analytics', 'KPIs', 'Data-Driven Decisions'],
+        content: `
+# Analytics & Reporting
+
+## Google Analytics
+Track website performance:
+- Users and sessions
+- Traffic sources
+- Behavior flow
+- Conversion tracking
+- Goal setup
+
+## Key Performance Indicators
+- Website traffic
+- Conversion rate
+- Customer acquisition cost
+- Lifetime value
+- Engagement rate
+
+## Creating Reports
+- Define objectives first
+- Focus on actionable insights
+- Compare periods
+- Visualize data effectively
+        `
+      }
+    ]
+  },
+  {
+    id: 'data-analytics',
+    title: 'Data Analytics & Visualization',
+    description: 'Learn to collect, analyze, and visualize data to drive business decisions using Excel, Python, and modern BI tools.',
+    category: 'Technology',
+    duration: '12 weeks',
+    level: 'Intermediate',
+    price: 35000,
+    image: dataAnalyticsImg,
+    featured: true,
+    learningOutcomes: [
+      'Analyze data using Excel and Python',
+      'Create compelling data visualizations',
+      'Use business intelligence tools like Power BI',
+      'Apply statistical analysis to business problems',
+      'Present data insights to stakeholders'
+    ],
+    modules: [
+      {
+        title: 'Foundations of Data Analytics',
+        topics: ['Data Types', 'Data Collection', 'Data Quality', 'Analytics Process'],
+        content: `
+# Foundations of Data Analytics
+
+## What is Data Analytics?
+The process of examining data sets to draw conclusions about the information they contain.
+
+## Types of Analytics
+- **Descriptive**: What happened?
+- **Diagnostic**: Why did it happen?
+- **Predictive**: What will happen?
+- **Prescriptive**: What should we do?
+
+## Data Quality
+The 5 Vs of Data:
+- Volume: Amount of data
+- Velocity: Speed of data flow
+- Variety: Different data types
+- Veracity: Data accuracy
+- Value: Business usefulness
+        `
+      },
+      {
+        title: 'Excel for Data Analysis',
+        topics: ['Formulas & Functions', 'Pivot Tables', 'Charts', 'Power Query'],
+        content: `
+# Excel for Data Analysis
+
+## Essential Functions
+- VLOOKUP/XLOOKUP
+- SUMIF/COUNTIF
+- IF statements
+- INDEX/MATCH
+- TEXT functions
+
+## Pivot Tables
+- Summarize large datasets
+- Group and filter data
+- Create calculated fields
+- Build pivot charts
+
+## Power Query
+- Import data from multiple sources
+- Transform and clean data
+- Automate data preparation
+- Merge and append queries
+        `
+      },
+      {
+        title: 'Python for Data Analysis',
+        topics: ['Pandas Basics', 'Data Manipulation', 'NumPy', 'Data Cleaning'],
+        content: `
+# Python for Data Analysis
+
+## Pandas Library
+\`\`\`python
+import pandas as pd
+
+# Load data
+df = pd.read_csv('data.csv')
+
+# Basic operations
+df.head()
+df.describe()
+df.info()
+
+# Filter data
+filtered = df[df['sales'] > 1000]
+
+# Group and aggregate
+summary = df.groupby('category')['sales'].sum()
+\`\`\`
+
+## Data Cleaning
+- Handle missing values
+- Remove duplicates
+- Fix data types
+- Normalize data
+        `
+      },
+      {
+        title: 'Data Visualization',
+        topics: ['Chart Types', 'Design Principles', 'Matplotlib', 'Seaborn'],
+        content: `
+# Data Visualization
+
+## Choosing the Right Chart
+- **Bar Charts**: Compare categories
+- **Line Charts**: Show trends over time
+- **Pie Charts**: Show proportions (use sparingly)
+- **Scatter Plots**: Show relationships
+- **Heatmaps**: Show patterns in matrices
+
+## Visualization with Python
+\`\`\`python
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Line chart
+plt.plot(df['date'], df['sales'])
+plt.title('Sales Over Time')
+plt.show()
+
+# Seaborn heatmap
+sns.heatmap(correlation_matrix, annot=True)
+\`\`\`
+
+## Design Principles
+- Simplicity is key
+- Label everything clearly
+- Use appropriate colors
+- Tell a story with data
+        `
+      },
+      {
+        title: 'Business Intelligence Tools',
+        topics: ['Power BI', 'Dashboard Design', 'Data Modeling', 'Sharing Reports'],
+        content: `
+# Business Intelligence Tools
+
+## Power BI
+- Connect to data sources
+- Transform data with Power Query
+- Build data models
+- Create interactive reports
+- Share dashboards
+
+## Dashboard Design
+Best practices:
+- Start with the key question
+- Use consistent formatting
+- Enable interactivity
+- Mobile-friendly design
+- Refresh data automatically
+
+## DAX Formulas
+\`\`\`
+Total Sales = SUM(Sales[Amount])
+YoY Growth = DIVIDE([This Year] - [Last Year], [Last Year])
+\`\`\`
+        `
+      }
+    ]
+  },
+  {
+    id: 'cloud-computing',
+    title: 'Cloud Computing Fundamentals',
+    description: 'Understand cloud services, infrastructure, and deployment models. Learn AWS, Azure, and Google Cloud basics.',
+    category: 'Technology',
+    duration: '10 weeks',
+    level: 'Intermediate',
+    price: 35000,
+    image: cloudComputingImg,
+    learningOutcomes: [
+      'Understand cloud computing concepts and models',
+      'Work with AWS core services',
+      'Deploy applications to the cloud',
+      'Manage cloud security and costs',
+      'Design scalable cloud architectures'
+    ],
+    modules: [
+      {
+        title: 'Introduction to Cloud Computing',
+        topics: ['What is Cloud', 'Service Models', 'Deployment Models', 'Major Providers'],
+        content: `
+# Introduction to Cloud Computing
+
+## What is Cloud Computing?
+On-demand delivery of IT resources over the internet with pay-as-you-go pricing.
+
+## Service Models
+- **IaaS**: Infrastructure as a Service (virtual machines)
+- **PaaS**: Platform as a Service (development platforms)
+- **SaaS**: Software as a Service (applications)
+
+## Deployment Models
+- Public Cloud: Shared infrastructure
+- Private Cloud: Dedicated infrastructure
+- Hybrid Cloud: Mix of public and private
+- Multi-Cloud: Multiple cloud providers
+
+## Major Providers
+- Amazon Web Services (AWS)
+- Microsoft Azure
+- Google Cloud Platform (GCP)
+        `
+      },
+      {
+        title: 'AWS Core Services',
+        topics: ['EC2', 'S3', 'RDS', 'Lambda'],
+        content: `
+# AWS Core Services
+
+## EC2 (Elastic Compute Cloud)
+Virtual servers in the cloud:
+- Launch instances
+- Choose instance types
+- Configure security groups
+- Attach storage
+
+## S3 (Simple Storage Service)
+Object storage:
+- Unlimited storage
+- High durability
+- Lifecycle policies
+- Static website hosting
+
+## RDS (Relational Database Service)
+Managed databases:
+- MySQL, PostgreSQL, SQL Server
+- Automated backups
+- Multi-AZ deployment
+- Read replicas
+
+## Lambda
+Serverless compute:
+- Run code without servers
+- Pay per execution
+- Auto-scaling
+- Event-driven
+        `
+      },
+      {
+        title: 'Cloud Security',
+        topics: ['IAM', 'Encryption', 'Network Security', 'Compliance'],
+        content: `
+# Cloud Security
+
+## Identity and Access Management (IAM)
+- Users and groups
+- Roles and policies
+- Principle of least privilege
+- Multi-factor authentication
+
+## Data Protection
+- Encryption at rest
+- Encryption in transit
+- Key management
+- Data classification
+
+## Network Security
+- Virtual Private Cloud (VPC)
+- Security groups
+- Network ACLs
+- VPN connections
+
+## Compliance
+- GDPR, HIPAA, SOC 2
+- Shared responsibility model
+- Audit logging
+- Regular assessments
+        `
+      },
+      {
+        title: 'Cloud Architecture',
+        topics: ['High Availability', 'Scalability', 'Disaster Recovery', 'Best Practices'],
+        content: `
+# Cloud Architecture
+
+## High Availability
+- Multiple availability zones
+- Load balancing
+- Auto-scaling groups
+- Health checks
+
+## Scalability
+- Horizontal scaling: Add more instances
+- Vertical scaling: Bigger instances
+- Database scaling
+- Caching strategies
+
+## Disaster Recovery
+- Backup and restore
+- Pilot light
+- Warm standby
+- Multi-site active-active
+
+## Well-Architected Framework
+Five pillars:
+1. Operational Excellence
+2. Security
+3. Reliability
+4. Performance Efficiency
+5. Cost Optimization
+        `
+      },
+      {
+        title: 'Cloud Cost Management',
+        topics: ['Pricing Models', 'Cost Optimization', 'Budgets', 'Reserved Instances'],
+        content: `
+# Cloud Cost Management
+
+## Pricing Models
+- On-demand: Pay by the hour/second
+- Reserved: Commit for 1-3 years
+- Spot: Bid on unused capacity
+- Savings Plans: Flexible commitment
+
+## Cost Optimization Strategies
+- Right-size resources
+- Delete unused resources
+- Use auto-scaling
+- Choose appropriate storage tiers
+- Reserved capacity for steady workloads
+
+## Monitoring Costs
+- Cost Explorer
+- Budgets and alerts
+- Tagging resources
+- Regular reviews
+        `
+      }
+    ]
+  },
+  {
+    id: 'mobile-app-development',
+    title: 'Mobile App Development',
+    description: 'Build cross-platform mobile applications for iOS and Android using React Native and modern development practices.',
+    category: 'Technology',
+    duration: '14 weeks',
+    level: 'Intermediate',
+    price: 35000,
+    image: mobileDevImg,
+    learningOutcomes: [
+      'Build cross-platform mobile apps with React Native',
+      'Design mobile user interfaces',
+      'Work with device APIs and native features',
+      'Publish apps to App Store and Play Store',
+      'Implement mobile authentication and data storage'
+    ],
+    modules: [
+      {
+        title: 'Mobile Development Fundamentals',
+        topics: ['Native vs Cross-Platform', 'React Native Setup', 'Expo Framework', 'Project Structure'],
+        content: `
+# Mobile Development Fundamentals
+
+## Native vs Cross-Platform
+**Native Development**:
+- iOS: Swift/Objective-C
+- Android: Kotlin/Java
+- Best performance
+- Platform-specific
+
+**Cross-Platform**:
+- React Native, Flutter
+- Single codebase
+- Faster development
+- Near-native performance
+
+## React Native with Expo
+\`\`\`bash
+npx create-expo-app MyApp
+cd MyApp
+npx expo start
+\`\`\`
+
+## Project Structure
+\`\`\`
+├── App.js
+├── app.json
+├── components/
+├── screens/
+├── navigation/
+├── hooks/
+└── assets/
+\`\`\`
+        `
+      },
+      {
+        title: 'UI Components & Styling',
+        topics: ['Core Components', 'Flexbox Layout', 'StyleSheet', 'Custom Components'],
+        content: `
+# UI Components & Styling
+
+## Core Components
+\`\`\`jsx
+import { View, Text, Image, ScrollView, TextInput, TouchableOpacity } from 'react-native';
+
+const MyScreen = () => (
+  <View style={styles.container}>
+    <Text style={styles.title}>Hello World</Text>
+    <TouchableOpacity onPress={() => alert('Pressed!')}>
+      <Text>Click Me</Text>
+    </TouchableOpacity>
+  </View>
+);
+\`\`\`
+
+## Flexbox Layout
+- flexDirection: row | column
+- justifyContent: center | space-between
+- alignItems: center | flex-start
+- flex: 1
+
+## StyleSheet
+\`\`\`jsx
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 20,
+    backgroundColor: '#fff',
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+  },
+});
+\`\`\`
+        `
+      },
+      {
+        title: 'Navigation & State Management',
+        topics: ['React Navigation', 'Stack Navigator', 'Tab Navigator', 'State Management'],
+        content: `
+# Navigation & State Management
+
+## React Navigation Setup
+\`\`\`jsx
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+
+const Stack = createStackNavigator();
+
+const App = () => (
+  <NavigationContainer>
+    <Stack.Navigator>
+      <Stack.Screen name="Home" component={HomeScreen} />
+      <Stack.Screen name="Details" component={DetailsScreen} />
+    </Stack.Navigator>
+  </NavigationContainer>
+);
+\`\`\`
+
+## Tab Navigation
+\`\`\`jsx
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+
+const Tab = createBottomTabNavigator();
+\`\`\`
+
+## State Management
+- useState for local state
+- Context API for shared state
+- Redux for complex apps
+- AsyncStorage for persistence
+        `
+      },
+      {
+        title: 'Working with APIs & Data',
+        topics: ['Fetch API', 'Axios', 'Local Storage', 'Real-time Data'],
+        content: `
+# Working with APIs & Data
+
+## Fetching Data
+\`\`\`jsx
+const [data, setData] = useState([]);
+const [loading, setLoading] = useState(true);
+
+useEffect(() => {
+  fetch('https://api.example.com/data')
+    .then(res => res.json())
+    .then(json => {
+      setData(json);
+      setLoading(false);
+    });
+}, []);
+\`\`\`
+
+## AsyncStorage
+\`\`\`jsx
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+// Save data
+await AsyncStorage.setItem('user', JSON.stringify(userData));
+
+// Read data
+const user = await AsyncStorage.getItem('user');
+\`\`\`
+
+## FlatList for Lists
+\`\`\`jsx
+<FlatList
+  data={items}
+  renderItem={({ item }) => <ItemCard item={item} />}
+  keyExtractor={item => item.id}
+/>
+\`\`\`
+        `
+      },
+      {
+        title: 'Publishing Your App',
+        topics: ['App Store Guidelines', 'Play Store Requirements', 'Build Process', 'Updates'],
+        content: `
+# Publishing Your App
+
+## Pre-Launch Checklist
+- Test on multiple devices
+- Optimize performance
+- Handle errors gracefully
+- Add analytics
+- Prepare marketing assets
+
+## iOS App Store
+1. Apple Developer Account ($99/year)
+2. App Store Connect setup
+3. Screenshots and descriptions
+4. App Review process (1-7 days)
+
+## Google Play Store
+1. Google Play Console ($25 one-time)
+2. Store listing setup
+3. Content rating questionnaire
+4. Review process (hours to days)
+
+## Building for Production
+\`\`\`bash
+# Expo build
+eas build --platform all
+
+# Generate app bundle
+eas submit --platform ios
+eas submit --platform android
+\`\`\`
+        `
+      }
+    ]
+  },
+  {
+    id: 'project-management-tech',
+    title: 'Tech Project Management',
+    description: 'Lead technology projects successfully using Agile, Scrum, and modern project management tools and methodologies.',
+    category: 'Technology',
+    duration: '8 weeks',
+    level: 'Intermediate',
+    price: 35000,
+    image: projectManagementImg,
+    learningOutcomes: [
+      'Apply Agile and Scrum methodologies',
+      'Use project management tools effectively',
+      'Lead development teams and sprints',
+      'Manage stakeholders and requirements',
+      'Deliver projects on time and budget'
+    ],
+    modules: [
+      {
+        title: 'Project Management Fundamentals',
+        topics: ['PM Basics', 'Project Lifecycle', 'Stakeholder Management', 'Requirements Gathering'],
+        content: `
+# Project Management Fundamentals
+
+## What is Project Management?
+The application of knowledge, skills, tools, and techniques to project activities to meet project requirements.
+
+## Project Lifecycle
+1. Initiation
+2. Planning
+3. Execution
+4. Monitoring & Control
+5. Closure
+
+## Key Constraints
+The Iron Triangle:
+- Scope
+- Time
+- Cost
+(Quality is at the center)
+
+## Stakeholder Management
+- Identify stakeholders
+- Assess influence and interest
+- Develop communication plan
+- Manage expectations
+        `
+      },
+      {
+        title: 'Agile Methodology',
+        topics: ['Agile Principles', 'Agile vs Waterfall', 'User Stories', 'Backlog Management'],
+        content: `
+# Agile Methodology
+
+## Agile Manifesto Values
+- Individuals and interactions over processes and tools
+- Working software over comprehensive documentation
+- Customer collaboration over contract negotiation
+- Responding to change over following a plan
+
+## Agile vs Waterfall
+| Aspect | Agile | Waterfall |
+|--------|-------|-----------|
+| Approach | Iterative | Sequential |
+| Flexibility | High | Low |
+| Customer Involvement | Continuous | Limited |
+| Delivery | Incremental | End of project |
+
+## User Stories
+Format: "As a [user], I want [feature], so that [benefit]"
+
+Example: "As a customer, I want to filter products by price, so that I can find items within my budget."
+
+## Story Points
+Relative estimation using Fibonacci: 1, 2, 3, 5, 8, 13, 21
+        `
+      },
+      {
+        title: 'Scrum Framework',
+        topics: ['Scrum Roles', 'Scrum Events', 'Scrum Artifacts', 'Sprint Planning'],
+        content: `
+# Scrum Framework
+
+## Scrum Roles
+- **Product Owner**: Owns the backlog, prioritizes work
+- **Scrum Master**: Facilitates the process, removes blockers
+- **Development Team**: Cross-functional team that delivers
+
+## Scrum Events
+- **Sprint**: 2-4 week iteration
+- **Sprint Planning**: Define sprint goals
+- **Daily Standup**: 15-min sync (What did I do? What will I do? Blockers?)
+- **Sprint Review**: Demo to stakeholders
+- **Sprint Retrospective**: Team improvement
+
+## Scrum Artifacts
+- **Product Backlog**: All desired work
+- **Sprint Backlog**: Work for current sprint
+- **Increment**: Potentially shippable product
+
+## Definition of Done
+- Code complete
+- Tests passing
+- Code reviewed
+- Documentation updated
+- Deployed to staging
+        `
+      },
+      {
+        title: 'Project Management Tools',
+        topics: ['Jira', 'Trello', 'Asana', 'GitHub Projects'],
+        content: `
+# Project Management Tools
+
+## Jira
+- Industry standard for software teams
+- Sprints and backlogs
+- Customizable workflows
+- Advanced reporting
+
+## Trello
+- Kanban-style boards
+- Simple and visual
+- Great for small teams
+- Easy to learn
+
+## Asana
+- Task and project management
+- Timeline views
+- Team collaboration
+- Integrations
+
+## Best Practices
+- Keep tasks small and specific
+- Update status regularly
+- Use labels and tags
+- Maintain clean backlogs
+- Regular grooming sessions
+        `
+      },
+      {
+        title: 'Leading Tech Teams',
+        topics: ['Team Leadership', 'Communication', 'Conflict Resolution', 'Remote Teams'],
+        content: `
+# Leading Tech Teams
+
+## Effective Leadership
+- Set clear expectations
+- Provide regular feedback
+- Remove blockers quickly
+- Celebrate successes
+- Foster psychological safety
+
+## Communication
+- Over-communicate, especially remotely
+- Use appropriate channels
+- Document decisions
+- Status updates and reports
+
+## Managing Remote Teams
+- Regular video check-ins
+- Async communication culture
+- Clear working hours
+- Virtual team building
+- Trust over micromanagement
+
+## Conflict Resolution
+1. Address issues early
+2. Listen to all perspectives
+3. Focus on interests, not positions
+4. Find win-win solutions
+5. Follow up afterward
+        `
+      }
+    ]
+  },
+  {
+    id: 'ui-ux-design',
+    title: 'UI/UX Design',
+    description: 'Design beautiful, user-centered digital products. Learn research, wireframing, prototyping, and design systems.',
+    category: 'Technology',
+    duration: '12 weeks',
+    level: 'Beginner',
+    price: 35000,
+    image: uiUxDesignImg,
+    featured: true,
+    learningOutcomes: [
+      'Conduct user research and usability testing',
+      'Create wireframes and prototypes in Figma',
+      'Apply visual design principles',
+      'Build and maintain design systems',
+      'Design for accessibility and mobile'
+    ],
+    modules: [
+      {
+        title: 'UX Design Fundamentals',
+        topics: ['What is UX', 'Design Thinking', 'User Research', 'Personas'],
+        content: `
+# UX Design Fundamentals
+
+## What is UX Design?
+User Experience (UX) design is the process of creating products that provide meaningful and relevant experiences to users.
+
+## The Design Thinking Process
+1. **Empathize**: Understand user needs
+2. **Define**: Frame the problem
+3. **Ideate**: Generate solutions
+4. **Prototype**: Build to learn
+5. **Test**: Validate with users
+
+## User Research Methods
+- Interviews
+- Surveys
+- Observation
+- Usability testing
+- Analytics review
+
+## Creating Personas
+Template:
+- Name and photo
+- Demographics
+- Goals and motivations
+- Pain points and frustrations
+- Behaviors and preferences
+        `
+      },
+      {
+        title: 'Information Architecture & Wireframing',
+        topics: ['Site Maps', 'User Flows', 'Wireframing', 'Low-Fi Prototypes'],
+        content: `
+# Information Architecture & Wireframing
+
+## Information Architecture
+Organizing content in a logical, user-friendly way:
+- Card sorting
+- Site maps
+- Navigation design
+- Content hierarchy
+
+## User Flows
+Document how users complete tasks:
+- Entry points
+- Decision points
+- Actions and outcomes
+- Success criteria
+
+## Wireframing
+Low-fidelity representations:
+- Focus on structure
+- No visual design
+- Quick to create and iterate
+- Paper or digital
+
+## Tools for Wireframing
+- Figma
+- Sketch
+- Balsamiq
+- Whimsical
+- Even pen and paper!
+        `
+      },
+      {
+        title: 'Visual Design Principles',
+        topics: ['Typography', 'Color Theory', 'Layout & Grid', 'Visual Hierarchy'],
+        content: `
+# Visual Design Principles
+
+## Typography
+- Choose readable fonts
+- Limit to 2-3 typefaces
+- Establish clear hierarchy
+- Consider line height and spacing
+
+## Color Theory
+- Primary, secondary, accent colors
+- Color psychology
+- Contrast for accessibility
+- 60-30-10 rule
+
+## Layout & Grid Systems
+- 8-point grid
+- Columns and gutters
+- Responsive breakpoints
+- Whitespace is important
+
+## Visual Hierarchy
+Guide user attention:
+- Size and scale
+- Color and contrast
+- Positioning
+- Typography weight
+        `
+      },
+      {
+        title: 'Prototyping in Figma',
+        topics: ['Figma Basics', 'Components', 'Auto Layout', 'Interactive Prototypes'],
+        content: `
+# Prototyping in Figma
+
+## Figma Basics
+- Frames and layers
+- Shapes and text
+- Images and icons
+- Styles (colors, text, effects)
+
+## Components
+- Create reusable elements
+- Variants for states
+- Instances and overrides
+- Component libraries
+
+## Auto Layout
+- Responsive components
+- Padding and spacing
+- Stacking and alignment
+- Nested auto layouts
+
+## Interactive Prototypes
+- Connect frames with interactions
+- Hover, click, and drag triggers
+- Animations and transitions
+- Smart animate
+- Prototype sharing
+        `
+      },
+      {
+        title: 'Design Systems & Handoff',
+        topics: ['Design Tokens', 'Component Libraries', 'Documentation', 'Developer Handoff'],
+        content: `
+# Design Systems & Handoff
+
+## Design Systems
+A collection of reusable components and guidelines:
+- Design tokens (colors, spacing, typography)
+- Component library
+- Pattern library
+- Style guide
+- Documentation
+
+## Building a Design System
+1. Audit existing designs
+2. Define foundations (tokens)
+3. Create core components
+4. Document usage guidelines
+5. Maintain and evolve
+
+## Developer Handoff
+- Inspection mode in Figma
+- Export assets properly
+- Provide specifications
+- Communicate interaction details
+- Answer developer questions
+
+## Accessibility in Design
+- Color contrast (WCAG 2.1)
+- Touch target sizes
+- Clear focus states
+- Alternative text
+- Keyboard navigation
+        `
+      }
+    ]
+  },
+  {
+    id: 'blockchain-crypto',
+    title: 'Blockchain & Cryptocurrency',
+    description: 'Understand blockchain technology, cryptocurrencies, smart contracts, and decentralized applications (dApps).',
+    category: 'Technology',
+    duration: '10 weeks',
+    level: 'Intermediate',
+    price: 35000,
+    image: blockchainImg,
+    learningOutcomes: [
+      'Understand blockchain technology fundamentals',
+      'Work with cryptocurrencies and wallets',
+      'Write basic smart contracts',
+      'Understand DeFi and NFTs',
+      'Evaluate blockchain use cases'
+    ],
+    modules: [
+      {
+        title: 'Blockchain Fundamentals',
+        topics: ['What is Blockchain', 'Distributed Ledgers', 'Consensus Mechanisms', 'Cryptography Basics'],
+        content: `
+# Blockchain Fundamentals
+
+## What is Blockchain?
+A decentralized, distributed ledger that records transactions across many computers.
+
+## Key Properties
+- **Decentralized**: No single point of control
+- **Immutable**: Cannot be changed once written
+- **Transparent**: All transactions are visible
+- **Secure**: Protected by cryptography
+
+## Consensus Mechanisms
+- **Proof of Work (PoW)**: Mining, high energy use
+- **Proof of Stake (PoS)**: Staking, energy efficient
+- **Delegated PoS**: Representatives validate
+- **Proof of Authority**: Trusted validators
+
+## Cryptography Basics
+- Hash functions (SHA-256)
+- Public and private keys
+- Digital signatures
+- Merkle trees
+        `
+      },
+      {
+        title: 'Cryptocurrencies',
+        topics: ['Bitcoin', 'Ethereum', 'Altcoins', 'Wallets & Exchanges'],
+        content: `
+# Cryptocurrencies
+
+## Bitcoin
+- First cryptocurrency (2009)
+- Digital gold / store of value
+- Limited supply (21 million)
+- Proof of Work consensus
+
+## Ethereum
+- Smart contract platform
+- Programmable blockchain
+- Moved to Proof of Stake
+- Foundation for DeFi and NFTs
+
+## Wallets
+- **Hot Wallets**: Online, convenient, less secure
+- **Cold Wallets**: Offline, secure, for long-term storage
+- **Custodial**: Exchange holds keys
+- **Non-custodial**: You control keys
+
+## Exchanges
+- Centralized (CEX): Binance, Coinbase
+- Decentralized (DEX): Uniswap, PancakeSwap
+- P2P: LocalBitcoins
+        `
+      },
+      {
+        title: 'Smart Contracts',
+        topics: ['What are Smart Contracts', 'Solidity Basics', 'ERC Standards', 'Security'],
+        content: `
+# Smart Contracts
+
+## What are Smart Contracts?
+Self-executing contracts with terms written in code. They automatically enforce and execute agreements.
+
+## Solidity Basics
+\`\`\`solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract SimpleStorage {
+    uint256 private value;
+
+    function set(uint256 _value) public {
+        value = _value;
+    }
+
+    function get() public view returns (uint256) {
+        return value;
+    }
+}
+\`\`\`
+
+## ERC Standards
+- **ERC-20**: Fungible tokens
+- **ERC-721**: NFTs (non-fungible tokens)
+- **ERC-1155**: Multi-token standard
+
+## Security Considerations
+- Reentrancy attacks
+- Integer overflow
+- Access control
+- Code audits
+        `
+      },
+      {
+        title: 'DeFi & NFTs',
+        topics: ['Decentralized Finance', 'Lending & Borrowing', 'NFT Basics', 'Use Cases'],
+        content: `
+# DeFi & NFTs
+
+## Decentralized Finance (DeFi)
+Financial services without intermediaries:
+- Lending and borrowing
+- Decentralized exchanges
+- Yield farming
+- Stablecoins
+
+## Popular DeFi Protocols
+- Uniswap: Token swapping
+- Aave: Lending/borrowing
+- Compound: Money markets
+- MakerDAO: DAI stablecoin
+
+## NFTs (Non-Fungible Tokens)
+Unique digital assets on blockchain:
+- Digital art
+- Collectibles
+- Gaming items
+- Music and media
+- Virtual real estate
+
+## Use Cases
+- Proof of ownership
+- Artist royalties
+- Membership passes
+- Identity verification
+        `
+      },
+      {
+        title: 'Blockchain Business Applications',
+        topics: ['Enterprise Blockchain', 'Supply Chain', 'Identity', 'Future Trends'],
+        content: `
+# Blockchain Business Applications
+
+## Enterprise Blockchain
+- Hyperledger Fabric
+- Private/consortium chains
+- Permissioned networks
+- Industry solutions
+
+## Supply Chain
+- Product tracking
+- Authenticity verification
+- Transparency
+- Reducing fraud
+
+## Digital Identity
+- Self-sovereign identity
+- Credential verification
+- Privacy preservation
+- Interoperability
+
+## Future Trends
+- Layer 2 scaling solutions
+- Cross-chain interoperability
+- Central Bank Digital Currencies (CBDCs)
+- Tokenization of real assets
+- Web3 and the metaverse
+        `
+      }
+    ]
+  },
+  {
+    id: 'devops-fundamentals',
+    title: 'DevOps & CI/CD',
+    description: 'Learn DevOps practices, continuous integration and deployment, containerization with Docker, and infrastructure automation.',
+    category: 'Technology',
+    duration: '12 weeks',
+    level: 'Advanced',
+    price: 35000,
+    image: devopsImg,
+    learningOutcomes: [
+      'Implement CI/CD pipelines',
+      'Containerize applications with Docker',
+      'Use Kubernetes for orchestration',
+      'Automate infrastructure with code',
+      'Monitor and troubleshoot production systems'
+    ],
+    modules: [
+      {
+        title: 'DevOps Culture & Practices',
+        topics: ['What is DevOps', 'DevOps Principles', 'Benefits', 'Team Structure'],
+        content: `
+# DevOps Culture & Practices
+
+## What is DevOps?
+A set of practices that combines software development (Dev) and IT operations (Ops) to shorten the development lifecycle.
+
+## Key Principles
+- Collaboration between Dev and Ops
+- Automation of repetitive tasks
+- Continuous improvement
+- Fast feedback loops
+- Shared responsibility
+
+## Benefits
+- Faster time to market
+- Improved reliability
+- Better quality
+- Increased efficiency
+- Happier teams
+
+## CALMS Framework
+- **C**ulture
+- **A**utomation
+- **L**ean
+- **M**easurement
+- **S**haring
+        `
+      },
+      {
+        title: 'Version Control & Git',
+        topics: ['Git Basics', 'Branching Strategies', 'Pull Requests', 'Git Flow'],
+        content: `
+# Version Control & Git
+
+## Git Basics
+\`\`\`bash
+# Initialize repository
+git init
+
+# Add and commit
+git add .
+git commit -m "Initial commit"
+
+# Work with remotes
+git remote add origin <url>
+git push -u origin main
+\`\`\`
+
+## Branching Strategies
+- **Git Flow**: feature, develop, release, hotfix, main
+- **GitHub Flow**: Simple, feature branches to main
+- **Trunk-Based**: Small, frequent merges
+
+## Pull Requests
+- Code review process
+- Automated checks
+- Approval workflows
+- Merge strategies (merge, squash, rebase)
+
+## Best Practices
+- Write clear commit messages
+- Keep commits small and focused
+- Review code thoroughly
+- Use branch protection
+        `
+      },
+      {
+        title: 'Continuous Integration & Deployment',
+        topics: ['CI/CD Concepts', 'GitHub Actions', 'Jenkins', 'Pipeline Design'],
+        content: `
+# Continuous Integration & Deployment
+
+## CI/CD Concepts
+- **Continuous Integration**: Automatically build and test on every commit
+- **Continuous Delivery**: Always ready to deploy
+- **Continuous Deployment**: Automatically deploy to production
+
+## GitHub Actions Example
+\`\`\`yaml
+name: CI/CD Pipeline
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run tests
+        run: npm test
+      - name: Build
+        run: npm run build
+      - name: Deploy
+        if: github.ref == 'refs/heads/main'
+        run: ./deploy.sh
+\`\`\`
+
+## Pipeline Stages
+1. Build
+2. Unit Tests
+3. Integration Tests
+4. Security Scan
+5. Deploy to Staging
+6. Smoke Tests
+7. Deploy to Production
+        `
+      },
+      {
+        title: 'Docker & Containers',
+        topics: ['Container Basics', 'Dockerfile', 'Docker Compose', 'Container Registry'],
+        content: `
+# Docker & Containers
+
+## What are Containers?
+Lightweight, standalone packages that include everything needed to run software.
+
+## Dockerfile
+\`\`\`dockerfile
+FROM node:18-alpine
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+EXPOSE 3000
+CMD ["npm", "start"]
+\`\`\`
+
+## Docker Commands
+\`\`\`bash
+# Build image
+docker build -t myapp:latest .
+
+# Run container
+docker run -p 3000:3000 myapp:latest
+
+# List containers
+docker ps
+
+# Stop container
+docker stop <container-id>
+\`\`\`
+
+## Docker Compose
+\`\`\`yaml
+version: '3.8'
+services:
+  web:
+    build: .
+    ports:
+      - "3000:3000"
+  db:
+    image: postgres:14
+    environment:
+      POSTGRES_PASSWORD: secret
+\`\`\`
+        `
+      },
+      {
+        title: 'Monitoring & Observability',
+        topics: ['Logging', 'Metrics', 'Tracing', 'Alerting'],
+        content: `
+# Monitoring & Observability
+
+## Three Pillars of Observability
+- **Logs**: Detailed event records
+- **Metrics**: Numerical measurements over time
+- **Traces**: Request journey through services
+
+## Logging Best Practices
+- Structured logging (JSON)
+- Appropriate log levels
+- Correlation IDs
+- Centralized log management
+
+## Metrics & Monitoring
+- System metrics (CPU, memory, disk)
+- Application metrics (requests, errors, latency)
+- Business metrics (conversions, revenue)
+- Tools: Prometheus, Grafana
+
+## Alerting
+- Define SLOs (Service Level Objectives)
+- Alert on symptoms, not causes
+- Avoid alert fatigue
+- Runbooks for common issues
+
+## Common Tools
+- ELK Stack (Elasticsearch, Logstash, Kibana)
+- Datadog
+- New Relic
+- PagerDuty
+        `
+      }
+    ]
+  },
+  {
+    id: 'ecommerce-business',
+    title: 'E-Commerce Business',
+    description: 'Launch and grow an online business. Learn e-commerce platforms, payment processing, and digital sales strategies.',
+    category: 'Business',
+    duration: '10 weeks',
+    level: 'Beginner',
+    price: 35000,
+    image: ecommerceImg,
+    learningOutcomes: [
+      'Set up an online store',
+      'Configure payment processing',
+      'Manage inventory and fulfillment',
+      'Optimize for conversions',
+      'Scale your e-commerce business'
+    ],
+    modules: [
+      {
+        title: 'E-Commerce Fundamentals',
+        topics: ['E-Commerce Models', 'Platform Selection', 'Legal Requirements', 'Business Planning'],
+        content: `
+# E-Commerce Fundamentals
+
+## E-Commerce Business Models
+- **B2C**: Business to Consumer (most common)
+- **B2B**: Business to Business
+- **C2C**: Consumer to Consumer (marketplaces)
+- **D2C**: Direct to Consumer (brands)
+- **Dropshipping**: Sell without inventory
+
+## Platform Options
+- **Shopify**: Easy to use, scalable
+- **WooCommerce**: WordPress plugin, flexible
+- **BigCommerce**: Enterprise features
+- **Custom**: Full control, more work
+
+## Legal Requirements
+- Business registration
+- Tax compliance
+- Privacy policy
+- Terms of service
+- Consumer protection laws
+        `
+      },
+      {
+        title: 'Setting Up Your Store',
+        topics: ['Store Design', 'Product Listings', 'Categories', 'Navigation'],
+        content: `
+# Setting Up Your Store
+
+## Store Design
+- Choose a clean, professional theme
+- Consistent branding
+- Mobile-first approach
+- Fast loading times
+
+## Product Listings
+Essential elements:
+- High-quality images (multiple angles)
+- Clear, benefit-focused titles
+- Detailed descriptions
+- Accurate pricing
+- Stock status
+
+## Product Photography
+- Good lighting
+- Clean backgrounds
+- Multiple angles
+- Lifestyle shots
+- Zoom capability
+
+## Site Structure
+- Clear categories
+- Easy navigation
+- Search functionality
+- Filters and sorting
+- Breadcrumbs
+        `
+      },
+      {
+        title: 'Payments & Checkout',
+        topics: ['Payment Gateways', 'Checkout Optimization', 'Security', 'Multi-Currency'],
+        content: `
+# Payments & Checkout
+
+## Payment Gateways
+- Stripe: Developer-friendly
+- PayPal: Trusted by consumers
+- Mobile Money: Essential for Africa
+- Credit/Debit cards
+
+## Checkout Optimization
+- Guest checkout option
+- Minimal form fields
+- Progress indicators
+- Multiple payment options
+- Clear shipping costs upfront
+
+## Reducing Cart Abandonment
+- Send reminder emails
+- Exit-intent popups
+- Trust badges and security seals
+- Easy returns policy
+- Live chat support
+
+## Security
+- SSL certificate (HTTPS)
+- PCI compliance
+- Fraud protection
+- Secure passwords
+        `
+      },
+      {
+        title: 'Inventory & Fulfillment',
+        topics: ['Inventory Management', 'Shipping Options', 'Order Processing', 'Returns'],
+        content: `
+# Inventory & Fulfillment
+
+## Inventory Management
+- Track stock levels
+- Set reorder points
+- Prevent overselling
+- Manage variants (size, color)
+
+## Shipping Strategies
+- Free shipping threshold
+- Flat rate shipping
+- Real-time carrier rates
+- Local pickup/delivery
+
+## Fulfillment Options
+- Self-fulfillment
+- Third-party logistics (3PL)
+- Dropshipping
+- Amazon FBA
+
+## Returns & Refunds
+- Clear return policy
+- Easy return process
+- Quick refunds
+- Return shipping labels
+        `
+      },
+      {
+        title: 'Growing Your Business',
+        topics: ['Marketing', 'Analytics', 'Customer Retention', 'Scaling'],
+        content: `
+# Growing Your Business
+
+## Marketing Channels
+- Search engine optimization
+- Paid advertising
+- Social media marketing
+- Email marketing
+- Influencer partnerships
+
+## Key Metrics to Track
+- Conversion rate
+- Average order value
+- Customer acquisition cost
+- Customer lifetime value
+- Cart abandonment rate
+
+## Customer Retention
+- Email follow-ups
+- Loyalty programs
+- Personalized recommendations
+- Excellent customer service
+- Re-engagement campaigns
+
+## Scaling Your Store
+- Expand product range
+- Enter new markets
+- Optimize operations
+- Build a team
+- Invest in technology
+        `
+      }
+    ]
+  },
+  {
+    id: 'video-content-creation',
+    title: 'Video Editing & Content Creation',
+    description: 'Create professional videos for YouTube, social media, and business. Learn editing, storytelling, and content strategy.',
+    category: 'Technology',
+    duration: '10 weeks',
+    level: 'Beginner',
+    price: 35000,
+    image: videoEditingImg,
+    learningOutcomes: [
+      'Edit videos using professional software',
+      'Create engaging content for social platforms',
+      'Plan and script video content',
+      'Optimize videos for different platforms',
+      'Build and grow a content audience'
+    ],
+    modules: [
+      {
+        title: 'Video Production Basics',
+        topics: ['Equipment', 'Lighting', 'Audio', 'Composition'],
+        content: `
+# Video Production Basics
+
+## Essential Equipment
+- Camera: Smartphone, DSLR, or mirrorless
+- Tripod or stabilizer
+- Microphone: Lavalier or shotgun
+- Lighting: Ring light or softbox
+- Memory cards and storage
+
+## Lighting Fundamentals
+- Three-point lighting
+- Natural light techniques
+- Avoid harsh shadows
+- Color temperature (warm/cool)
+
+## Audio Quality
+- External microphone is essential
+- Reduce background noise
+- Monitor audio levels
+- Room acoustics matter
+
+## Composition Rules
+- Rule of thirds
+- Headroom and look room
+- Leading lines
+- Clean backgrounds
+        `
+      },
+      {
+        title: 'Video Editing Fundamentals',
+        topics: ['Editing Software', 'Timeline Editing', 'Cuts & Transitions', 'Exporting'],
+        content: `
+# Video Editing Fundamentals
+
+## Popular Editing Software
+- **DaVinci Resolve**: Free, professional
+- **Adobe Premiere Pro**: Industry standard
+- **Final Cut Pro**: Mac exclusive
+- **CapCut**: Mobile-friendly, free
+
+## Basic Workflow
+1. Import footage
+2. Organize in bins
+3. Create sequence
+4. Rough cut
+5. Fine cut
+6. Add B-roll
+7. Audio mixing
+8. Color correction
+9. Export
+
+## Essential Cuts
+- Hard cut: Direct transition
+- J-cut: Audio before video
+- L-cut: Audio continues
+- Match cut: Similarity between shots
+- Jump cut: Same shot, time skip
+
+## Export Settings
+- Resolution: 1080p or 4K
+- Frame rate: 24, 30, or 60 fps
+- Codec: H.264 or H.265
+- Bitrate: Higher = better quality
+        `
+      },
+      {
+        title: 'Content Strategy',
+        topics: ['Niche Selection', 'Content Calendar', 'Scripting', 'Hooks & CTAs'],
+        content: `
+# Content Strategy
+
+## Finding Your Niche
+- Intersection of passion, skill, market
+- Research competition
+- Validate demand
+- Unique angle or value proposition
+
+## Content Planning
+- Content calendar
+- Batch production
+- Consistent posting schedule
+- Mix of content types
+
+## Scripting Videos
+Structure:
+1. **Hook**: Grab attention in 3 seconds
+2. **Introduction**: What you'll cover
+3. **Main Content**: Deliver value
+4. **Call to Action**: What to do next
+
+## Engagement Tactics
+- Ask questions
+- Create polls
+- Respond to comments
+- Collaborate with others
+- Community building
+        `
+      },
+      {
+        title: 'Platform-Specific Content',
+        topics: ['YouTube', 'TikTok/Reels', 'LinkedIn', 'Stories'],
+        content: `
+# Platform-Specific Content
+
+## YouTube
+- Longer form content (8-15 minutes ideal)
+- SEO optimization (titles, descriptions, tags)
+- Thumbnails are crucial
+- End screens and cards
+- Consistent upload schedule
+
+## TikTok & Reels
+- Vertical format (9:16)
+- Hook in first 1-3 seconds
+- Trending sounds and effects
+- Captions for silent viewing
+- 15-60 second sweet spot
+
+## LinkedIn Video
+- Professional tone
+- Value-focused content
+- Square or vertical format
+- Native upload preferred
+- Add captions
+
+## Stories (Instagram/Facebook)
+- Behind-the-scenes content
+- Interactive stickers
+- Quick updates
+- Authentic, less polished
+- 15-second segments
+        `
+      },
+      {
+        title: 'Growing Your Audience',
+        topics: ['Algorithm Understanding', 'SEO for Video', 'Monetization', 'Analytics'],
+        content: `
+# Growing Your Audience
+
+## Understanding Algorithms
+Key metrics that matter:
+- Watch time / retention
+- Engagement (likes, comments, shares)
+- Click-through rate (CTR)
+- Session duration
+- Subscriber velocity
+
+## Video SEO
+- Keyword research
+- Optimized titles and descriptions
+- Custom thumbnails
+- Tags and hashtags
+- Closed captions
+
+## Monetization Options
+- Ad revenue (YouTube Partner Program)
+- Sponsorships and brand deals
+- Affiliate marketing
+- Selling products/services
+- Memberships and Patreon
+
+## Analytics & Improvement
+- Review performance regularly
+- Identify best performers
+- A/B test thumbnails
+- Study audience retention graphs
+- Learn from failures
         `
       }
     ]
