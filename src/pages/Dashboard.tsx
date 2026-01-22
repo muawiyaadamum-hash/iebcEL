@@ -60,12 +60,12 @@ const Dashboard = () => {
       if (!user) return;
 
       try {
-        // Fetch profile
+        // Fetch profile (use maybeSingle to avoid error if profile missing)
         const { data: profileData } = await supabase
           .from("profiles")
           .select("full_name, email, phone, avatar_url")
           .eq("user_id", user.id)
-          .single();
+          .maybeSingle();
 
         if (profileData) {
           setProfile(profileData);
