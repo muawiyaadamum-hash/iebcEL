@@ -1,10 +1,11 @@
 import { Button } from "@/components/ui/button";
-import { GraduationCap, Menu, X, Download, User, LogOut, MessageCircle } from "lucide-react";
+import { Menu, X, Download, User, LogOut, MessageCircle } from "lucide-react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import NotificationBell from "./NotificationBell";
 import { getWhatsAppLink } from "./WhatsAppButton";
+import logo from "@/assets/logo.jpg";
 
 const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -22,10 +23,8 @@ const Navbar = () => {
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between">
           <Link to="/" className="flex items-center gap-2">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-accent">
-              <GraduationCap className="h-6 w-6 text-primary-foreground" />
-            </div>
-            <span className="text-xl font-bold">MTech Academy</span>
+            <img src={logo} alt="MTECHsolutions Academy" className="h-10 w-10 rounded-lg object-cover" />
+            <span className="text-xl font-bold">MTECHsolutions</span>
           </Link>
 
           {/* Desktop Navigation */}
