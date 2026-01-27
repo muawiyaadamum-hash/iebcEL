@@ -18,5 +18,4 @@ export interface Course {
   featured?: boolean;
 }
 
-export const REGISTRATION_FEE = 5000;
-export const COURSE_FEE = 35000;
+export const REGISTRATION_FEE = 10000;

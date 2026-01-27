@@ -290,7 +290,7 @@ const Admin = () => {
   const totalEnrollments = enrollments.length;
   const completedPayments = enrollments.filter(e => e.payment_status === "completed").length;
   const pendingPayments = enrollments.filter(e => e.payment_status === "pending").length;
-  const totalRevenue = completedPayments * 35000; // Course fee
+  const totalRevenue = users.length * 10000; // Registration fee per user
 
   const filteredUsers = users.filter(u =>
     u.full_name.toLowerCase().includes(searchTerm.toLowerCase()) ||

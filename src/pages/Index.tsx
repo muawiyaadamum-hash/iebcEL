@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useScrollToTop } from "@/hooks/useScrollToTop";
-import { COURSE_FEE, REGISTRATION_FEE } from "@/types/course";
+import { REGISTRATION_FEE } from "@/types/course";
 
 const Index = () => {
   useScrollToTop();
@@ -76,9 +76,9 @@ const Index = () => {
               <div className="h-12 w-12 bg-gradient-to-br from-primary to-accent rounded-xl flex items-center justify-center mb-6">
                 <CheckCircle2 className="h-6 w-6 text-white" />
               </div>
-              <h3 className="text-xl font-semibold mb-3">Affordable Pricing</h3>
+              <h3 className="text-xl font-semibold mb-3">One-Time Registration</h3>
               <p className="text-muted-foreground">
-                Pay only {REGISTRATION_FEE.toLocaleString()} XAF registration fee and {COURSE_FEE.toLocaleString()} XAF per course. No hidden costs.
+                Pay only {REGISTRATION_FEE.toLocaleString()} XAF registration fee for lifetime access to all courses. No hidden costs.
               </p>
             </div>
 
