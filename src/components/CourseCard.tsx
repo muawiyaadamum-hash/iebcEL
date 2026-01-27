@@ -51,8 +51,8 @@ const CourseCard = ({ course }: CourseCardProps) => {
       
       <CardFooter className="flex items-center justify-between">
         <div>
-          <p className="text-2xl font-bold text-primary">{course.price.toLocaleString()} XAF</p>
-          <p className="text-xs text-muted-foreground">One-time payment</p>
+          <p className="text-2xl font-bold text-green-600">FREE</p>
+          <p className="text-xs text-muted-foreground">Registration required</p>
         </div>
         <Link to={`/courses/${course.id}`}>
           <Button className="bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90">

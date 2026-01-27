@@ -73,12 +73,12 @@ const Hero = () => {
               <div className="relative h-full flex items-center justify-center p-12">
                 <div className="text-center text-white space-y-6">
                   <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20">
-                    <h3 className="text-3xl font-bold mb-2">5,000 XAF</h3>
-                    <p className="text-white/90">Registration Fee</p>
+                    <h3 className="text-3xl font-bold mb-2">10,000 XAF</h3>
+                    <p className="text-white/90">One-Time Registration</p>
                   </div>
                   <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20">
-                    <h3 className="text-3xl font-bold mb-2">15,000 XAF</h3>
-                    <p className="text-white/90">Per Course</p>
+                    <h3 className="text-3xl font-bold mb-2">FREE</h3>
+                    <p className="text-white/90">All Courses Access</p>
                   </div>
                 </div>
               </div>

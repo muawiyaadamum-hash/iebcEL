@@ -38,6 +38,9 @@ const Navbar = () => {
             <Link to="/about" className="text-sm font-medium text-foreground hover:text-primary transition-colors">
               About
             </Link>
+            <Link to="/events" className="text-sm font-medium text-foreground hover:text-primary transition-colors">
+              Events
+            </Link>
             <Link to="/install" className="text-sm font-medium text-foreground hover:text-primary transition-colors flex items-center gap-1">
               <Download className="h-4 w-4" />
               Install
@@ -117,6 +120,13 @@ const Navbar = () => {
               onClick={() => setMobileMenuOpen(false)}
             >
               About
+            </Link>
+            <Link
+              to="/events"
+              className="block text-sm font-medium text-foreground hover:text-primary transition-colors"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Events
             </Link>
             <Link
               to="/install"

@@ -11,8 +11,9 @@ import { useNavigate, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useScrollToTop } from "@/hooks/useScrollToTop";
-import { Loader2, MessageCircle } from "lucide-react";
-import { getWhatsAppLink } from "@/components/WhatsAppButton";
+import { Loader2, MessageCircle, CheckCircle2 } from "lucide-react";
+import { getWhatsAppLink, getRegistrationMessage } from "@/components/WhatsAppButton";
+import { REGISTRATION_FEE } from "@/types/course";
 
 const Register = () => {
   useScrollToTop();
@@ -72,7 +73,6 @@ const Register = () => {
 
     try {
       // Only send metadata fields that have values.
-      // (Avoid sending empty strings like date_of_birth="" which can break backend parsing.)
       const metadata: Record<string, string> = {
         full_name: formData.fullName.trim(),
         phone: formData.phone.trim(),
@@ -107,9 +107,17 @@ const Register = () => {
 
       if (data.user) {
         toast({
-          title: "Registration Successful!",
-          description: "Welcome to MTech Academy! Redirecting to your dashboard...",
+          title: "Account Created Successfully!",
+          description: "Now complete your registration via WhatsApp to get full access.",
         });
+        
+        // Open WhatsApp with prefilled registration message
+        const whatsappMessage = getRegistrationMessage(
+          formData.fullName,
+          formData.email,
+          formData.phone
+        );
+        window.open(getWhatsAppLink(whatsappMessage), '_blank');
         
         setTimeout(() => {
           navigate("/dashboard");
@@ -143,10 +151,10 @@ const Register = () => {
         <div className="container mx-auto px-4 max-w-4xl">
           <div className="text-center mb-12">
             <h1 className="text-4xl md:text-5xl font-bold mb-4">
-              Create Your Account
+              Register for MTech Academy
             </h1>
             <p className="text-lg text-muted-foreground">
-              Join MTech Academy and start your learning journey
+              One-time registration of {REGISTRATION_FEE.toLocaleString()} XAF for unlimited course access
             </p>
             <p className="text-sm text-muted-foreground mt-2">
               Already have an account?{" "}
@@ -162,7 +170,7 @@ const Register = () => {
                 <CardHeader>
                   <CardTitle>Student Registration</CardTitle>
                   <CardDescription>
-                    Create your free account to access courses
+                    Create your account and complete payment via WhatsApp
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -305,7 +313,10 @@ const Register = () => {
                           Creating Account...
                         </>
                       ) : (
-                        "Create Free Account"
+                        <>
+                          <MessageCircle className="mr-2 h-4 w-4" />
+                          Register & Pay via WhatsApp
+                        </>
                       )}
                     </Button>
                   </form>
@@ -316,13 +327,13 @@ const Register = () => {
             <div className="space-y-6">
               <Card className="bg-gradient-to-br from-primary to-accent text-white border-0">
                 <CardHeader>
-                  <CardTitle className="text-white">Free Registration</CardTitle>
+                  <CardTitle className="text-white">Registration Fee</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="text-center">
-                    <p className="text-4xl font-bold mb-2">FREE</p>
+                    <p className="text-4xl font-bold mb-2">{REGISTRATION_FEE.toLocaleString()} XAF</p>
                     <p className="text-white/90 text-sm">
-                      Create your account for free
+                      One-time payment for lifetime access
                     </p>
                   </div>
                 </CardContent>
@@ -334,27 +345,65 @@ const Register = () => {
                 </CardHeader>
                 <CardContent className="space-y-3">
                   <div className="flex items-start gap-2">
-                    <div className="h-2 w-2 rounded-full bg-primary mt-2" />
+                    <CheckCircle2 className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
                     <p className="text-sm text-muted-foreground">
-                      Browse all available courses
+                      Unlimited access to all courses
                     </p>
                   </div>
                   <div className="flex items-start gap-2">
-                    <div className="h-2 w-2 rounded-full bg-primary mt-2" />
+                    <CheckCircle2 className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
                     <p className="text-sm text-muted-foreground">
-                      Student dashboard access
+                      Lifetime course access
                     </p>
                   </div>
                   <div className="flex items-start gap-2">
-                    <div className="h-2 w-2 rounded-full bg-primary mt-2" />
+                    <CheckCircle2 className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
                     <p className="text-sm text-muted-foreground">
-                      Track your enrolled courses
+                      Certificate of completion
                     </p>
                   </div>
                   <div className="flex items-start gap-2">
-                    <div className="h-2 w-2 rounded-full bg-primary mt-2" />
+                    <CheckCircle2 className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
                     <p className="text-sm text-muted-foreground">
                       24/7 AI support access
+                    </p>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <CheckCircle2 className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
+                    <p className="text-sm text-muted-foreground">
+                      WhatsApp support
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle>How It Works</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="flex items-start gap-3">
+                    <div className="w-6 h-6 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-sm font-medium flex-shrink-0">
+                      1
+                    </div>
+                    <p className="text-sm text-muted-foreground">
+                      Fill out the registration form
+                    </p>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <div className="w-6 h-6 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-sm font-medium flex-shrink-0">
+                      2
+                    </div>
+                    <p className="text-sm text-muted-foreground">
+                      Complete payment via WhatsApp
+                    </p>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <div className="w-6 h-6 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-sm font-medium flex-shrink-0">
+                      3
+                    </div>
+                    <p className="text-sm text-muted-foreground">
+                      Get instant access to all courses
                     </p>
                   </div>
                 </CardContent>
@@ -373,7 +422,7 @@ const Register = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    <Button variant="outline" className="w-full border-green-500 text-green-600 hover:bg-green-50 dark:hover:bg-green-950">
+                    <Button variant="outline" className="w-full border-primary/50 hover:bg-primary/5">
                       <MessageCircle className="mr-2 h-4 w-4" />
                       WhatsApp Support
                     </Button>
