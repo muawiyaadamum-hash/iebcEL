@@ -3,13 +3,16 @@ import { Menu, X, Download, User, LogOut, MessageCircle } from "lucide-react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 import NotificationBell from "./NotificationBell";
+import LanguageSwitcher from "./LanguageSwitcher";
 import { getWhatsAppLink } from "./WhatsAppButton";
 import logo from "@/assets/logo.jpg";
 
 const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { user, signOut } = useAuth();
+  const { t } = useLanguage();
   const navigate = useNavigate();
 
   const handleSignOut = async () => {
@@ -30,16 +33,16 @@ const Navbar = () => {
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-4">
             <Link to="/" className="text-sm font-medium text-foreground hover:text-primary transition-colors">
-              Home
+              {t("nav.home")}
             </Link>
             <Link to="/courses" className="text-sm font-medium text-foreground hover:text-primary transition-colors">
-              Courses
+              {t("nav.courses")}
             </Link>
             <Link to="/about" className="text-sm font-medium text-foreground hover:text-primary transition-colors">
-              About
+              {t("nav.about")}
             </Link>
             <Link to="/events" className="text-sm font-medium text-foreground hover:text-primary transition-colors">
-              Events
+              {t("nav.events")}
             </Link>
             <Link to="/install" className="text-sm font-medium text-foreground hover:text-primary transition-colors flex items-center gap-1">
               <Download className="h-4 w-4" />
@@ -55,29 +58,31 @@ const Navbar = () => {
               WhatsApp
             </a>
             
+            <LanguageSwitcher />
+            
             <NotificationBell />
             
             {user ? (
               <>
                 <Link to="/dashboard" className="text-sm font-medium text-foreground hover:text-primary transition-colors flex items-center gap-1">
                   <User className="h-4 w-4" />
-                  Dashboard
+                  {t("nav.dashboard")}
                 </Link>
                 <Button variant="outline" size="sm" onClick={handleSignOut}>
                   <LogOut className="h-4 w-4 mr-2" />
-                  Sign Out
+                  {t("nav.logout")}
                 </Button>
               </>
             ) : (
               <>
                 <Link to="/auth">
                   <Button variant="outline" size="sm">
-                    Login
+                    {t("nav.login")}
                   </Button>
                 </Link>
                 <Link to="/register">
                   <Button className="bg-gradient-to-r from-secondary to-secondary/90 hover:from-secondary/90 hover:to-secondary">
-                    Register Now
+                    {t("nav.register")}
                   </Button>
                 </Link>
               </>
@@ -100,33 +105,36 @@ const Navbar = () => {
         {/* Mobile Navigation */}
         {mobileMenuOpen && (
           <div className="md:hidden py-4 space-y-4">
+            <div className="flex justify-end mb-2">
+              <LanguageSwitcher />
+            </div>
             <Link
               to="/"
               className="block text-sm font-medium text-foreground hover:text-primary transition-colors"
               onClick={() => setMobileMenuOpen(false)}
             >
-              Home
+              {t("nav.home")}
             </Link>
             <Link
               to="/courses"
               className="block text-sm font-medium text-foreground hover:text-primary transition-colors"
               onClick={() => setMobileMenuOpen(false)}
             >
-              Courses
+              {t("nav.courses")}
             </Link>
             <Link
               to="/about"
               className="block text-sm font-medium text-foreground hover:text-primary transition-colors"
               onClick={() => setMobileMenuOpen(false)}
             >
-              About
+              {t("nav.about")}
             </Link>
             <Link
               to="/events"
               className="block text-sm font-medium text-foreground hover:text-primary transition-colors"
               onClick={() => setMobileMenuOpen(false)}
             >
-              Events
+              {t("nav.events")}
             </Link>
             <Link
               to="/install"
@@ -155,23 +163,23 @@ const Navbar = () => {
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   <User className="h-4 w-4" />
-                  Dashboard
+                  {t("nav.dashboard")}
                 </Link>
                 <Button variant="outline" className="w-full" onClick={handleSignOut}>
                   <LogOut className="h-4 w-4 mr-2" />
-                  Sign Out
+                  {t("nav.logout")}
                 </Button>
               </>
             ) : (
               <>
                 <Link to="/auth" onClick={() => setMobileMenuOpen(false)}>
                   <Button variant="outline" className="w-full mb-2">
-                    Login
+                    {t("nav.login")}
                   </Button>
                 </Link>
                 <Link to="/register" onClick={() => setMobileMenuOpen(false)}>
                   <Button className="w-full bg-gradient-to-r from-secondary to-secondary/90">
-                    Register Now
+                    {t("nav.register")}
                   </Button>
                 </Link>
               </>
