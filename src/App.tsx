@@ -4,6 +4,9 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
+import { LanguageProvider } from "@/contexts/LanguageContext";
+import { AccessCodeProvider } from "@/contexts/AccessCodeContext";
+import AccessCodeGate from "@/components/AccessCodeGate";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import AIChatbot from "@/components/AIChatbot";
 import Index from "./pages/Index";
@@ -23,42 +26,48 @@ const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <AuthProvider>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/courses" element={<Courses />} />
-            <Route path="/courses/:id" element={<CourseDetail />} />
-            <Route path="/learn/:id" element={
-              <ProtectedRoute>
-                <CourseViewer />
-              </ProtectedRoute>
-            } />
-            <Route path="/register" element={<Register />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/events" element={<Events />} />
-            <Route path="/install" element={<Install />} />
-            <Route path="/auth" element={<Auth />} />
-            <Route path="/dashboard" element={
-              <ProtectedRoute>
-                <Dashboard />
-              </ProtectedRoute>
-            } />
-            <Route path="/admin" element={
-              <ProtectedRoute>
-                <Admin />
-              </ProtectedRoute>
-            } />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-          <AIChatbot />
-        </BrowserRouter>
-      </TooltipProvider>
-    </AuthProvider>
+    <LanguageProvider>
+      <AccessCodeProvider>
+        <AuthProvider>
+          <TooltipProvider>
+            <Toaster />
+            <Sonner />
+            <AccessCodeGate>
+              <BrowserRouter>
+                <Routes>
+                  <Route path="/" element={<Index />} />
+                  <Route path="/courses" element={<Courses />} />
+                  <Route path="/courses/:id" element={<CourseDetail />} />
+                  <Route path="/learn/:id" element={
+                    <ProtectedRoute>
+                      <CourseViewer />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/register" element={<Register />} />
+                  <Route path="/about" element={<About />} />
+                  <Route path="/events" element={<Events />} />
+                  <Route path="/install" element={<Install />} />
+                  <Route path="/auth" element={<Auth />} />
+                  <Route path="/dashboard" element={
+                    <ProtectedRoute>
+                      <Dashboard />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/admin" element={
+                    <ProtectedRoute>
+                      <Admin />
+                    </ProtectedRoute>
+                  } />
+                  {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+                <AIChatbot />
+              </BrowserRouter>
+            </AccessCodeGate>
+          </TooltipProvider>
+        </AuthProvider>
+      </AccessCodeProvider>
+    </LanguageProvider>
   </QueryClientProvider>
 );
 
