@@ -13,10 +13,10 @@ const Footer = () => {
               <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-accent">
                 <GraduationCap className="h-6 w-6 text-primary-foreground" />
               </div>
-              <span className="text-xl font-bold">MTech Academy</span>
+              <span className="text-xl font-bold">IEBC E-Learning</span>
             </div>
             <p className="text-sm text-muted-foreground">
-              Empowering learners with professional online courses in technology, business, and more.
+              Centre de Formation IEBC — Formations certifiantes en finance islamique, commerce international, management et technologies en zone CEMAC.
             </p>
             <div className="flex gap-2">
               <a
@@ -121,7 +121,7 @@ const Footer = () => {
         </div>
 
         <div className="border-t border-border mt-12 pt-8 text-center text-sm text-muted-foreground">
-          <p>&copy; {new Date().getFullYear()} MTech Academy. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} Centre de Formation IEBC — IEBC E-Learning. Tous droits réservés.</p>
         </div>
       </div>
     </footer>

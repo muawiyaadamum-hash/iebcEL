@@ -26,8 +26,8 @@ const Navbar = () => {
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between">
           <Link to="/" className="flex items-center gap-2">
-            <img src={logo} alt="MTECHsolutions Academy" className="h-10 w-10 rounded-lg object-cover" />
-            <span className="text-xl font-bold">MTECHsolutions</span>
+            <img src={logo} alt="IEBC E-Learning" className="h-10 w-10 rounded-lg object-cover" />
+            <span className="text-xl font-bold">IEBC E-Learning</span>
           </Link>
 
           {/* Desktop Navigation */}
