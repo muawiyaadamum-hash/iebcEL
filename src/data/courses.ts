@@ -18,6 +18,7 @@ import blockchainImg from '@/assets/blockchain.jpg';
 import devopsImg from '@/assets/devops.jpg';
 import ecommerceImg from '@/assets/ecommerce.jpg';
 import videoEditingImg from '@/assets/video-editing.jpg';
+import islamicFinanceImg from '@/assets/islamic-finance.jpg';
 
 export const courses: Course[] = [
   // ============ TECHNOLOGY COURSES ============
@@ -5579,6 +5580,239 @@ Key metrics that matter:
 - Learn from failures
         `
       }
+    ]
+  },
+  // ============ ISLAMIC FINANCE — UIFTIC PROGRAM ============
+  {
+    id: 'fondements-charia',
+    title: 'Fondements de la Charia',
+    description: 'Sources de la jurisprudence islamique, Maqaasid Charia, jurisprudence des transactions et principales interdictions. Programme UIFTIC — Module 1.',
+    category: 'Finance Islamique',
+    duration: '4 semaines',
+    level: 'Beginner',
+    price: 0,
+    image: islamicFinanceImg,
+    learningOutcomes: [
+      'Maîtriser les sources de la jurisprudence islamique',
+      "Comprendre l'histoire de la jurisprudence",
+      'Identifier les Maqaasid Charia et règles majeures',
+      'Appliquer la jurisprudence des transactions',
+      'Reconnaître les principales interdictions'
+    ],
+    modules: [
+      { title: 'Sources de la jurisprudence islamique', topics: ['Coran', 'Sunna', 'Ijma', 'Qiyas'], content: '# Sources de la jurisprudence\n\nÉtude des sources primaires et secondaires.' },
+      { title: 'Histoire de la jurisprudence', topics: ['Les écoles', 'Évolution historique'], content: '# Histoire de la jurisprudence' },
+      { title: 'Maqaasid Charia', topics: ['Objectifs', 'Règles jurisprudentielles majeures'], content: '# Maqaasid Charia' },
+      { title: 'Jurisprudence des transactions', topics: ['Contrats', 'Conditions de validité'], content: '# Jurisprudence des transactions' },
+      { title: 'Principales interdictions', topics: ['Riba', 'Gharar', 'Maysir'], content: '# Principales interdictions et sagesse' },
+    ],
+    featured: true
+  },
+  {
+    id: 'produits-financiers-islamiques',
+    title: 'Produits Financiers Islamiques',
+    description: 'Mourabaha, Ijara, Sukuk, Moudaraba, Moucharaka. Financement participatif, basé sur la dette, et services. Programme UIFTIC — Module 2.',
+    category: 'Finance Islamique',
+    duration: '4 semaines',
+    level: 'Intermediate',
+    price: 0,
+    image: islamicFinanceImg,
+    learningOutcomes: [
+      'Maîtriser le financement participatif',
+      'Comprendre le financement commercial basé sur la dette',
+      'Appliquer les modes de financement non commerciaux',
+      'Gérer le financement de services',
+      'Identifier les opérations équivoques'
+    ],
+    modules: [
+      { title: 'Financement participatif', topics: ['Moudaraba', 'Moucharaka', 'Étude de cas'], content: '# Financement participatif' },
+      { title: 'Financement basé sur la dette', topics: ['Mourabaha', 'Salam', 'Istisna'], content: '# Financement commercial' },
+      { title: 'Modes non commerciaux', topics: ['Qard Hassan', 'Waqf'], content: '# Modes de financement non commerciaux' },
+      { title: 'Financement de services', topics: ['Ijara', 'Wakala'], content: '# Financement de services' },
+      { title: 'Opérations équivoques', topics: ['Cas limites', 'Analyse charia'], content: '# Opérations équivoques' },
+    ],
+    featured: true
+  },
+  {
+    id: 'comptabilite-aaoifi',
+    title: 'Comptabilité & Normes AAOIFI',
+    description: 'Normes AAOIFI, traitement comptable des produits islamiques, reporting financier et audit charia. Programme UIFTIC — Module 3.',
+    category: 'Finance Islamique',
+    duration: '4 semaines',
+    level: 'Advanced',
+    price: 0,
+    image: islamicFinanceImg,
+    learningOutcomes: [
+      'Maîtriser les normes AAOIFI',
+      'Traiter comptablement les produits islamiques',
+      'Produire le reporting financier islamique',
+      'Réaliser un audit charia',
+      'Appliquer des études de cas AAOIFI'
+    ],
+    modules: [
+      { title: 'Introduction aux normes AAOIFI', topics: ['Histoire', 'Structure'], content: '# Normes AAOIFI' },
+      { title: 'Traitement comptable', topics: ['Mourabaha', 'Ijara', 'Sukuk'], content: '# Traitement comptable des produits islamiques' },
+      { title: 'Reporting financier islamique', topics: ['États financiers', 'Notes'], content: '# Reporting' },
+      { title: 'Audit charia', topics: ['Méthodologie', 'Conformité'], content: '# Audit charia' },
+      { title: 'Études de cas pratiques', topics: ['Cas réels'], content: '# Études de cas AAOIFI' },
+    ]
+  },
+  {
+    id: 'gouvernance-bancaire',
+    title: 'Gouvernance & Gestion Bancaire',
+    description: 'Organisation bancaire, gestion des comptes, comités charia, zakat et gestion des risques. Programme UIFTIC — Module 4.',
+    category: 'Finance Islamique',
+    duration: '4 semaines',
+    level: 'Intermediate',
+    price: 0,
+    image: islamicFinanceImg,
+    learningOutcomes: [
+      "Comprendre l'organisation bancaire islamique",
+      'Gérer les comptes clients',
+      'Mettre en place un comité charia',
+      'Gérer la zakat',
+      'Maîtriser la gestion des risques'
+    ],
+    modules: [
+      { title: 'Organisation bancaire', topics: ['Structure', 'Départements'], content: '# Organisation bancaire' },
+      { title: 'Gestion des comptes', topics: ['Comptes courants', 'Comptes d\'investissement'], content: '# Gestion des comptes' },
+      { title: 'Comités charia et contrôle', topics: ['Rôle', 'Fonctionnement'], content: '# Comités charia' },
+      { title: 'Gestion de la zakat', topics: ['Calcul', 'Distribution'], content: '# Gestion de la zakat' },
+      { title: 'Gestion des risques', topics: ['Risques spécifiques FI'], content: '# Gestion des risques' },
+    ]
+  },
+  {
+    id: 'monnaie-finance-islamique',
+    title: 'La Monnaie en Finance Islamique',
+    description: 'Nature et fonctions de la monnaie, politique monétaire et inflation dans une perspective islamique. Programme UIFTIC — Module 5.',
+    category: 'Finance Islamique',
+    duration: '3 semaines',
+    level: 'Intermediate',
+    price: 0,
+    image: islamicFinanceImg,
+    learningOutcomes: [
+      'Comprendre la nature de la monnaie',
+      'Analyser la politique monétaire islamique',
+      'Saisir le paradigme monétaire en Islam',
+      'Étudier la relation monnaie/inflation'
+    ],
+    modules: [
+      { title: 'Nature et fonctions de la monnaie', topics: ['Définitions', 'Rôles'], content: '# La monnaie' },
+      { title: 'Politique monétaire en FI', topics: ['Outils', 'Limites'], content: '# Politique monétaire' },
+      { title: 'Paradigme monétaire en Islam', topics: ['Or et argent', 'Monnaie fiduciaire'], content: '# Paradigme monétaire' },
+      { title: 'Monnaie et inflation', topics: ['Causes', 'Solutions FI'], content: '# Inflation' },
+    ]
+  },
+  {
+    id: 'crise-finance-islamique',
+    title: 'Crise Financière & Finance Islamique',
+    description: 'Stabilité financière, crises systémiques, et approches alternatives du risque en finance islamique. Programme UIFTIC — Module 6.',
+    category: 'Finance Islamique',
+    duration: '3 semaines',
+    level: 'Advanced',
+    price: 0,
+    image: islamicFinanceImg,
+    learningOutcomes: [
+      'Comprendre la stabilité financière',
+      'Analyser les crises du système conventionnel',
+      "Évaluer les limites des réponses classiques",
+      'Maîtriser les approches alternatives du risque'
+    ],
+    modules: [
+      { title: 'Stabilité financière', topics: ['Concepts'], content: '# Stabilité financière' },
+      { title: 'Crises du système conventionnel', topics: ['Historique', 'Causes'], content: '# Crises' },
+      { title: 'Échec des réponses classiques', topics: ['Analyse critique'], content: '# Limites' },
+      { title: 'Approches alternatives en FI', topics: ['Partage des risques'], content: '# Approches FI' },
+    ]
+  },
+  {
+    id: 'takaful',
+    title: 'Takaful (Assurance Islamique)',
+    description: "Principes du Takaful, modèles de gestion wakala et mudaraba, alternatives à l'assurance classique. Programme UIFTIC — Module 7.",
+    category: 'Finance Islamique',
+    duration: '3 semaines',
+    level: 'Intermediate',
+    price: 0,
+    image: islamicFinanceImg,
+    learningOutcomes: [
+      "Comprendre l'assurance classique",
+      "Identifier les raisons de l'interdiction",
+      'Maîtriser les fondements du Takaful',
+      'Appliquer les modèles wakala et mudaraba'
+    ],
+    modules: [
+      { title: "Principes de l'assurance classique", topics: ['Fonctionnement'], content: '# Assurance classique' },
+      { title: "Raisons de l'interdiction", topics: ['Gharar', 'Riba'], content: '# Interdictions' },
+      { title: 'Fondements du Takaful', topics: ['Solidarité', 'Don'], content: '# Takaful' },
+      { title: 'Modèles wakala et mudaraba', topics: ['Comparaison'], content: '# Modèles de gestion' },
+    ]
+  },
+  {
+    id: 'sukuk-marches',
+    title: 'Sukuk & Marchés de Capitaux',
+    description: 'Normes AAOIFI marchés, sukuk, gestion de portefeuille, indices et instruments de liquidité. Programme UIFTIC — Module 8.',
+    category: 'Finance Islamique',
+    duration: '3 semaines',
+    level: 'Advanced',
+    price: 0,
+    image: islamicFinanceImg,
+    learningOutcomes: [
+      'Maîtriser les normes AAOIFI marchés',
+      'Gérer un portefeuille islamique',
+      'Structurer les 14 contrats sukuk',
+      'Réaliser le screening charia',
+      'Utiliser les instruments de couverture'
+    ],
+    modules: [
+      { title: 'Normes AAOIFI marchés', topics: ['4 normes clés'], content: '# Normes marchés' },
+      { title: 'Gestion de portefeuille', topics: ['Fonds islamiques'], content: '# Portefeuille' },
+      { title: 'Les 14 contrats sukuk', topics: ['Structuration'], content: '# Sukuk' },
+      { title: 'Indices et screening', topics: ['Méthodologie'], content: '# Indices' },
+      { title: 'Liquidité et couverture', topics: ['Instruments'], content: '# Couverture' },
+    ]
+  },
+  {
+    id: 'commerce-international-cemac',
+    title: 'Commerce International en Zone CEMAC',
+    description: 'Réglementation, échanges intra-CEMAC, douanes, financement du commerce et opportunités sous-régionales.',
+    category: 'Business',
+    duration: '6 semaines',
+    level: 'Intermediate',
+    price: 0,
+    image: islamicFinanceImg,
+    learningOutcomes: [
+      'Maîtriser la réglementation CEMAC',
+      'Optimiser les échanges intra-CEMAC',
+      'Gérer les opérations douanières',
+      'Financer le commerce international'
+    ],
+    modules: [
+      { title: 'Cadre CEMAC', topics: ['Institutions', 'Traités'], content: '# Cadre CEMAC' },
+      { title: 'Échanges intra-CEMAC', topics: ['Flux', 'Barrières'], content: '# Échanges' },
+      { title: 'Douanes et fiscalité', topics: ['Procédures'], content: '# Douanes' },
+      { title: 'Financement du commerce', topics: ['Crédoc', 'Garanties'], content: '# Financement' },
+    ]
+  },
+  {
+    id: 'management-transformation-digitale',
+    title: 'Management & Transformation Digitale',
+    description: 'Stratégie digitale, conduite du changement, leadership et outils numériques pour entreprises CEMAC.',
+    category: 'Management',
+    duration: '6 semaines',
+    level: 'Intermediate',
+    price: 0,
+    image: islamicFinanceImg,
+    learningOutcomes: [
+      'Élaborer une stratégie digitale',
+      'Conduire le changement',
+      'Manager des équipes',
+      'Déployer des outils numériques'
+    ],
+    modules: [
+      { title: 'Stratégie digitale', topics: ['Vision', 'Roadmap'], content: '# Stratégie digitale' },
+      { title: 'Conduite du changement', topics: ['Méthodes'], content: '# Changement' },
+      { title: 'Leadership', topics: ['Styles', 'Pratiques'], content: '# Leadership' },
+      { title: 'Outils numériques', topics: ['Cloud', 'Collaboration'], content: '# Outils' },
     ]
   }
 ];
