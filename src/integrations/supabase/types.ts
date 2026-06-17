@@ -152,6 +152,163 @@ export type Database = {
         }
         Relationships: []
       }
+      project_submissions: {
+        Row: {
+          admin_feedback: string | null
+          course_id: string
+          file_name: string
+          file_path: string
+          file_size: number | null
+          grade: number | null
+          id: string
+          notes: string | null
+          reviewed_at: string | null
+          status: string
+          submitted_at: string
+          user_id: string
+        }
+        Insert: {
+          admin_feedback?: string | null
+          course_id: string
+          file_name: string
+          file_path: string
+          file_size?: number | null
+          grade?: number | null
+          id?: string
+          notes?: string | null
+          reviewed_at?: string | null
+          status?: string
+          submitted_at?: string
+          user_id: string
+        }
+        Update: {
+          admin_feedback?: string | null
+          course_id?: string
+          file_name?: string
+          file_path?: string
+          file_size?: number | null
+          grade?: number | null
+          id?: string
+          notes?: string | null
+          reviewed_at?: string | null
+          status?: string
+          submitted_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      quiz_attempts: {
+        Row: {
+          answers: Json
+          course_id: string
+          created_at: string
+          id: string
+          passed: boolean
+          quiz_id: string
+          score: number
+          total: number
+          user_id: string
+        }
+        Insert: {
+          answers: Json
+          course_id: string
+          created_at?: string
+          id?: string
+          passed: boolean
+          quiz_id: string
+          score: number
+          total: number
+          user_id: string
+        }
+        Update: {
+          answers?: Json
+          course_id?: string
+          created_at?: string
+          id?: string
+          passed?: boolean
+          quiz_id?: string
+          score?: number
+          total?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quiz_attempts_quiz_id_fkey"
+            columns: ["quiz_id"]
+            isOneToOne: false
+            referencedRelation: "quizzes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      quiz_questions: {
+        Row: {
+          correct_index: number
+          created_at: string
+          id: string
+          options: Json
+          order: number
+          question: string
+          quiz_id: string
+        }
+        Insert: {
+          correct_index: number
+          created_at?: string
+          id?: string
+          options: Json
+          order?: number
+          question: string
+          quiz_id: string
+        }
+        Update: {
+          correct_index?: number
+          created_at?: string
+          id?: string
+          options?: Json
+          order?: number
+          question?: string
+          quiz_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quiz_questions_quiz_id_fkey"
+            columns: ["quiz_id"]
+            isOneToOne: false
+            referencedRelation: "quizzes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      quizzes: {
+        Row: {
+          course_id: string
+          created_at: string
+          description: string | null
+          id: string
+          passing_score: number
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          course_id: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          passing_score?: number
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          course_id?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          passing_score?: number
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string

@@ -37,8 +37,11 @@ import {
   XCircle,
   Clock,
   Send,
-  RefreshCw
+  RefreshCw,
+  ClipboardList,
+  FileText
 } from "lucide-react";
+import { AdminQuizAttempts, AdminProjectSubmissions } from "@/components/AdminEvaluations";
 
 interface Profile {
   id: string;
@@ -399,9 +402,11 @@ const Admin = () => {
 
           {/* Main Content */}
           <Tabs defaultValue="users" className="space-y-6">
-            <TabsList>
+            <TabsList className="flex-wrap h-auto">
               <TabsTrigger value="users">Users</TabsTrigger>
               <TabsTrigger value="enrollments">Enrollments</TabsTrigger>
+              <TabsTrigger value="quiz"><ClipboardList className="h-4 w-4 mr-1" />Quiz Attempts</TabsTrigger>
+              <TabsTrigger value="projects"><FileText className="h-4 w-4 mr-1" />Projects</TabsTrigger>
               <TabsTrigger value="notifications">Notifications</TabsTrigger>
               <TabsTrigger value="courses">Courses</TabsTrigger>
             </TabsList>
@@ -512,6 +517,14 @@ const Admin = () => {
                   </div>
                 </CardContent>
               </Card>
+            </TabsContent>
+
+            <TabsContent value="quiz">
+              <AdminQuizAttempts />
+            </TabsContent>
+
+            <TabsContent value="projects">
+              <AdminProjectSubmissions />
             </TabsContent>
 
             {/* Notifications Tab */}

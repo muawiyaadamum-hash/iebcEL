@@ -24,8 +24,13 @@ import {
   BookOpen,
   ArrowLeft,
   GraduationCap,
-  FileText
+  FileText,
+  ClipboardList,
+  Upload as UploadIcon
 } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import QuizComponent from "@/components/QuizComponent";
+import ProjectUpload from "@/components/ProjectUpload";
 
 interface ModuleProgress {
   module_id: string;
@@ -389,113 +394,108 @@ const CourseViewer = () => {
           )}
         </aside>
 
-        {/* Main Content - Slide View */}
+        {/* Main Content */}
         <main className="flex-1 flex flex-col">
-          {/* Module Header */}
-          <div className="border-b border-border p-4 bg-background">
-            <div className="flex items-center justify-between">
-              <div>
-                <Badge variant="outline" className="mb-2">
-                  Module {currentModuleIndex + 1} of {course.modules.length}
-                </Badge>
-                <h1 className="text-2xl font-bold">{currentModule.title}</h1>
-              </div>
-              {!isModuleCompleted(currentModuleIndex) && (
-                <Button onClick={markModuleComplete} variant="outline">
-                  <CheckCircle2 className="mr-2 h-4 w-4" />
-                  Mark Complete
-                </Button>
-              )}
-              {isModuleCompleted(currentModuleIndex) && (
-                <Badge className="bg-primary/10 text-primary border-primary/20">
-                  <CheckCircle2 className="mr-1 h-3 w-3" />
-                  Completed
-                </Badge>
-              )}
+          <Tabs defaultValue="lesson" className="flex-1 flex flex-col">
+            <div className="border-b border-border bg-background px-4 pt-3">
+              <TabsList>
+                <TabsTrigger value="lesson"><BookOpen className="h-4 w-4 mr-2" />Leçon</TabsTrigger>
+                <TabsTrigger value="quiz"><ClipboardList className="h-4 w-4 mr-2" />Évaluation QCM</TabsTrigger>
+                <TabsTrigger value="project"><UploadIcon className="h-4 w-4 mr-2" />Projet</TabsTrigger>
+              </TabsList>
             </div>
-          </div>
 
-          {/* Content Slide - PDF Viewer Style */}
-          <div className="flex-1 overflow-hidden">
-            {currentModule.content ? (
-              <PDFViewer 
-                content={currentModule.content} 
-                title={`${currentModule.title} - ${currentTopic}`}
-              />
-            ) : (
-              <div className="h-full p-4 md:p-8 overflow-y-auto">
-                <Card className="w-full max-w-4xl mx-auto min-h-[400px] bg-gradient-to-br from-muted/50 to-background border-2">
-                  <CardContent className="p-6 md:p-10">
-                    <div className="space-y-6">
-                      <div className="flex items-center justify-between flex-wrap gap-2">
-                        <Badge className="text-sm px-3 py-1">
-                          Topic {currentTopicIndex + 1} of {currentModule.topics.length}
-                        </Badge>
-                        <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                          <span className="flex items-center gap-1"><BookOpen className="h-4 w-4" />{course.duration}</span>
-                          <span className="flex items-center gap-1"><Award className="h-4 w-4" />{course.level}</span>
-                        </div>
-                      </div>
-                      
-                      <h2 className="text-2xl md:text-3xl font-bold">
-                        {currentTopic}
-                      </h2>
-                      
-                      <div className="flex items-center gap-3 p-4 bg-muted/50 rounded-lg">
-                        <FileText className="h-8 w-8 text-primary" />
-                        <div>
-                          <p className="font-medium">Module Content</p>
-                          <p className="text-sm text-muted-foreground">
-                            Review the material and mark as complete when ready.
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
+            <TabsContent value="lesson" className="flex-1 flex flex-col m-0">
+              <div className="border-b border-border p-4 bg-background">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <Badge variant="outline" className="mb-2">
+                      Module {currentModuleIndex + 1} of {course.modules.length}
+                    </Badge>
+                    <h1 className="text-2xl font-bold">{currentModule.title}</h1>
+                  </div>
+                  {!isModuleCompleted(currentModuleIndex) && (
+                    <Button onClick={markModuleComplete} variant="outline">
+                      <CheckCircle2 className="mr-2 h-4 w-4" />
+                      Mark Complete
+                    </Button>
+                  )}
+                  {isModuleCompleted(currentModuleIndex) && (
+                    <Badge className="bg-primary/10 text-primary border-primary/20">
+                      <CheckCircle2 className="mr-1 h-3 w-3" />
+                      Completed
+                    </Badge>
+                  )}
+                </div>
               </div>
-            )}
-          </div>
 
-          {/* Navigation Footer */}
-          <div className="border-t border-border p-4 bg-muted/30">
-            <div className="flex items-center justify-between max-w-4xl mx-auto">
-              <Button
-                variant="outline"
-                onClick={goToPreviousTopic}
-                disabled={currentModuleIndex === 0 && currentTopicIndex === 0}
-              >
-                <ChevronLeft className="mr-2 h-4 w-4" />
-                Previous
-              </Button>
-
-              <div className="text-sm text-muted-foreground">
-                {currentModule.topics.map((_, i) => (
-                  <span
-                    key={i}
-                    className={`inline-block w-2 h-2 rounded-full mx-1 ${
-                      i === currentTopicIndex ? 'bg-primary' : 'bg-muted-foreground/30'
-                    }`}
+              <div className="flex-1 overflow-hidden">
+                {currentModule.content ? (
+                  <PDFViewer
+                    content={currentModule.content}
+                    title={`${currentModule.title} - ${currentTopic}`}
                   />
-                ))}
+                ) : (
+                  <div className="h-full p-4 md:p-8 overflow-y-auto">
+                    <Card className="w-full max-w-4xl mx-auto min-h-[400px] bg-gradient-to-br from-muted/50 to-background border-2">
+                      <CardContent className="p-6 md:p-10">
+                        <h2 className="text-2xl md:text-3xl font-bold">{currentTopic}</h2>
+                      </CardContent>
+                    </Card>
+                  </div>
+                )}
               </div>
 
-              <Button
-                onClick={goToNextTopic}
-                disabled={
-                  currentModuleIndex === course.modules.length - 1 && 
-                  currentTopicIndex === currentModule.topics.length - 1 &&
-                  isModuleCompleted(currentModuleIndex)
-                }
-              >
-                {currentModuleIndex === course.modules.length - 1 && 
-                 currentTopicIndex === currentModule.topics.length - 1 
-                  ? (isModuleCompleted(currentModuleIndex) ? 'Completed' : 'Complete Module')
-                  : 'Next'}
-                <ChevronRight className="ml-2 h-4 w-4" />
-              </Button>
-            </div>
-          </div>
+              <div className="border-t border-border p-4 bg-muted/30">
+                <div className="flex items-center justify-between max-w-4xl mx-auto">
+                  <Button
+                    variant="outline"
+                    onClick={goToPreviousTopic}
+                    disabled={currentModuleIndex === 0 && currentTopicIndex === 0}
+                  >
+                    <ChevronLeft className="mr-2 h-4 w-4" />
+                    Previous
+                  </Button>
+                  <div className="text-sm text-muted-foreground">
+                    {currentModule.topics.map((_, i) => (
+                      <span
+                        key={i}
+                        className={`inline-block w-2 h-2 rounded-full mx-1 ${
+                          i === currentTopicIndex ? 'bg-primary' : 'bg-muted-foreground/30'
+                        }`}
+                      />
+                    ))}
+                  </div>
+                  <Button
+                    onClick={goToNextTopic}
+                    disabled={
+                      currentModuleIndex === course.modules.length - 1 &&
+                      currentTopicIndex === currentModule.topics.length - 1 &&
+                      isModuleCompleted(currentModuleIndex)
+                    }
+                  >
+                    {currentModuleIndex === course.modules.length - 1 &&
+                     currentTopicIndex === currentModule.topics.length - 1
+                      ? (isModuleCompleted(currentModuleIndex) ? 'Completed' : 'Complete Module')
+                      : 'Next'}
+                    <ChevronRight className="ml-2 h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+            </TabsContent>
+
+            <TabsContent value="quiz" className="flex-1 overflow-y-auto p-4 md:p-8 m-0">
+              <div className="max-w-3xl mx-auto">
+                <QuizComponent courseId={course.id} />
+              </div>
+            </TabsContent>
+
+            <TabsContent value="project" className="flex-1 overflow-y-auto p-4 md:p-8 m-0">
+              <div className="max-w-3xl mx-auto">
+                <ProjectUpload courseId={course.id} />
+              </div>
+            </TabsContent>
+          </Tabs>
         </main>
       </div>
     </div>

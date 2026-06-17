@@ -25,10 +25,10 @@ const Index = () => {
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              Featured Courses
+              Cours phares
             </h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              Start your learning journey with our most popular courses
+              Démarrez avec nos programmes les plus populaires en finance islamique et au-delà
             </p>
           </div>
           
@@ -54,10 +54,10 @@ const Index = () => {
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              Why Choose MTech Academy?
+              Pourquoi choisir le Centre de Formation IEBC ?
             </h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              We provide quality education with flexible learning options
+              Expertise en finance islamique, accompagnement personnalisé et flexibilité totale
             </p>
           </div>
 
@@ -100,14 +100,14 @@ const Index = () => {
         <div className="container mx-auto px-4">
           <div className="bg-gradient-to-br from-primary to-accent rounded-3xl p-12 md:p-16 text-center text-white">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              Ready to Start Learning?
+              Prêt à vous former ?
             </h2>
             <p className="text-lg text-white/90 mb-8 max-w-2xl mx-auto">
-              Join MTech Academy today and unlock your potential with our comprehensive online courses.
+              Rejoignez le Centre de Formation IEBC et obtenez vos certifications en finance islamique, commerce et management.
             </p>
             <Link to="/register">
               <Button size="lg" className="bg-white text-primary hover:bg-white/90">
-                Register Now
+                S'inscrire
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </Link>
