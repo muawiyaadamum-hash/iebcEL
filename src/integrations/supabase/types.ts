@@ -14,6 +14,180 @@ export type Database = {
   }
   public: {
     Tables: {
+      course_enrollments: {
+        Row: {
+          created_at: string
+          cursus_id: string
+          id: string
+          notes: string | null
+          payment_reference: string | null
+          status: string
+          updated_at: string
+          user_id: string
+          validated_at: string | null
+          validated_by: string | null
+        }
+        Insert: {
+          created_at?: string
+          cursus_id: string
+          id?: string
+          notes?: string | null
+          payment_reference?: string | null
+          status?: string
+          updated_at?: string
+          user_id: string
+          validated_at?: string | null
+          validated_by?: string | null
+        }
+        Update: {
+          created_at?: string
+          cursus_id?: string
+          id?: string
+          notes?: string | null
+          payment_reference?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string
+          validated_at?: string | null
+          validated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "course_enrollments_cursus_id_fkey"
+            columns: ["cursus_id"]
+            isOneToOne: false
+            referencedRelation: "cursus"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      cursus: {
+        Row: {
+          certification: boolean
+          created_at: string
+          description: string | null
+          display_order: number
+          duration_hours: number
+          duration_label: string | null
+          featured: boolean
+          id: string
+          image_url: string | null
+          level: string | null
+          modality: string | null
+          objectives: string | null
+          pole_id: string
+          price_xaf: number
+          published: boolean
+          registration_fee_xaf: number
+          slug: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          certification?: boolean
+          created_at?: string
+          description?: string | null
+          display_order?: number
+          duration_hours?: number
+          duration_label?: string | null
+          featured?: boolean
+          id?: string
+          image_url?: string | null
+          level?: string | null
+          modality?: string | null
+          objectives?: string | null
+          pole_id: string
+          price_xaf?: number
+          published?: boolean
+          registration_fee_xaf?: number
+          slug: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          certification?: boolean
+          created_at?: string
+          description?: string | null
+          display_order?: number
+          duration_hours?: number
+          duration_label?: string | null
+          featured?: boolean
+          id?: string
+          image_url?: string | null
+          level?: string | null
+          modality?: string | null
+          objectives?: string | null
+          pole_id?: string
+          price_xaf?: number
+          published?: boolean
+          registration_fee_xaf?: number
+          slug?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cursus_pole_id_fkey"
+            columns: ["pole_id"]
+            isOneToOne: false
+            referencedRelation: "poles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      cursus_modules: {
+        Row: {
+          created_at: string
+          cursus_id: string
+          description: string | null
+          display_order: number
+          duration_hours: number
+          formateur_id: string | null
+          id: string
+          locked: boolean
+          published: boolean
+          required: boolean
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          cursus_id: string
+          description?: string | null
+          display_order?: number
+          duration_hours?: number
+          formateur_id?: string | null
+          id?: string
+          locked?: boolean
+          published?: boolean
+          required?: boolean
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          cursus_id?: string
+          description?: string | null
+          display_order?: number
+          duration_hours?: number
+          formateur_id?: string | null
+          id?: string
+          locked?: boolean
+          published?: boolean
+          required?: boolean
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cursus_modules_cursus_id_fkey"
+            columns: ["cursus_id"]
+            isOneToOne: false
+            referencedRelation: "cursus"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       enrollments: {
         Row: {
           completed_at: string | null
@@ -46,6 +220,62 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      lessons: {
+        Row: {
+          content: string | null
+          created_at: string
+          display_order: number
+          duration_minutes: number | null
+          external_url: string | null
+          file_path: string | null
+          id: string
+          lesson_type: string
+          module_id: string
+          published: boolean
+          required: boolean
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          content?: string | null
+          created_at?: string
+          display_order?: number
+          duration_minutes?: number | null
+          external_url?: string | null
+          file_path?: string | null
+          id?: string
+          lesson_type?: string
+          module_id: string
+          published?: boolean
+          required?: boolean
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          content?: string | null
+          created_at?: string
+          display_order?: number
+          duration_minutes?: number | null
+          external_url?: string | null
+          file_path?: string | null
+          id?: string
+          lesson_type?: string
+          module_id?: string
+          published?: boolean
+          required?: boolean
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lessons_module_id_fkey"
+            columns: ["module_id"]
+            isOneToOne: false
+            referencedRelation: "cursus_modules"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       module_progress: {
         Row: {
@@ -107,6 +337,42 @@ export type Database = {
           target_user_id?: string | null
           title?: string
           type?: string
+        }
+        Relationships: []
+      }
+      poles: {
+        Row: {
+          created_at: string
+          description: string | null
+          display_order: number
+          id: string
+          image_url: string | null
+          published: boolean
+          slug: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          display_order?: number
+          id?: string
+          image_url?: string | null
+          published?: boolean
+          slug: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          display_order?: number
+          id?: string
+          image_url?: string | null
+          published?: boolean
+          slug?: string
+          title?: string
+          updated_at?: string
         }
         Relationships: []
       }
@@ -348,6 +614,10 @@ export type Database = {
           _role: Database["public"]["Enums"]["app_role"]
           _user_id: string
         }
+        Returns: boolean
+      }
+      is_enrolled_validated: {
+        Args: { _cursus_id: string; _user_id: string }
         Returns: boolean
       }
     }
