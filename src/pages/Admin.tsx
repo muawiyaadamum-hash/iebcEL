@@ -335,10 +335,14 @@ const Admin = () => {
                 Manage users, enrollments, and platform settings
               </p>
             </div>
-            <Button onClick={refreshData} variant="outline">
-              <RefreshCw className="h-4 w-4 mr-2" />
-              Refresh Data
-            </Button>
+            <div className="flex gap-2">
+              <Button onClick={() => navigate("/admin/lms")} className="bg-gradient-to-r from-primary to-accent">
+                <BookOpen className="h-4 w-4 mr-2" />Gestion pédagogique (LMS)
+              </Button>
+              <Button onClick={refreshData} variant="outline">
+                <RefreshCw className="h-4 w-4 mr-2" />Refresh Data
+              </Button>
+            </div>
           </div>
 
           {/* Stats Cards */}
