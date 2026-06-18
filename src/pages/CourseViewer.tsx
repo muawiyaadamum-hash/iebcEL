@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams, Navigate, Link, useNavigate } from "react-router-dom";
+import { useParams, Link, Navigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import Navbar from "@/components/Navbar";
@@ -10,311 +10,89 @@ import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { toast } from "sonner";
-import { courses } from "@/data/courses";
 import { useScrollToTop } from "@/hooks/useScrollToTop";
-import PDFViewer from "@/components/PDFViewer";
-import {
-  Loader2,
-  ChevronLeft,
-  ChevronRight,
-  CheckCircle2,
-  Circle,
-  Lock,
-  Award,
-  BookOpen,
-  ArrowLeft,
-  GraduationCap,
-  FileText,
-  ClipboardList,
-  Upload as UploadIcon
-} from "lucide-react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import QuizComponent from "@/components/QuizComponent";
-import ProjectUpload from "@/components/ProjectUpload";
-
-interface ModuleProgress {
-  module_id: string;
-  completed: boolean;
-  completed_at: string | null;
-}
+import { Loader2, ChevronLeft, ChevronRight, CheckCircle2, Circle, Lock, BookOpen, ArrowLeft, FileText, Video, Link2 } from "lucide-react";
+import { fetchCursusBySlug, fetchModules, fetchLessons, fetchEnrollment, type Cursus, type CursusModule, type Lesson } from "@/lib/lms";
 
 const CourseViewer = () => {
   useScrollToTop();
-  const { id } = useParams();
-  const navigate = useNavigate();
+  const { id: slug } = useParams();
   const { user, loading: authLoading } = useAuth();
-  const [isEnrolled, setIsEnrolled] = useState<boolean | null>(null);
-  const [currentModuleIndex, setCurrentModuleIndex] = useState(0);
-  const [currentTopicIndex, setCurrentTopicIndex] = useState(0);
-  const [moduleProgress, setModuleProgress] = useState<ModuleProgress[]>([]);
-  const [enrollmentId, setEnrollmentId] = useState<string | null>(null);
+  const [cursus, setCursus] = useState<Cursus | null>(null);
+  const [modules, setModules] = useState<CursusModule[]>([]);
+  const [lessonsByModule, setLessonsByModule] = useState<Record<string, Lesson[]>>({});
+  const [progress, setProgress] = useState<Record<string, boolean>>({});
+  const [activeModuleIdx, setActiveModuleIdx] = useState(0);
+  const [activeLessonIdx, setActiveLessonIdx] = useState(0);
+  const [signedUrl, setSignedUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
-  const [showCertificate, setShowCertificate] = useState(false);
-
-  const course = courses.find(c => c.id === id);
+  const [accessOk, setAccessOk] = useState<boolean | null>(null);
 
   useEffect(() => {
-    const checkEnrollment = async () => {
-      if (!user || !course) {
-        setLoading(false);
-        return;
-      }
+    if (authLoading || !slug || !user) return;
+    (async () => {
+      setLoading(true);
+      const c = await fetchCursusBySlug(slug);
+      if (!c) { setLoading(false); return; }
+      setCursus(c);
+      const enr = await fetchEnrollment(user.id, c.id);
+      if (enr?.status !== "validated") { setAccessOk(false); setLoading(false); return; }
+      setAccessOk(true);
+      const mods = await fetchModules(c.id);
+      setModules(mods);
+      const map: Record<string, Lesson[]> = {};
+      for (const m of mods) map[m.id] = await fetchLessons(m.id);
+      setLessonsByModule(map);
+      const { data: prog } = await supabase.from("module_progress").select("module_id,completed").eq("user_id", user.id).eq("course_id", c.id);
+      const pmap: Record<string, boolean> = {};
+      (prog || []).forEach((p: any) => { pmap[p.module_id] = !!p.completed; });
+      setProgress(pmap);
+      setLoading(false);
+    })();
+  }, [slug, user, authLoading]);
 
-      try {
-        // Check enrollment
-        const { data: enrollment } = await supabase
-          .from("enrollments")
-          .select("*")
-          .eq("user_id", user.id)
-          .eq("course_id", course.id)
-          .eq("payment_status", "completed")
-          .single();
+  const currentModule = modules[activeModuleIdx];
+  const currentLessons = currentModule ? lessonsByModule[currentModule.id] || [] : [];
+  const currentLesson = currentLessons[activeLessonIdx];
 
-        if (enrollment) {
-          setIsEnrolled(true);
-          setEnrollmentId(enrollment.id);
-
-          // Fetch module progress
-          const { data: progress } = await supabase
-            .from("module_progress")
-            .select("*")
-            .eq("user_id", user.id)
-            .eq("course_id", course.id);
-
-          if (progress) {
-            setModuleProgress(progress.map(p => ({
-              module_id: p.module_id,
-              completed: p.completed || false,
-              completed_at: p.completed_at
-            })));
-          }
-        } else {
-          setIsEnrolled(false);
-        }
-      } catch (error) {
-        console.error("Error checking enrollment:", error);
-        setIsEnrolled(false);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (!authLoading) {
-      checkEnrollment();
+  useEffect(() => {
+    setSignedUrl(null);
+    if (currentLesson?.file_path) {
+      supabase.storage.from("course-content").createSignedUrl(currentLesson.file_path, 3600)
+        .then(({ data }) => setSignedUrl(data?.signedUrl || null));
     }
-  }, [user, authLoading, course]);
+  }, [currentLesson?.id, currentLesson?.file_path]);
 
-  if (!course) {
-    return <Navigate to="/courses" replace />;
-  }
+  const completedCount = Object.values(progress).filter(Boolean).length;
+  const overall = modules.length ? Math.round((completedCount / modules.length) * 100) : 0;
+
+  const markComplete = async () => {
+    if (!user || !cursus || !currentModule) return;
+    await supabase.from("module_progress").upsert({
+      user_id: user.id, course_id: cursus.id, module_id: currentModule.id,
+      completed: true, completed_at: new Date().toISOString(),
+    }, { onConflict: "user_id,course_id,module_id" });
+    setProgress((p) => ({ ...p, [currentModule.id]: true }));
+    toast.success("Module marqué comme terminé");
+  };
 
   if (authLoading || loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
-      </div>
-    );
+    return <div className="min-h-screen flex items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div>;
   }
-
-  if (!user) {
-    return <Navigate to="/auth" replace />;
-  }
-
-  if (isEnrolled === false) {
+  if (!user) return <Navigate to="/auth" replace />;
+  if (!cursus) return <Navigate to="/courses" replace />;
+  if (accessOk === false) {
     return (
       <div className="min-h-screen bg-background">
         <Navbar />
-        <section className="py-20">
-          <div className="container mx-auto px-4 text-center">
+        <section className="py-20 text-center">
+          <div className="container mx-auto px-4">
             <Lock className="h-16 w-16 mx-auto text-muted-foreground mb-6" />
-            <h1 className="text-3xl font-bold mb-4">Course Not Accessible</h1>
+            <h1 className="text-3xl font-bold mb-4">Accès verrouillé</h1>
             <p className="text-muted-foreground mb-6 max-w-md mx-auto">
-              You need to enroll in this course to access the content.
+              Votre inscription à ce cursus n'est pas encore validée. Finalisez votre paiement via WhatsApp.
             </p>
-            <div className="flex gap-4 justify-center">
-              <Button asChild>
-                <Link to={`/course/${course.id}`}>Enroll Now - Free</Link>
-              </Button>
-              <Button variant="outline" asChild>
-                <Link to="/dashboard">Go to Dashboard</Link>
-              </Button>
-            </div>
-          </div>
-        </section>
-        <Footer />
-      </div>
-    );
-  }
-
-  const currentModule = course.modules[currentModuleIndex];
-  const currentTopic = currentModule?.topics[currentTopicIndex];
-  const totalTopics = course.modules.reduce((acc, m) => acc + m.topics.length, 0);
-  
-  // Calculate completed topics
-  const completedModulesCount = moduleProgress.filter(p => p.completed).length;
-  const overallProgress = Math.round((completedModulesCount / course.modules.length) * 100);
-  
-  const isModuleCompleted = (moduleIndex: number) => {
-    const moduleId = `module-${moduleIndex}`;
-    return moduleProgress.some(p => p.module_id === moduleId && p.completed);
-  };
-
-  const isAllCompleted = completedModulesCount === course.modules.length;
-
-  const markModuleComplete = async () => {
-    if (!user || !course) return;
-
-    const moduleId = `module-${currentModuleIndex}`;
-    
-    try {
-      // Check if already exists
-      const existing = moduleProgress.find(p => p.module_id === moduleId);
-      
-      if (existing) {
-        // Update
-        await supabase
-          .from("module_progress")
-          .update({ completed: true, completed_at: new Date().toISOString() })
-          .eq("user_id", user.id)
-          .eq("course_id", course.id)
-          .eq("module_id", moduleId);
-      } else {
-        // Insert
-        await supabase
-          .from("module_progress")
-          .insert({
-            user_id: user.id,
-            course_id: course.id,
-            module_id: moduleId,
-            completed: true,
-            completed_at: new Date().toISOString()
-          });
-      }
-
-      // Update local state
-      setModuleProgress(prev => {
-        const updated = prev.filter(p => p.module_id !== moduleId);
-        return [...updated, { module_id: moduleId, completed: true, completed_at: new Date().toISOString() }];
-      });
-
-      // Update enrollment progress
-      const newProgress = Math.round(((completedModulesCount + 1) / course.modules.length) * 100);
-      await supabase
-        .from("enrollments")
-        .update({ 
-          progress: newProgress,
-          ...(newProgress === 100 ? { completed_at: new Date().toISOString() } : {})
-        })
-        .eq("id", enrollmentId);
-
-      toast.success("Module completed!");
-
-      // Auto-advance to next module
-      if (currentModuleIndex < course.modules.length - 1) {
-        setCurrentModuleIndex(prev => prev + 1);
-        setCurrentTopicIndex(0);
-      } else if (newProgress === 100) {
-        setShowCertificate(true);
-      }
-    } catch (error) {
-      console.error("Error marking module complete:", error);
-      toast.error("Failed to save progress");
-    }
-  };
-
-  const goToNextTopic = () => {
-    if (currentTopicIndex < currentModule.topics.length - 1) {
-      setCurrentTopicIndex(prev => prev + 1);
-    } else if (currentModuleIndex < course.modules.length - 1) {
-      // Prompt to mark module complete before moving on
-      if (!isModuleCompleted(currentModuleIndex)) {
-        markModuleComplete();
-      } else {
-        setCurrentModuleIndex(prev => prev + 1);
-        setCurrentTopicIndex(0);
-      }
-    }
-  };
-
-  const goToPreviousTopic = () => {
-    if (currentTopicIndex > 0) {
-      setCurrentTopicIndex(prev => prev - 1);
-    } else if (currentModuleIndex > 0) {
-      setCurrentModuleIndex(prev => prev - 1);
-      setCurrentTopicIndex(course.modules[currentModuleIndex - 1].topics.length - 1);
-    }
-  };
-
-  const selectModule = (moduleIndex: number) => {
-    setCurrentModuleIndex(moduleIndex);
-    setCurrentTopicIndex(0);
-  };
-
-  // Certificate Modal
-  if (showCertificate) {
-    return (
-      <div className="min-h-screen bg-background">
-        <Navbar />
-        <section className="py-20">
-          <div className="container mx-auto px-4 max-w-3xl">
-            <div className="text-center mb-8">
-              <Award className="h-20 w-20 mx-auto text-secondary mb-4" />
-              <h1 className="text-4xl font-bold mb-2">Congratulations!</h1>
-              <p className="text-xl text-muted-foreground">
-                You've completed the {course.title} course
-              </p>
-            </div>
-
-            {/* Certificate Preview */}
-            <Card className="bg-gradient-to-br from-primary/5 via-background to-secondary/5 border-2 border-primary/20 overflow-hidden">
-              <CardContent className="p-8 md:p-12">
-                <div className="text-center space-y-6">
-                  <div className="flex justify-center gap-2 items-center">
-                    <GraduationCap className="h-8 w-8 text-primary" />
-                    <span className="text-2xl font-bold text-primary">MTech Academy</span>
-                  </div>
-                  
-                  <div className="py-6 border-t border-b border-border">
-                    <p className="text-sm text-muted-foreground uppercase tracking-widest mb-2">
-                      Certificate of Completion
-                    </p>
-                    <h2 className="text-3xl font-bold mb-4">{course.title}</h2>
-                    <p className="text-lg">
-                      This certifies that <span className="font-semibold">{user?.email}</span> has successfully completed
-                      all {course.modules.length} modules of this course.
-                    </p>
-                  </div>
-
-                  <div className="flex justify-between text-sm text-muted-foreground">
-                    <div>
-                      <p className="font-medium">Date Completed</p>
-                      <p>{new Date().toLocaleDateString()}</p>
-                    </div>
-                    <div>
-                      <p className="font-medium">Course Duration</p>
-                      <p>{course.duration}</p>
-                    </div>
-                    <div>
-                      <p className="font-medium">Course Level</p>
-                      <p>{course.level}</p>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            <div className="flex gap-4 justify-center mt-8">
-              <Button size="lg" onClick={() => setShowCertificate(false)}>
-                <BookOpen className="mr-2 h-4 w-4" />
-                Review Course
-              </Button>
-              <Button size="lg" variant="outline" asChild>
-                <Link to="/dashboard">
-                  <ArrowLeft className="mr-2 h-4 w-4" />
-                  Back to Dashboard
-                </Link>
-              </Button>
-            </div>
+            <Button asChild><Link to={`/courses/${cursus.slug}`}>Retour à la fiche cursus</Link></Button>
           </div>
         </section>
         <Footer />
@@ -325,179 +103,123 @@ const CourseViewer = () => {
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <Navbar />
-      
       <div className="flex-1 flex flex-col lg:flex-row">
-        {/* Sidebar - Module List */}
         <aside className="w-full lg:w-80 border-r border-border bg-muted/30">
           <div className="p-4 border-b border-border">
             <Button variant="ghost" size="sm" asChild className="mb-4">
-              <Link to="/dashboard">
-                <ArrowLeft className="h-4 w-4 mr-2" />
-                Back to Dashboard
-              </Link>
+              <Link to="/dashboard"><ArrowLeft className="h-4 w-4 mr-2" />Retour au tableau de bord</Link>
             </Button>
-            <h2 className="font-bold text-lg line-clamp-2">{course.title}</h2>
+            <h2 className="font-bold text-lg line-clamp-2">{cursus.title}</h2>
             <div className="flex items-center gap-2 mt-2">
-              <Progress value={overallProgress} className="flex-1 h-2" />
-              <span className="text-sm font-medium">{overallProgress}%</span>
+              <Progress value={overall} className="flex-1 h-2" />
+              <span className="text-sm font-medium">{overall}%</span>
             </div>
           </div>
-          
           <ScrollArea className="h-[calc(100vh-280px)]">
             <div className="p-4 space-y-2">
-              {course.modules.map((module, moduleIndex) => {
-                const isCompleted = isModuleCompleted(moduleIndex);
-                const isActive = moduleIndex === currentModuleIndex;
-                
+              {modules.map((m, idx) => {
+                const done = progress[m.id];
+                const active = idx === activeModuleIdx;
                 return (
-                  <button
-                    key={moduleIndex}
-                    onClick={() => selectModule(moduleIndex)}
-                    className={`w-full text-left p-3 rounded-lg transition-colors ${
-                      isActive 
-                        ? 'bg-primary text-primary-foreground' 
-                        : 'hover:bg-muted'
-                    }`}
-                  >
+                  <button key={m.id} onClick={() => { setActiveModuleIdx(idx); setActiveLessonIdx(0); }}
+                    className={`w-full text-left p-3 rounded-lg transition-colors ${active ? "bg-primary text-primary-foreground" : "hover:bg-muted"}`}>
                     <div className="flex items-start gap-3">
-                      <div className="flex-shrink-0 mt-0.5">
-                        {isCompleted ? (
-                          <CheckCircle2 className={`h-5 w-5 ${isActive ? 'text-primary-foreground' : 'text-primary'}`} />
-                        ) : (
-                          <Circle className={`h-5 w-5 ${isActive ? 'text-primary-foreground' : 'text-muted-foreground'}`} />
-                        )}
-                      </div>
+                      {done ? <CheckCircle2 className={`h-5 w-5 ${active ? "text-primary-foreground" : "text-primary"}`} /> : <Circle className={`h-5 w-5 ${active ? "text-primary-foreground" : "text-muted-foreground"}`} />}
                       <div>
-                        <p className="font-medium text-sm">Module {moduleIndex + 1}</p>
-                        <p className={`text-sm ${isActive ? 'text-primary-foreground/80' : 'text-muted-foreground'} line-clamp-2`}>
-                          {module.title}
-                        </p>
+                        <p className="font-medium text-sm">Module {idx + 1}</p>
+                        <p className={`text-sm line-clamp-2 ${active ? "text-primary-foreground/80" : "text-muted-foreground"}`}>{m.title}</p>
                       </div>
                     </div>
                   </button>
                 );
               })}
+              {modules.length === 0 && <p className="text-sm text-muted-foreground p-3">Aucun module disponible pour le moment.</p>}
             </div>
           </ScrollArea>
-
-          {/* Show Certificate Button if completed */}
-          {isAllCompleted && (
-            <div className="p-4 border-t border-border">
-              <Button 
-                className="w-full bg-gradient-to-r from-secondary to-secondary/80"
-                onClick={() => setShowCertificate(true)}
-              >
-                <Award className="mr-2 h-4 w-4" />
-                View Certificate
-              </Button>
-            </div>
-          )}
         </aside>
 
-        {/* Main Content */}
         <main className="flex-1 flex flex-col">
-          <Tabs defaultValue="lesson" className="flex-1 flex flex-col">
-            <div className="border-b border-border bg-background px-4 pt-3">
-              <TabsList>
-                <TabsTrigger value="lesson"><BookOpen className="h-4 w-4 mr-2" />Leçon</TabsTrigger>
-                <TabsTrigger value="quiz"><ClipboardList className="h-4 w-4 mr-2" />Évaluation QCM</TabsTrigger>
-                <TabsTrigger value="project"><UploadIcon className="h-4 w-4 mr-2" />Projet</TabsTrigger>
-              </TabsList>
-            </div>
-
-            <TabsContent value="lesson" className="flex-1 flex flex-col m-0">
-              <div className="border-b border-border p-4 bg-background">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <Badge variant="outline" className="mb-2">
-                      Module {currentModuleIndex + 1} of {course.modules.length}
-                    </Badge>
-                    <h1 className="text-2xl font-bold">{currentModule.title}</h1>
-                  </div>
-                  {!isModuleCompleted(currentModuleIndex) && (
-                    <Button onClick={markModuleComplete} variant="outline">
-                      <CheckCircle2 className="mr-2 h-4 w-4" />
-                      Mark Complete
-                    </Button>
-                  )}
-                  {isModuleCompleted(currentModuleIndex) && (
-                    <Badge className="bg-primary/10 text-primary border-primary/20">
-                      <CheckCircle2 className="mr-1 h-3 w-3" />
-                      Completed
-                    </Badge>
-                  )}
+          {currentModule ? (
+            <>
+              <div className="border-b border-border p-4 bg-background flex items-center justify-between">
+                <div>
+                  <Badge variant="outline" className="mb-2">Module {activeModuleIdx + 1}/{modules.length}</Badge>
+                  <h1 className="text-2xl font-bold">{currentModule.title}</h1>
+                  {currentModule.description && <p className="text-sm text-muted-foreground mt-1 max-w-2xl">{currentModule.description}</p>}
                 </div>
+                {!progress[currentModule.id] ? (
+                  <Button onClick={markComplete} variant="outline"><CheckCircle2 className="mr-2 h-4 w-4" />Marquer terminé</Button>
+                ) : (
+                  <Badge className="bg-primary/10 text-primary border-primary/20"><CheckCircle2 className="mr-1 h-3 w-3" />Terminé</Badge>
+                )}
               </div>
 
-              <div className="flex-1 overflow-hidden">
-                {currentModule.content ? (
-                  <PDFViewer
-                    content={currentModule.content}
-                    title={`${currentModule.title} - ${currentTopic}`}
-                  />
+              <div className="flex-1 p-4 md:p-8 overflow-y-auto">
+                {currentLesson ? (
+                  <Card>
+                    <CardContent className="p-6 md:p-8 space-y-4">
+                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                        {currentLesson.lesson_type === "pdf" && <FileText className="h-4 w-4" />}
+                        {currentLesson.lesson_type === "video" && <Video className="h-4 w-4" />}
+                        {currentLesson.lesson_type === "link" && <Link2 className="h-4 w-4" />}
+                        <span className="capitalize">{currentLesson.lesson_type}</span>
+                        <span>•</span>
+                        <span>Leçon {activeLessonIdx + 1}/{currentLessons.length}</span>
+                      </div>
+                      <h2 className="text-2xl font-bold">{currentLesson.title}</h2>
+                      {currentLesson.content && <div className="prose prose-sm max-w-none whitespace-pre-line">{currentLesson.content}</div>}
+                      {currentLesson.lesson_type === "pdf" && signedUrl && (
+                        <iframe src={signedUrl} className="w-full h-[70vh] rounded border" title={currentLesson.title} />
+                      )}
+                      {currentLesson.lesson_type === "video" && (currentLesson.external_url || signedUrl) && (
+                        <video controls src={currentLesson.external_url || signedUrl || undefined} className="w-full rounded" />
+                      )}
+                      {currentLesson.lesson_type === "link" && currentLesson.external_url && (
+                        <a href={currentLesson.external_url} target="_blank" rel="noreferrer" className="text-primary underline">
+                          Ouvrir le lien externe
+                        </a>
+                      )}
+                    </CardContent>
+                  </Card>
                 ) : (
-                  <div className="h-full p-4 md:p-8 overflow-y-auto">
-                    <Card className="w-full max-w-4xl mx-auto min-h-[400px] bg-gradient-to-br from-muted/50 to-background border-2">
-                      <CardContent className="p-6 md:p-10">
-                        <h2 className="text-2xl md:text-3xl font-bold">{currentTopic}</h2>
-                      </CardContent>
-                    </Card>
-                  </div>
+                  <Card><CardContent className="p-8 text-center text-muted-foreground">Aucune leçon publiée dans ce module.</CardContent></Card>
                 )}
               </div>
 
               <div className="border-t border-border p-4 bg-muted/30">
                 <div className="flex items-center justify-between max-w-4xl mx-auto">
-                  <Button
-                    variant="outline"
-                    onClick={goToPreviousTopic}
-                    disabled={currentModuleIndex === 0 && currentTopicIndex === 0}
-                  >
-                    <ChevronLeft className="mr-2 h-4 w-4" />
-                    Previous
+                  <Button variant="outline" disabled={activeLessonIdx === 0 && activeModuleIdx === 0}
+                    onClick={() => {
+                      if (activeLessonIdx > 0) setActiveLessonIdx(i => i - 1);
+                      else if (activeModuleIdx > 0) {
+                        const prev = activeModuleIdx - 1;
+                        setActiveModuleIdx(prev);
+                        const ls = lessonsByModule[modules[prev].id] || [];
+                        setActiveLessonIdx(Math.max(0, ls.length - 1));
+                      }
+                    }}>
+                    <ChevronLeft className="mr-2 h-4 w-4" />Précédent
                   </Button>
-                  <div className="text-sm text-muted-foreground">
-                    {currentModule.topics.map((_, i) => (
-                      <span
-                        key={i}
-                        className={`inline-block w-2 h-2 rounded-full mx-1 ${
-                          i === currentTopicIndex ? 'bg-primary' : 'bg-muted-foreground/30'
-                        }`}
-                      />
-                    ))}
-                  </div>
-                  <Button
-                    onClick={goToNextTopic}
-                    disabled={
-                      currentModuleIndex === course.modules.length - 1 &&
-                      currentTopicIndex === currentModule.topics.length - 1 &&
-                      isModuleCompleted(currentModuleIndex)
-                    }
-                  >
-                    {currentModuleIndex === course.modules.length - 1 &&
-                     currentTopicIndex === currentModule.topics.length - 1
-                      ? (isModuleCompleted(currentModuleIndex) ? 'Completed' : 'Complete Module')
-                      : 'Next'}
-                    <ChevronRight className="ml-2 h-4 w-4" />
+                  <Button onClick={() => {
+                    if (activeLessonIdx < currentLessons.length - 1) setActiveLessonIdx(i => i + 1);
+                    else if (activeModuleIdx < modules.length - 1) { setActiveModuleIdx(i => i + 1); setActiveLessonIdx(0); }
+                  }} disabled={activeModuleIdx === modules.length - 1 && activeLessonIdx >= currentLessons.length - 1}>
+                    Suivant<ChevronRight className="ml-2 h-4 w-4" />
                   </Button>
                 </div>
               </div>
-            </TabsContent>
-
-            <TabsContent value="quiz" className="flex-1 overflow-y-auto p-4 md:p-8 m-0">
-              <div className="max-w-3xl mx-auto">
-                <QuizComponent courseId={course.id} />
+            </>
+          ) : (
+            <div className="flex-1 flex items-center justify-center">
+              <div className="text-center">
+                <BookOpen className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
+                <p className="text-muted-foreground">Aucun module disponible pour ce cursus.</p>
               </div>
-            </TabsContent>
-
-            <TabsContent value="project" className="flex-1 overflow-y-auto p-4 md:p-8 m-0">
-              <div className="max-w-3xl mx-auto">
-                <ProjectUpload courseId={course.id} />
-              </div>
-            </TabsContent>
-          </Tabs>
+            </div>
+          )}
         </main>
       </div>
+      <Footer />
     </div>
   );
 };
