@@ -51,12 +51,15 @@ const AdminLms = () => {
   }, [user, authLoading]);
 
   const reloadAll = async () => {
-    const [p, c, { data: e }] = await Promise.all([
+    const [p, c, { data: e }, { data: profs }] = await Promise.all([
       supabase.from("poles").select("*").order("display_order").then(r => (r.data || []) as Pole[]),
       supabase.from("cursus").select("*, pole:poles(*)").order("display_order").then(r => (r.data || []) as any[]),
-      supabase.from("course_enrollments").select("*, cursus:cursus(title,slug), profile:profiles!course_enrollments_user_id_fkey(full_name,email,phone)").order("created_at", { ascending: false }),
+      supabase.from("course_enrollments").select("*, cursus:cursus(title,slug)").order("created_at", { ascending: false }),
+      supabase.from("profiles").select("user_id,full_name,email,phone"),
     ]);
-    setPoles(p); setCursus(c); setEnrollments(e || []);
+    const profMap = new Map((profs || []).map((pr: any) => [pr.user_id, pr]));
+    const enriched = (e || []).map((row: any) => ({ ...row, profile: profMap.get(row.user_id) || null }));
+    setPoles(p); setCursus(c); setEnrollments(enriched);
   };
 
   const loadModulesFor = async (cursusId: string) => {
