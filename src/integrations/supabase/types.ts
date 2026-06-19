@@ -221,6 +221,121 @@ export type Database = {
         }
         Relationships: []
       }
+      exam_attempts: {
+        Row: {
+          answers: Json
+          created_at: string
+          cursus_id: string
+          id: string
+          passed: boolean | null
+          question_ids: Json
+          score: number | null
+          started_at: string
+          status: string
+          submitted_at: string | null
+          total: number
+          user_id: string
+        }
+        Insert: {
+          answers?: Json
+          created_at?: string
+          cursus_id: string
+          id?: string
+          passed?: boolean | null
+          question_ids?: Json
+          score?: number | null
+          started_at?: string
+          status?: string
+          submitted_at?: string | null
+          total?: number
+          user_id: string
+        }
+        Update: {
+          answers?: Json
+          created_at?: string
+          cursus_id?: string
+          id?: string
+          passed?: boolean | null
+          question_ids?: Json
+          score?: number | null
+          started_at?: string
+          status?: string
+          submitted_at?: string | null
+          total?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "exam_attempts_cursus_id_fkey"
+            columns: ["cursus_id"]
+            isOneToOne: false
+            referencedRelation: "cursus"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      exam_question_bank: {
+        Row: {
+          correct_option: string
+          created_at: string
+          created_by: string | null
+          cursus_id: string
+          difficulty: string | null
+          explanation: string | null
+          id: string
+          option_a: string
+          option_b: string
+          option_c: string
+          option_d: string
+          published: boolean
+          question: string
+          topic: string | null
+          updated_at: string
+        }
+        Insert: {
+          correct_option: string
+          created_at?: string
+          created_by?: string | null
+          cursus_id: string
+          difficulty?: string | null
+          explanation?: string | null
+          id?: string
+          option_a: string
+          option_b: string
+          option_c: string
+          option_d: string
+          published?: boolean
+          question: string
+          topic?: string | null
+          updated_at?: string
+        }
+        Update: {
+          correct_option?: string
+          created_at?: string
+          created_by?: string | null
+          cursus_id?: string
+          difficulty?: string | null
+          explanation?: string | null
+          id?: string
+          option_a?: string
+          option_b?: string
+          option_c?: string
+          option_d?: string
+          published?: boolean
+          question?: string
+          topic?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "exam_question_bank_cursus_id_fkey"
+            columns: ["cursus_id"]
+            isOneToOne: false
+            referencedRelation: "cursus"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       lessons: {
         Row: {
           content: string | null
@@ -608,6 +723,10 @@ export type Database = {
           admin_password: string
         }
         Returns: undefined
+      }
+      draw_exam_questions: {
+        Args: { _cursus_id: string; _n?: number }
+        Returns: string[]
       }
       has_role: {
         Args: {

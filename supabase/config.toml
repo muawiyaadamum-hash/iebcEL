@@ -5,3 +5,9 @@ verify_jwt = true
 
 [functions.fapshi-webhook]
 verify_jwt = false
+
+[functions.exam-start]
+verify_jwt = true
+
+[functions.exam-submit]
+verify_jwt = true

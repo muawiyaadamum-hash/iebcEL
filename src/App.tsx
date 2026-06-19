@@ -19,6 +19,7 @@ import Install from "./pages/Install";
 import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
 import AdminLms from "./pages/AdminLms";
+import Exam from "./pages/Exam";
 import Events from "./pages/Events";
 import NotFound from "./pages/NotFound";
 
@@ -56,6 +57,11 @@ const App = () => (
                   <Route path="/admin" element={
                     <ProtectedRoute>
                       <AdminLms />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/exam/:slug" element={
+                    <ProtectedRoute>
+                      <Exam />
                     </ProtectedRoute>
                   } />
                   {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
