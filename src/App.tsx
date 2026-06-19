@@ -59,6 +59,11 @@ const App = () => (
                       <AdminLms />
                     </ProtectedRoute>
                   } />
+                  <Route path="/exam/:slug" element={
+                    <ProtectedRoute>
+                      <Exam />
+                    </ProtectedRoute>
+                  } />
                   {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                   <Route path="*" element={<NotFound />} />
                 </Routes>
