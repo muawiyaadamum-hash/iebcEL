@@ -18,7 +18,6 @@ import About from "./pages/About";
 import Install from "./pages/Install";
 import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
-import Admin from "./pages/Admin";
 import AdminLms from "./pages/AdminLms";
 import Events from "./pages/Events";
 import NotFound from "./pages/NotFound";
@@ -55,11 +54,6 @@ const App = () => (
                     </ProtectedRoute>
                   } />
                   <Route path="/admin" element={
-                    <ProtectedRoute>
-                      <Admin />
-                    </ProtectedRoute>
-                  } />
-                  <Route path="/admin/lms" element={
                     <ProtectedRoute>
                       <AdminLms />
                     </ProtectedRoute>

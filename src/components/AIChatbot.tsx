@@ -34,7 +34,7 @@ const FAQ_PROMPTS = [
   "Chat with support on WhatsApp",
 ];
 
-const GREETING_MESSAGE = `👋 Hi there! I'm MTech Bot, your 24/7 AI support assistant.
+const GREETING_MESSAGE = `👋 Hi there! I'm IEBC Bot, your 24/7 AI support assistant.
 
 I'm here to help you with:
 • Finding the right course for your goals
@@ -180,7 +180,7 @@ const [messages, setMessages] = useState<Message[]>([]);
 
     // Handle WhatsApp redirect
     if (text.toLowerCase().includes('whatsapp')) {
-      window.open(getWhatsAppLink("Hello MTech Academy! I need assistance and would like to chat with your support team."), '_blank');
+      window.open(getWhatsAppLink("Hello Centre de Formation IEBC! I need assistance and would like to chat with your support team."), '_blank');
       setMessages(prev => [...prev, 
         { role: "user", content: text },
         { role: "assistant", content: "I'm opening WhatsApp for you to chat with our human support team! They're available to help you with any questions. 💬" }
@@ -237,7 +237,7 @@ const [messages, setMessages] = useState<Message[]>([]);
             </button>
             <div className="flex items-center gap-2 mb-2">
               <Volume2 className="h-4 w-4" />
-              <span className="font-semibold text-sm">MTech Bot</span>
+              <span className="font-semibold text-sm">IEBC Bot</span>
             </div>
             <p className="text-sm">{AUTO_POPUP_MESSAGE}</p>
             <Button 
@@ -286,7 +286,7 @@ const [messages, setMessages] = useState<Message[]>([]);
               </div>
               <div>
                 <h3 className="font-semibold flex items-center gap-1">
-                  MTech Bot
+                  IEBC Bot
                   <Headphones className="h-3.5 w-3.5" />
                 </h3>
                 <p className="text-xs opacity-90">24/7 AI Support</p>

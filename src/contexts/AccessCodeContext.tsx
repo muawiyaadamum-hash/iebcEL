@@ -10,10 +10,10 @@ const AccessCodeContext = createContext<AccessCodeContextType | undefined>(undef
 
 // Valid access codes - in production, these would be validated server-side
 const VALID_ACCESS_CODES = [
-  "MTECH2025",
-  "ACADEMY25",
+  "IEBC2025",
+  "IEBC25",
+  "CEMAC25",
   "LEARN2025",
-  "STUDENT25",
   "WELCOME25"
 ];
 

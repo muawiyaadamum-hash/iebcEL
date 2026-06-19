@@ -30,7 +30,7 @@ const Install = () => {
       setIsInstalled(true);
       toast({
         title: "App Installed!",
-        description: "MTech Academy has been installed successfully.",
+        description: "Centre de Formation IEBC has been installed successfully.",
       });
     });
 
@@ -55,7 +55,7 @@ const Install = () => {
     if (outcome === 'accepted') {
       toast({
         title: "Installing...",
-        description: "MTech Academy is being installed to your device.",
+        description: "Centre de Formation IEBC is being installed to your device.",
       });
     }
 
@@ -71,7 +71,7 @@ const Install = () => {
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-12">
               <h1 className="text-4xl md:text-5xl font-bold mb-4">
-                Install MTech Academy
+                Install Centre de Formation IEBC
               </h1>
               <p className="text-lg text-muted-foreground">
                 Get instant access to your courses, even offline
@@ -97,7 +97,7 @@ const Install = () => {
                 <CardHeader>
                   <CardTitle>Install on Your Device</CardTitle>
                   <CardDescription>
-                    Install MTech Academy for a better experience
+                    Install Centre de Formation IEBC for a better experience
                   </CardDescription>
                 </CardHeader>
                 <CardContent>

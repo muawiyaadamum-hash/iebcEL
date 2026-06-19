@@ -152,7 +152,7 @@ const Auth = () => {
     } else {
       toast({
         title: "Account Created!",
-        description: "Welcome to MTech Academy. Redirecting to your dashboard..."
+        description: "Welcome to Centre de Formation IEBC. Redirecting to your dashboard..."
       });
       navigate("/dashboard");
     }
@@ -178,7 +178,7 @@ const Auth = () => {
                 <GraduationCap className="h-10 w-10 text-primary" />
               </div>
             </div>
-            <h1 className="text-3xl font-bold mb-2">Welcome to MTech Academy</h1>
+            <h1 className="text-3xl font-bold mb-2">Welcome to Centre de Formation IEBC</h1>
             <p className="text-muted-foreground">
               Access your student dashboard
             </p>

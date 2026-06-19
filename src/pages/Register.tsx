@@ -13,7 +13,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useScrollToTop } from "@/hooks/useScrollToTop";
 import { Loader2, MessageCircle, CheckCircle2 } from "lucide-react";
 import { getWhatsAppLink, getRegistrationMessage } from "@/components/WhatsAppButton";
-import { REGISTRATION_FEE } from "@/types/course";
+import { REGISTRATION_FEE_XAF } from "@/lib/lms";
 
 const Register = () => {
   useScrollToTop();
@@ -151,10 +151,10 @@ const Register = () => {
         <div className="container mx-auto px-4 max-w-4xl">
           <div className="text-center mb-12">
             <h1 className="text-4xl md:text-5xl font-bold mb-4">
-              Register for MTech Academy
+              Register for Centre de Formation IEBC
             </h1>
             <p className="text-lg text-muted-foreground">
-              One-time registration of {REGISTRATION_FEE.toLocaleString()} XAF for unlimited course access
+              One-time registration of {REGISTRATION_FEE_XAF.toLocaleString()} XAF for unlimited course access
             </p>
             <p className="text-sm text-muted-foreground mt-2">
               Already have an account?{" "}
@@ -297,7 +297,7 @@ const Register = () => {
                         htmlFor="terms"
                         className="text-sm text-muted-foreground leading-relaxed cursor-pointer"
                       >
-                        I agree to the terms and conditions of MTech Academy
+                        I agree to the terms and conditions of Centre de Formation IEBC
                       </label>
                     </div>
 
@@ -331,7 +331,7 @@ const Register = () => {
                 </CardHeader>
                 <CardContent>
                   <div className="text-center">
-                    <p className="text-4xl font-bold mb-2">{REGISTRATION_FEE.toLocaleString()} XAF</p>
+                    <p className="text-4xl font-bold mb-2">{REGISTRATION_FEE_XAF.toLocaleString()} XAF</p>
                     <p className="text-white/90 text-sm">
                       One-time payment for lifetime access
                     </p>
@@ -418,7 +418,7 @@ const Register = () => {
                     Contact us for assistance with registration
                   </p>
                   <a
-                    href={getWhatsAppLink("Hello! I need help with registration at MTech Academy.")}
+                    href={getWhatsAppLink("Hello! I need help with registration at Centre de Formation IEBC.")}
                     target="_blank"
                     rel="noopener noreferrer"
                   >

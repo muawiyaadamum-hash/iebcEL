@@ -61,7 +61,7 @@ const InstallBanner = () => {
           <Download className="h-5 w-5 text-primary-foreground flex-shrink-0" />
           <div className="flex-1">
             <p className="text-sm font-semibold text-primary-foreground">
-              Install MTech Academy
+              Install Centre de Formation IEBC
             </p>
             <p className="text-xs text-primary-foreground/90">
               Access courses offline, faster loading
