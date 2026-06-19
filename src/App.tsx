@@ -55,11 +55,6 @@ const App = () => (
                   } />
                   <Route path="/admin" element={
                     <ProtectedRoute>
-                      <Admin />
-                    </ProtectedRoute>
-                  } />
-                  <Route path="/admin/lms" element={
-                    <ProtectedRoute>
                       <AdminLms />
                     </ProtectedRoute>
                   } />
