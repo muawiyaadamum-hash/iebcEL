@@ -127,6 +127,9 @@ const AdminLms = () => {
                 reloadLessons={loadLessonsFor}
               />
             </TabsContent>
+            <TabsContent value="qcm">
+              <AdminQuestionBank />
+            </TabsContent>
             <TabsContent value="enrollments">
               <EnrollmentsPanel enrollments={enrollments} onChange={reloadAll} adminId={user.id} />
             </TabsContent>
