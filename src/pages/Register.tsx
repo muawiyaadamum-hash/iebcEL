@@ -13,7 +13,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useScrollToTop } from "@/hooks/useScrollToTop";
 import { Loader2, MessageCircle, CheckCircle2 } from "lucide-react";
 import { getWhatsAppLink, getRegistrationMessage } from "@/components/WhatsAppButton";
-import { REGISTRATION_FEE } from "@/types/course";
+import { REGISTRATION_FEE_XAF } from "@/lib/lms";
 
 const Register = () => {
   useScrollToTop();
@@ -154,7 +154,7 @@ const Register = () => {
               Register for Centre de Formation IEBC
             </h1>
             <p className="text-lg text-muted-foreground">
-              One-time registration of {REGISTRATION_FEE.toLocaleString()} XAF for unlimited course access
+              One-time registration of {REGISTRATION_FEE_XAF.toLocaleString()} XAF for unlimited course access
             </p>
             <p className="text-sm text-muted-foreground mt-2">
               Already have an account?{" "}
@@ -331,7 +331,7 @@ const Register = () => {
                 </CardHeader>
                 <CardContent>
                   <div className="text-center">
-                    <p className="text-4xl font-bold mb-2">{REGISTRATION_FEE.toLocaleString()} XAF</p>
+                    <p className="text-4xl font-bold mb-2">{REGISTRATION_FEE_XAF.toLocaleString()} XAF</p>
                     <p className="text-white/90 text-sm">
                       One-time payment for lifetime access
                     </p>
