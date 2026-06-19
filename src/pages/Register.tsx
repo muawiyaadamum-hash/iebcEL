@@ -151,7 +151,7 @@ const Register = () => {
         <div className="container mx-auto px-4 max-w-4xl">
           <div className="text-center mb-12">
             <h1 className="text-4xl md:text-5xl font-bold mb-4">
-              Register for MTech Academy
+              Register for Centre de Formation IEBC
             </h1>
             <p className="text-lg text-muted-foreground">
               One-time registration of {REGISTRATION_FEE.toLocaleString()} XAF for unlimited course access
@@ -297,7 +297,7 @@ const Register = () => {
                         htmlFor="terms"
                         className="text-sm text-muted-foreground leading-relaxed cursor-pointer"
                       >
-                        I agree to the terms and conditions of MTech Academy
+                        I agree to the terms and conditions of Centre de Formation IEBC
                       </label>
                     </div>
 
@@ -418,7 +418,7 @@ const Register = () => {
                     Contact us for assistance with registration
                   </p>
                   <a
-                    href={getWhatsAppLink("Hello! I need help with registration at MTech Academy.")}
+                    href={getWhatsAppLink("Hello! I need help with registration at Centre de Formation IEBC.")}
                     target="_blank"
                     rel="noopener noreferrer"
                   >

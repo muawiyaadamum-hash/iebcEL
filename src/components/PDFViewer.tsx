@@ -114,7 +114,7 @@ const PDFViewer = ({ content, title }: PDFViewerProps) => {
           
           {/* Page footer */}
           <div className="border-t pt-4 mt-8 text-center text-sm text-muted-foreground">
-            <p>MTech Academy - {title}</p>
+            <p>Centre de Formation IEBC - {title}</p>
             <p>Page {currentPage}</p>
           </div>
         </div>

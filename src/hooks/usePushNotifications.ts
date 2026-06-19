@@ -35,7 +35,7 @@ export const usePushNotifications = () => {
         });
         // Show a welcome notification
         showNotification({
-          title: "Welcome to MTech Academy!",
+          title: "Welcome to Centre de Formation IEBC!",
           body: "You'll receive notifications about new courses, updates, and reminders.",
           icon: "/icon-192.png",
         });

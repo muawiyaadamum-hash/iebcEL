@@ -9,7 +9,7 @@ import { useToast } from "@/hooks/use-toast";
 import { WHATSAPP_NUMBER } from "@/components/WhatsAppButton";
 
 const getAccessCodeRequestMessage = () => {
-  return `Hello MTech Academy!
+  return `Hello Centre de Formation IEBC!
 
 I would like to request an access code for the learning platform.
 
@@ -55,7 +55,7 @@ const AccessCodeGate = ({ children }: { children: React.ReactNode }) => {
             <Lock className="h-8 w-8 text-primary" />
           </div>
           <h1 className="text-2xl font-bold text-foreground mb-2">
-            MTech Academy
+            Centre de Formation IEBC
           </h1>
         </div>
 

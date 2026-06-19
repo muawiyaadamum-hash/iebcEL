@@ -3,11 +3,11 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 export const WHATSAPP_NUMBER = "237656987759";
-export const DEFAULT_WHATSAPP_MESSAGE = "Hello MTech Academy! I'm interested in your courses and would like to learn more about enrollment options. Please assist me.";
+export const DEFAULT_WHATSAPP_MESSAGE = "Hello Centre de Formation IEBC! I'm interested in your courses and would like to learn more about enrollment options. Please assist me.";
 
 export const getRegistrationMessage = (name: string, email: string, phone: string, courseName?: string) => {
   const courseInfo = courseName ? `\n- Course Interest: ${courseName}` : '';
-  return `Hello MTech Academy!
+  return `Hello Centre de Formation IEBC!
 
 I would like to register for your learning platform.
 

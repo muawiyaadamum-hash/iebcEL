@@ -31,7 +31,7 @@ export const translations: Translations = {
   "index.featured": { en: "Featured Courses", fr: "Cours en vedette" },
   "index.featuredDesc": { en: "Start your learning journey with our most popular courses", fr: "Commencez votre parcours d'apprentissage avec nos cours les plus populaires" },
   "index.viewAll": { en: "View All Courses", fr: "Voir tous les cours" },
-  "index.whyChoose": { en: "Why Choose MTech Academy?", fr: "Pourquoi choisir MTech Academy?" },
+  "index.whyChoose": { en: "Why Choose Centre de Formation IEBC?", fr: "Pourquoi choisir Centre de Formation IEBC?" },
   "index.whyChooseDesc": { en: "We provide quality education with flexible learning options", fr: "Nous offrons une éducation de qualité avec des options d'apprentissage flexibles" },
   "index.pace": { en: "Learn at Your Pace", fr: "Apprenez à votre rythme" },
   "index.paceDesc": { en: "Access course materials anytime, anywhere. Study at your own speed with lifetime access.", fr: "Accédez aux cours à tout moment, n'importe où. Étudiez à votre rythme avec un accès à vie." },
@@ -40,7 +40,7 @@ export const translations: Translations = {
   "index.support": { en: "24/7 Support", fr: "Support 24/7" },
   "index.supportDesc": { en: "Get help anytime with our AI chatbot or connect with our team on WhatsApp.", fr: "Obtenez de l'aide à tout moment avec notre chatbot IA ou contactez notre équipe sur WhatsApp." },
   "index.ready": { en: "Ready to Start Learning?", fr: "Prêt à commencer à apprendre?" },
-  "index.readyDesc": { en: "Join MTech Academy today and unlock your potential with our comprehensive online courses.", fr: "Rejoignez MTech Academy aujourd'hui et libérez votre potentiel avec nos cours en ligne complets." },
+  "index.readyDesc": { en: "Join Centre de Formation IEBC today and unlock your potential with our comprehensive online courses.", fr: "Rejoignez Centre de Formation IEBC aujourd'hui et libérez votre potentiel avec nos cours en ligne complets." },
   "index.registerNow": { en: "Register Now", fr: "S'inscrire maintenant" },
   
   // Courses
@@ -64,7 +64,7 @@ export const translations: Translations = {
   "courses.viewDetails": { en: "View Details", fr: "Voir les détails" },
   
   // Auth
-  "auth.welcome": { en: "Welcome to MTech Academy", fr: "Bienvenue à MTech Academy" },
+  "auth.welcome": { en: "Welcome to Centre de Formation IEBC", fr: "Bienvenue à Centre de Formation IEBC" },
   "auth.accessDashboard": { en: "Access your student dashboard", fr: "Accédez à votre tableau de bord étudiant" },
   "auth.login": { en: "Login", fr: "Connexion" },
   "auth.signup": { en: "Sign Up", fr: "S'inscrire" },

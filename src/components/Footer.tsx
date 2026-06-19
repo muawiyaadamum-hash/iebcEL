@@ -20,7 +20,7 @@ const Footer = () => {
             </p>
             <div className="flex gap-2">
               <a
-                href={getWhatsAppLink("Hello MTech Academy! I'd like to learn more about your courses.")}
+                href={getWhatsAppLink("Hello Centre de Formation IEBC! I'd like to learn more about your courses.")}
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -67,7 +67,7 @@ const Footer = () => {
               </li>
               <li>
                 <a
-                  href={getWhatsAppLink("Hello! I need help with MTech Academy.")}
+                  href={getWhatsAppLink("Hello! I need help with Centre de Formation IEBC.")}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-sm text-muted-foreground hover:text-primary transition-colors flex items-center gap-2"
