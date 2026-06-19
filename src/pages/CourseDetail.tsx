@@ -192,9 +192,14 @@ const CourseDetail = () => {
                     </Link>
                   </div>
                 ) : enrollment?.status === "validated" ? (
-                  <Button size="lg" className="w-full" onClick={() => navigate(`/learn/${cursus.slug}`)}>
-                    <BookOpen className="mr-2 h-4 w-4" />Accéder au cursus<ArrowRight className="ml-2 h-4 w-4" />
-                  </Button>
+                  <div className="space-y-2">
+                    <Button size="lg" className="w-full" onClick={() => navigate(`/learn/${cursus.slug}`)}>
+                      <BookOpen className="mr-2 h-4 w-4" />Accéder au cursus<ArrowRight className="ml-2 h-4 w-4" />
+                    </Button>
+                    <Button size="lg" variant="outline" className="w-full" onClick={() => navigate(`/exam/${cursus.slug}`)}>
+                      Passer l'examen QCM (50 questions)
+                    </Button>
+                  </div>
                 ) : (
                   <Button size="lg" className="w-full bg-gradient-to-r from-secondary to-secondary/90" onClick={requestEnrollment} disabled={submitting}>
                     {submitting ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Chargement</> : (
