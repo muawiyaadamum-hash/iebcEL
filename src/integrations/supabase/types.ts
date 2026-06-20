@@ -14,6 +14,63 @@ export type Database = {
   }
   public: {
     Tables: {
+      certificates: {
+        Row: {
+          attempt_id: string | null
+          code: string
+          created_at: string
+          cursus_id: string
+          cursus_title: string
+          id: string
+          issued_at: string
+          score: number
+          student_name: string
+          total: number
+          user_id: string
+        }
+        Insert: {
+          attempt_id?: string | null
+          code: string
+          created_at?: string
+          cursus_id: string
+          cursus_title: string
+          id?: string
+          issued_at?: string
+          score: number
+          student_name: string
+          total: number
+          user_id: string
+        }
+        Update: {
+          attempt_id?: string | null
+          code?: string
+          created_at?: string
+          cursus_id?: string
+          cursus_title?: string
+          id?: string
+          issued_at?: string
+          score?: number
+          student_name?: string
+          total?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "certificates_attempt_id_fkey"
+            columns: ["attempt_id"]
+            isOneToOne: false
+            referencedRelation: "exam_attempts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "certificates_cursus_id_fkey"
+            columns: ["cursus_id"]
+            isOneToOne: false
+            referencedRelation: "cursus"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       course_enrollments: {
         Row: {
           created_at: string
@@ -738,6 +795,17 @@ export type Database = {
       is_enrolled_validated: {
         Args: { _cursus_id: string; _user_id: string }
         Returns: boolean
+      }
+      verify_certificate: {
+        Args: { _code: string }
+        Returns: {
+          code: string
+          cursus_title: string
+          issued_at: string
+          score: number
+          student_name: string
+          total: number
+        }[]
       }
     }
     Enums: {

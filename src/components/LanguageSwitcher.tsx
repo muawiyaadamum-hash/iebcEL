@@ -1,41 +1,33 @@
 import { useLanguage } from "@/contexts/LanguageContext";
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Globe } from "lucide-react";
 
 const LanguageSwitcher = () => {
   const { language, setLanguage } = useLanguage();
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon" className="h-9 w-9">
-          <Globe className="h-4 w-4" />
-          <span className="sr-only">Switch language</span>
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        <DropdownMenuItem 
-          onClick={() => setLanguage("en")}
-          className={language === "en" ? "bg-accent" : ""}
-        >
-          <span className="mr-2">🇬🇧</span>
-          English
-        </DropdownMenuItem>
-        <DropdownMenuItem 
-          onClick={() => setLanguage("fr")}
-          className={language === "fr" ? "bg-accent" : ""}
-        >
-          <span className="mr-2">🇫🇷</span>
-          Français
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <div className="flex items-center gap-1 rounded-md border border-border/60 p-0.5">
+      <button
+        type="button"
+        onClick={() => setLanguage("fr")}
+        aria-label="Français"
+        title="Français"
+        className={`px-2 py-1 rounded text-base leading-none transition-colors ${
+          language === "fr" ? "bg-muted" : "hover:bg-muted/50 opacity-60"
+        }`}
+      >
+        🇫🇷
+      </button>
+      <button
+        type="button"
+        onClick={() => setLanguage("en")}
+        aria-label="English"
+        title="English"
+        className={`px-2 py-1 rounded text-base leading-none transition-colors ${
+          language === "en" ? "bg-muted" : "hover:bg-muted/50 opacity-60"
+        }`}
+      >
+        🇬🇧
+      </button>
+    </div>
   );
 };
 

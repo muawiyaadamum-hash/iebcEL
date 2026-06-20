@@ -21,6 +21,7 @@ import Dashboard from "./pages/Dashboard";
 import AdminLms from "./pages/AdminLms";
 import Exam from "./pages/Exam";
 import Events from "./pages/Events";
+import VerifyCertificate from "./pages/VerifyCertificate";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -64,6 +65,7 @@ const App = () => (
                       <Exam />
                     </ProtectedRoute>
                   } />
+                  <Route path="/verify/:code" element={<VerifyCertificate />} />
                   {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                   <Route path="*" element={<NotFound />} />
                 </Routes>
