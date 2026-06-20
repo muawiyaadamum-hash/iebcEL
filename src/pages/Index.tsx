@@ -4,6 +4,7 @@ import Hero from "@/components/Hero";
 import CursusCard from "@/components/CursusCard";
 import Footer from "@/components/Footer";
 import InstallBanner from "@/components/InstallBanner";
+import ExpertsCarousel from "@/components/ExpertsCarousel";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, CheckCircle2, Loader2 } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -29,6 +30,7 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <Navbar />
       <Hero />
+      <ExpertsCarousel />
       <InstallBanner />
 
       {/* Pôles de formation */}

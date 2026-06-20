@@ -47,14 +47,19 @@ const Hero = () => {
 
             <div className="flex flex-col sm:flex-row gap-4">
               <Link to="/register">
-                <Button size="lg" className="bg-gradient-to-r from-secondary to-secondary/90 hover:from-secondary/90 hover:to-secondary group">
-                  Commencer
+                <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground group">
+                  S'inscrire (10 000 XAF)
                   <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
                 </Button>
               </Link>
               <Link to="/courses">
                 <Button size="lg" variant="outline">
-                  Voir les cours
+                  Voir les cursus
+                </Button>
+              </Link>
+              <Link to="/auth">
+                <Button size="lg" variant="ghost">
+                  Se connecter
                 </Button>
               </Link>
             </div>
