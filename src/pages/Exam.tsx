@@ -84,14 +84,54 @@ const Exam = () => {
       toast.error(data?.error || error?.message || "Erreur lors de la soumission");
       return;
     }
-    setResult({
-      score: data.score,
-      total: data.total,
-      passed: data.passed,
-      review: data.review,
+    const built = {
+      score: data.score as number,
+      total: data.total as number,
+      passed: data.passed as boolean,
+      review: data.review as ExamReviewItem[],
       submittedAt: new Date().toISOString(),
-    });
+    };
+    setResult(built);
     setQuestions([]);
+
+    // Phase 4: auto-issue certificate on pass
+    if (built.passed && cursus && user) {
+      setIssuingCert(true);
+      const code = generateCertificateCode();
+      const studentName = (user.user_metadata as any)?.full_name || user.email || "Apprenant";
+      const { error: insertErr } = await supabase.from("certificates").insert({
+        user_id: user.id,
+        cursus_id: cursus.id,
+        attempt_id: attemptId,
+        code,
+        student_name: studentName,
+        cursus_title: cursus.title,
+        score: built.score,
+        total: built.total,
+      });
+      setIssuingCert(false);
+      if (insertErr) {
+        toast.error("Certificat non émis : " + insertErr.message);
+      } else {
+        setCertCode(code);
+        toast.success("Certificat émis avec QR de vérification !");
+      }
+    }
+  };
+
+  const downloadCertificate = async () => {
+    if (!result || !cursus || !certCode || !user) return;
+    const verifyUrl = `${window.location.origin}/verify/${certCode}`;
+    const doc = await generateCertificatePdf({
+      code: certCode,
+      studentName: (user.user_metadata as any)?.full_name || user.email || "Apprenant",
+      cursusTitle: cursus.title,
+      score: result.score,
+      total: result.total,
+      issuedAt: result.submittedAt,
+      verifyUrl,
+    });
+    doc.save(`Certificat-IEBC-${cursus.slug}-${certCode}.pdf`);
   };
 
   const downloadReport = () => {
@@ -137,10 +177,23 @@ const Exam = () => {
                 Seuil de réussite : 60%. Vous avez obtenu {Math.round((result.score / result.total) * 100)}%.
               </p>
               <div className="flex gap-3 flex-wrap">
-                <Button onClick={downloadReport}><Download className="h-4 w-4 mr-2" />Télécharger le rapport PDF</Button>
-                <Button variant="outline" onClick={() => navigate("/dashboard")}>Retour au tableau de bord</Button>
-                <Button variant="outline" onClick={() => { setResult(null); setAttemptId(null); }}>Refaire un examen</Button>
+                <Button onClick={downloadReport}><Download className="h-4 w-4 mr-2" />Rapport PDF</Button>
+                {result.passed && certCode && (
+                  <Button onClick={downloadCertificate} className="bg-amber-600 hover:bg-amber-700 text-white">
+                    <Award className="h-4 w-4 mr-2" />Télécharger le certificat
+                  </Button>
+                )}
+                {result.passed && issuingCert && (
+                  <Button disabled variant="outline"><Loader2 className="h-4 w-4 mr-2 animate-spin" />Émission du certificat…</Button>
+                )}
+                <Button variant="outline" onClick={() => navigate("/dashboard")}>Tableau de bord</Button>
+                <Button variant="ghost" onClick={() => { setResult(null); setAttemptId(null); setCertCode(null); }}>Refaire</Button>
               </div>
+              {result.passed && certCode && (
+                <div className="text-xs text-muted-foreground p-3 rounded bg-amber-50 dark:bg-amber-950/20 border border-amber-300">
+                  Réf. certificat : <span className="font-mono">{certCode}</span> · vérifiable sur <span className="font-mono">/verify/{certCode}</span>
+                </div>
+              )}
               <div className="mt-6 space-y-3">
                 <h3 className="font-semibold">Détail des réponses</h3>
                 {result.review.map((r, i) => (
