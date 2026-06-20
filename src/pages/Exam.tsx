@@ -40,6 +40,8 @@ const Exam = () => {
   const [result, setResult] = useState<null | {
     score: number; total: number; passed: boolean; review: ExamReviewItem[]; submittedAt: string;
   }>(null);
+  const [certCode, setCertCode] = useState<string | null>(null);
+  const [issuingCert, setIssuingCert] = useState(false);
 
   useEffect(() => {
     if (!slug) return;
