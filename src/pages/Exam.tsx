@@ -7,12 +7,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
-import { Loader2, Download, CheckCircle2, XCircle, AlertTriangle } from "lucide-react";
+import { Loader2, Download, CheckCircle2, XCircle, AlertTriangle, Award } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { fetchCursusBySlug, type Cursus } from "@/lib/lms";
 import { useAuth } from "@/contexts/AuthContext";
 import { generateExamReportPdf, type ExamReviewItem } from "@/lib/examReport";
+import { generateCertificateCode, generateCertificatePdf } from "@/lib/certificate";
 
 interface ExamQuestion {
   id: string;
