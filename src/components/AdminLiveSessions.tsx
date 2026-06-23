@@ -93,10 +93,10 @@ const AdminLiveSessions = () => {
         <div className="flex flex-wrap items-end gap-3">
           <div className="flex-1 min-w-[240px]">
             <Label>Filtrer par cursus</Label>
-            <Select value={cursusId} onValueChange={setCursusId}>
+            <Select value={cursusId || "__all"} onValueChange={(v) => setCursusId(v === "__all" ? "" : v)}>
               <SelectTrigger><SelectValue placeholder="Tous les cursus" /></SelectTrigger>
               <SelectContent className="bg-popover">
-                <SelectItem value="">Tous</SelectItem>
+                <SelectItem value="__all">Tous</SelectItem>
                 {cursusList.map((c) => <SelectItem key={c.id} value={c.id}>{c.title}</SelectItem>)}
               </SelectContent>
             </Select>
