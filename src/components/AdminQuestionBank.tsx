@@ -196,10 +196,21 @@ const AdminQuestionBank = () => {
               <span>{importing ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Upload className="h-4 w-4 mr-2" />}Importer CSV</span>
             </Button>
           </label>
+          <label className="inline-flex">
+            <input
+              type="file" accept=".pdf,.docx,.json,.txt,.md" className="hidden"
+              onChange={(e) => e.target.files?.[0] && handleAiImport(e.target.files[0])}
+              disabled={!cursusId || aiImporting}
+            />
+            <Button variant="secondary" disabled={!cursusId || aiImporting} asChild>
+              <span>{aiImporting ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Sparkles className="h-4 w-4 mr-2" />}Import IA (PDF/DOCX/JSON)</span>
+            </Button>
+          </label>
         </div>
 
         <p className="text-xs text-muted-foreground">
-          Format CSV : <code>question,option_a,option_b,option_c,option_d,correct_option,explanation,topic</code> (sans virgule dans les champs).
+          CSV : <code>question,option_a,option_b,option_c,option_d,correct_option,explanation,topic</code>.{" "}
+          IA : téléversez un PDF, DOCX ou JSON — l'IA extrait automatiquement les questions et les réponses.
         </p>
 
         {cursusId && (
