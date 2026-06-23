@@ -36,6 +36,8 @@ const AdminQuestionBank = () => {
   const [editing, setEditing] = useState<Partial<QBankItem> | null>(null);
   const [open, setOpen] = useState(false);
   const [importing, setImporting] = useState(false);
+  const [aiImporting, setAiImporting] = useState(false);
+  const [aiPreview, setAiPreview] = useState<any[] | null>(null);
 
   useEffect(() => { fetchCursusList().then(setCursusList); }, []);
 
