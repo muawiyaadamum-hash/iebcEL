@@ -22,6 +22,7 @@ import AdminLms from "./pages/AdminLms";
 import Exam from "./pages/Exam";
 import Events from "./pages/Events";
 import VerifyCertificate from "./pages/VerifyCertificate";
+import LiveSession from "./pages/LiveSession";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
