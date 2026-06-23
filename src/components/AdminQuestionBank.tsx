@@ -291,6 +291,30 @@ const AdminQuestionBank = () => {
             )}
           </DialogContent>
         </Dialog>
+
+        <Dialog open={!!aiPreview} onOpenChange={(v) => !v && setAiPreview(null)}>
+          <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+            <DialogHeader><DialogTitle>Aperçu de l'extraction IA — {aiPreview?.length || 0} questions</DialogTitle></DialogHeader>
+            <div className="space-y-2 max-h-[60vh] overflow-y-auto">
+              {aiPreview?.map((q, i) => (
+                <div key={i} className="border rounded p-2 text-sm">
+                  <div className="font-medium">Q{i + 1}. {q.question}</div>
+                  <ul className="text-xs mt-1 space-y-0.5">
+                    {(["A","B","C","D"] as const).map((k) => (
+                      <li key={k} className={q.correct_option === k ? "text-green-700 font-semibold" : ""}>
+                        {k}. {q[`option_${k.toLowerCase()}`]}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+            <div className="flex justify-end gap-2">
+              <Button variant="outline" onClick={() => setAiPreview(null)}>Annuler</Button>
+              <Button onClick={confirmAiImport}>Tout ajouter à la banque</Button>
+            </div>
+          </DialogContent>
+        </Dialog>
       </CardContent>
     </Card>
   );
