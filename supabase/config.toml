@@ -11,3 +11,6 @@ verify_jwt = true
 
 [functions.exam-submit]
 verify_jwt = true
+
+[functions.import-questions]
+verify_jwt = true
