@@ -132,6 +132,9 @@ const AdminLms = () => {
             <TabsContent value="qcm">
               <AdminQuestionBank />
             </TabsContent>
+            <TabsContent value="visio">
+              <AdminLiveSessions />
+            </TabsContent>
             <TabsContent value="enrollments">
               <EnrollmentsPanel enrollments={enrollments} onChange={reloadAll} adminId={user.id} />
             </TabsContent>
