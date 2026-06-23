@@ -67,6 +67,11 @@ const App = () => (
                     </ProtectedRoute>
                   } />
                   <Route path="/verify/:code" element={<VerifyCertificate />} />
+                  <Route path="/live/:id" element={
+                    <ProtectedRoute>
+                      <LiveSession />
+                    </ProtectedRoute>
+                  } />
                   {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                   <Route path="*" element={<NotFound />} />
                 </Routes>
