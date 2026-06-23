@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Loader2, Plus, Trash2, Upload, Pencil } from "lucide-react";
+import { Loader2, Plus, Trash2, Upload, Pencil, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 import { fetchCursusList, type Cursus } from "@/lib/lms";
 
@@ -36,6 +36,8 @@ const AdminQuestionBank = () => {
   const [editing, setEditing] = useState<Partial<QBankItem> | null>(null);
   const [open, setOpen] = useState(false);
   const [importing, setImporting] = useState(false);
+  const [aiImporting, setAiImporting] = useState(false);
+  const [aiPreview, setAiPreview] = useState<any[] | null>(null);
 
   useEffect(() => { fetchCursusList().then(setCursusList); }, []);
 
@@ -123,6 +125,48 @@ const AdminQuestionBank = () => {
     }
   };
 
+  const handleAiImport = async (file: File) => {
+    if (!cursusId) { toast.error("Sélectionnez d'abord un cursus."); return; }
+    setAiImporting(true);
+    try {
+      const buf = await file.arrayBuffer();
+      const bytes = new Uint8Array(buf);
+      let binary = "";
+      for (let i = 0; i < bytes.length; i++) binary += String.fromCharCode(bytes[i]);
+      const base64 = btoa(binary);
+      const ext = file.name.split(".").pop()?.toLowerCase();
+      const isJson = ext === "json" || file.type === "application/json";
+      const body: any = isJson
+        ? { format: "json", raw_text: await file.text() }
+        : { filename: file.name, mime: file.type || (ext === "pdf" ? "application/pdf" : "application/vnd.openxmlformats-officedocument.wordprocessingml.document"), base64 };
+
+      const { data, error } = await supabase.functions.invoke("import-questions", { body });
+      if (error) throw error;
+      if (data?.error) throw new Error(data.error);
+      const questions = data?.questions || [];
+      if (questions.length === 0) throw new Error("Aucune question extraite du document.");
+      setAiPreview(questions);
+      toast.success(`${questions.length} questions extraites — vérifiez puis validez.`);
+    } catch (e: any) {
+      toast.error(e.message || "Échec de l'import IA");
+    } finally {
+      setAiImporting(false);
+    }
+  };
+
+  const confirmAiImport = async () => {
+    if (!aiPreview || !cursusId) return;
+    const payload = aiPreview.map((q) => ({ ...q, cursus_id: cursusId, published: true }));
+    for (let i = 0; i < payload.length; i += 100) {
+      const { error } = await supabase.from("exam_question_bank").insert(payload.slice(i, i + 100));
+      if (error) { toast.error(error.message); return; }
+    }
+    toast.success(`${payload.length} questions ajoutées à la banque`);
+    setAiPreview(null);
+    const { data } = await supabase.from("exam_question_bank").select("*").eq("cursus_id", cursusId).order("created_at", { ascending: false });
+    setItems((data as QBankItem[]) || []);
+  };
+
   return (
     <Card>
       <CardHeader>
@@ -152,10 +196,21 @@ const AdminQuestionBank = () => {
               <span>{importing ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Upload className="h-4 w-4 mr-2" />}Importer CSV</span>
             </Button>
           </label>
+          <label className="inline-flex">
+            <input
+              type="file" accept=".pdf,.docx,.json,.txt,.md" className="hidden"
+              onChange={(e) => e.target.files?.[0] && handleAiImport(e.target.files[0])}
+              disabled={!cursusId || aiImporting}
+            />
+            <Button variant="secondary" disabled={!cursusId || aiImporting} asChild>
+              <span>{aiImporting ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Sparkles className="h-4 w-4 mr-2" />}Import IA (PDF/DOCX/JSON)</span>
+            </Button>
+          </label>
         </div>
 
         <p className="text-xs text-muted-foreground">
-          Format CSV : <code>question,option_a,option_b,option_c,option_d,correct_option,explanation,topic</code> (sans virgule dans les champs).
+          CSV : <code>question,option_a,option_b,option_c,option_d,correct_option,explanation,topic</code>.{" "}
+          IA : téléversez un PDF, DOCX ou JSON — l'IA extrait automatiquement les questions et les réponses.
         </p>
 
         {cursusId && (
@@ -234,6 +289,30 @@ const AdminQuestionBank = () => {
                 </div>
               </div>
             )}
+          </DialogContent>
+        </Dialog>
+
+        <Dialog open={!!aiPreview} onOpenChange={(v) => !v && setAiPreview(null)}>
+          <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+            <DialogHeader><DialogTitle>Aperçu de l'extraction IA — {aiPreview?.length || 0} questions</DialogTitle></DialogHeader>
+            <div className="space-y-2 max-h-[60vh] overflow-y-auto">
+              {aiPreview?.map((q, i) => (
+                <div key={i} className="border rounded p-2 text-sm">
+                  <div className="font-medium">Q{i + 1}. {q.question}</div>
+                  <ul className="text-xs mt-1 space-y-0.5">
+                    {(["A","B","C","D"] as const).map((k) => (
+                      <li key={k} className={q.correct_option === k ? "text-green-700 font-semibold" : ""}>
+                        {k}. {q[`option_${k.toLowerCase()}`]}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+            <div className="flex justify-end gap-2">
+              <Button variant="outline" onClick={() => setAiPreview(null)}>Annuler</Button>
+              <Button onClick={confirmAiImport}>Tout ajouter à la banque</Button>
+            </div>
           </DialogContent>
         </Dialog>
       </CardContent>

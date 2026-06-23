@@ -449,6 +449,84 @@ export type Database = {
           },
         ]
       }
+      live_sessions: {
+        Row: {
+          created_at: string
+          cursus_id: string
+          description: string | null
+          duration_minutes: number
+          ended_at: string | null
+          external_url: string | null
+          host_id: string | null
+          id: string
+          module_id: string | null
+          provider: string
+          published: boolean
+          recording_url: string | null
+          room_name: string | null
+          scheduled_at: string
+          started_at: string | null
+          status: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          cursus_id: string
+          description?: string | null
+          duration_minutes?: number
+          ended_at?: string | null
+          external_url?: string | null
+          host_id?: string | null
+          id?: string
+          module_id?: string | null
+          provider?: string
+          published?: boolean
+          recording_url?: string | null
+          room_name?: string | null
+          scheduled_at: string
+          started_at?: string | null
+          status?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          cursus_id?: string
+          description?: string | null
+          duration_minutes?: number
+          ended_at?: string | null
+          external_url?: string | null
+          host_id?: string | null
+          id?: string
+          module_id?: string | null
+          provider?: string
+          published?: boolean
+          recording_url?: string | null
+          room_name?: string | null
+          scheduled_at?: string
+          started_at?: string | null
+          status?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "live_sessions_cursus_id_fkey"
+            columns: ["cursus_id"]
+            isOneToOne: false
+            referencedRelation: "cursus"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "live_sessions_module_id_fkey"
+            columns: ["module_id"]
+            isOneToOne: false
+            referencedRelation: "cursus_modules"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       module_progress: {
         Row: {
           completed: boolean | null
