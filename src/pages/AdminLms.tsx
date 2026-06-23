@@ -106,6 +106,7 @@ const AdminLms = () => {
               <TabsTrigger value="cursus"><BookOpen className="h-4 w-4 mr-1" />Cursus ({cursus.length})</TabsTrigger>
               <TabsTrigger value="modules"><FileText className="h-4 w-4 mr-1" />Modules & leçons</TabsTrigger>
               <TabsTrigger value="qcm"><HelpCircle className="h-4 w-4 mr-1" />Banque QCM</TabsTrigger>
+              <TabsTrigger value="visio"><Video className="h-4 w-4 mr-1" />Cours vidéo / visio</TabsTrigger>
               <TabsTrigger value="enrollments">Inscriptions ({enrollments.filter(e => e.status === "pending").length} en attente)</TabsTrigger>
             </TabsList>
 
