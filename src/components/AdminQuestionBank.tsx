@@ -48,10 +48,13 @@ const AdminQuestionBank = () => {
   const [aiImporting, setAiImporting] = useState(false);
   const [aiPreview, setAiPreview] = useState<any[] | null>(null);
 
+  const [moduleTopics, setModuleTopics] = useState<string[]>([]);
+
   useEffect(() => { fetchCursusList().then(setCursusList); }, []);
 
   useEffect(() => {
-    if (!cursusId) { setItems([]); return; }
+    if (!cursusId) { setItems([]); setModuleTopics([]); return; }
+    fetchModules(cursusId).then((mods) => setModuleTopics(mods.map((m) => m.title)));
     setLoading(true);
     supabase
       .from("exam_question_bank")
@@ -60,16 +63,20 @@ const AdminQuestionBank = () => {
       .order("created_at", { ascending: false })
       .then(({ data, error }) => {
         if (error) toast.error(error.message);
-        setItems((data as QBankItem[]) || []);
+        setItems(((data as any) || []) as QBankItem[]);
         setLoading(false);
       });
   }, [cursusId]);
 
   const save = async () => {
     if (!editing || !cursusId) return;
-    const payload = {
+    const correct = (editing.correct_option || "A") as "A"|"B"|"C"|"D";
+    const correct_options = editing.question_type === "multi" && editing.correct_options?.length
+      ? editing.correct_options : [correct];
+    const payload: any = {
       cursus_id: cursusId,
       question: editing.question?.trim() || "",
+      question_type: editing.question_type || "qcm",
       option_a: editing.option_a?.trim() || "",
       option_b: editing.option_b?.trim() || "",
       option_c: editing.option_c?.trim() || "",
