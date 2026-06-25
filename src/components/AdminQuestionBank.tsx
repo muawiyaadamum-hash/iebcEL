@@ -174,7 +174,19 @@ const AdminQuestionBank = () => {
 
   const confirmAiImport = async () => {
     if (!aiPreview || !cursusId) return;
-    const payload = aiPreview.map((q) => ({ ...q, cursus_id: cursusId, published: true }));
+    const payload = aiPreview.map((q) => ({
+      cursus_id: cursusId,
+      question: q.question,
+      question_type: q.question_type || "qcm",
+      option_a: q.option_a, option_b: q.option_b,
+      option_c: q.option_c || "—", option_d: q.option_d || "—",
+      correct_option: q.correct_option || "A",
+      correct_options: Array.isArray(q.correct_options) && q.correct_options.length ? q.correct_options : [q.correct_option || "A"],
+      explanation: q.explanation || null,
+      topic: q.topic || null,
+      difficulty: q.difficulty || "medium",
+      published: true,
+    }));
     for (let i = 0; i < payload.length; i += 100) {
       const { error } = await supabase.from("exam_question_bank").insert(payload.slice(i, i + 100));
       if (error) { toast.error(error.message); return; }
@@ -182,7 +194,7 @@ const AdminQuestionBank = () => {
     toast.success(`${payload.length} questions ajoutées à la banque`);
     setAiPreview(null);
     const { data } = await supabase.from("exam_question_bank").select("*").eq("cursus_id", cursusId).order("created_at", { ascending: false });
-    setItems((data as QBankItem[]) || []);
+    setItems(((data as any) || []) as QBankItem[]);
   };
 
   return (
