@@ -380,18 +380,27 @@ const AdminQuestionBank = () => {
           <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
             <DialogHeader><DialogTitle>Aperçu de l'extraction IA — {aiPreview?.length || 0} questions</DialogTitle></DialogHeader>
             <div className="space-y-2 max-h-[60vh] overflow-y-auto">
-              {aiPreview?.map((q, i) => (
-                <div key={i} className="border rounded p-2 text-sm">
-                  <div className="font-medium">Q{i + 1}. {q.question}</div>
-                  <ul className="text-xs mt-1 space-y-0.5">
-                    {(["A","B","C","D"] as const).map((k) => (
-                      <li key={k} className={q.correct_option === k ? "text-green-700 font-semibold" : ""}>
-                        {k}. {q[`option_${k.toLowerCase()}`]}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
+              {aiPreview?.map((q, i) => {
+                const correct: string[] = Array.isArray(q.correct_options) && q.correct_options.length ? q.correct_options : [q.correct_option];
+                const isTF = q.question_type === "true_false";
+                return (
+                  <div key={i} className="border rounded p-2 text-sm">
+                    <div className="font-medium flex items-center gap-2 flex-wrap">
+                      <span>Q{i + 1}. {q.question}</span>
+                      <Badge variant="secondary" className="text-[10px]">{typeLabel(q.question_type)}</Badge>
+                      {q.topic && <Badge variant="outline" className="text-[10px]">{q.topic}</Badge>}
+                    </div>
+                    <ul className="text-xs mt-1 space-y-0.5">
+                      {(isTF ? ["A","B"] : ["A","B","C","D"] as const).map((k) => (
+                        <li key={k} className={correct.includes(k) ? "text-green-700 font-semibold" : ""}>
+                          {k}. {q[`option_${k.toLowerCase()}`]}
+                        </li>
+                      ))}
+                    </ul>
+                    {q.explanation && <p className="text-[11px] text-muted-foreground mt-1 italic">{q.explanation}</p>}
+                  </div>
+                );
+              })}
             </div>
             <div className="flex justify-end gap-2">
               <Button variant="outline" onClick={() => setAiPreview(null)}>Annuler</Button>
