@@ -155,8 +155,8 @@ const AdminQuestionBank = () => {
       const ext = file.name.split(".").pop()?.toLowerCase();
       const isJson = ext === "json" || file.type === "application/json";
       const body: any = isJson
-        ? { format: "json", raw_text: await file.text() }
-        : { filename: file.name, mime: file.type || (ext === "pdf" ? "application/pdf" : "application/vnd.openxmlformats-officedocument.wordprocessingml.document"), base64 };
+        ? { format: "json", raw_text: await file.text(), topics: moduleTopics }
+        : { filename: file.name, mime: file.type || (ext === "pdf" ? "application/pdf" : "application/vnd.openxmlformats-officedocument.wordprocessingml.document"), base64, topics: moduleTopics };
 
       const { data, error } = await supabase.functions.invoke("import-questions", { body });
       if (error) throw error;
