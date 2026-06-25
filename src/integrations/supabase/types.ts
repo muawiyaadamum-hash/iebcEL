@@ -334,6 +334,7 @@ export type Database = {
       exam_question_bank: {
         Row: {
           correct_option: string
+          correct_options: string[]
           created_at: string
           created_by: string | null
           cursus_id: string
@@ -346,11 +347,13 @@ export type Database = {
           option_d: string
           published: boolean
           question: string
+          question_type: string
           topic: string | null
           updated_at: string
         }
         Insert: {
           correct_option: string
+          correct_options?: string[]
           created_at?: string
           created_by?: string | null
           cursus_id: string
@@ -363,11 +366,13 @@ export type Database = {
           option_d: string
           published?: boolean
           question: string
+          question_type?: string
           topic?: string | null
           updated_at?: string
         }
         Update: {
           correct_option?: string
+          correct_options?: string[]
           created_at?: string
           created_by?: string | null
           cursus_id?: string
@@ -380,6 +385,7 @@ export type Database = {
           option_d?: string
           published?: boolean
           question?: string
+          question_type?: string
           topic?: string | null
           updated_at?: string
         }
@@ -556,6 +562,59 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      module_resources: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          description: string | null
+          display_order: number
+          external_url: string | null
+          file_path: string | null
+          file_type: string | null
+          id: string
+          module_id: string
+          published: boolean
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          display_order?: number
+          external_url?: string | null
+          file_path?: string | null
+          file_type?: string | null
+          id?: string
+          module_id: string
+          published?: boolean
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          display_order?: number
+          external_url?: string | null
+          file_path?: string | null
+          file_type?: string | null
+          id?: string
+          module_id?: string
+          published?: boolean
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "module_resources_module_id_fkey"
+            columns: ["module_id"]
+            isOneToOne: false
+            referencedRelation: "cursus_modules"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       notifications: {
         Row: {
