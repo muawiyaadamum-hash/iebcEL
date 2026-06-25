@@ -9,14 +9,19 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Loader2, Plus, Trash2, Upload, Pencil, Sparkles } from "lucide-react";
 import { toast } from "sonner";
-import { fetchCursusList, type Cursus } from "@/lib/lms";
+import { fetchCursusList, fetchModules, type Cursus } from "@/lib/lms";
+import { Badge } from "@/components/ui/badge";
+
+type QType = "qcm" | "true_false" | "multi";
 
 interface QBankItem {
   id: string;
   cursus_id: string;
   question: string;
+  question_type: QType;
   option_a: string; option_b: string; option_c: string; option_d: string;
   correct_option: "A" | "B" | "C" | "D";
+  correct_options: string[];
   explanation: string | null;
   topic: string | null;
   difficulty: string;
@@ -24,9 +29,13 @@ interface QBankItem {
 }
 
 const emptyItem: Partial<QBankItem> = {
-  question: "", option_a: "", option_b: "", option_c: "", option_d: "",
-  correct_option: "A", explanation: "", topic: "", difficulty: "medium", published: true,
+  question: "", question_type: "qcm",
+  option_a: "", option_b: "", option_c: "", option_d: "",
+  correct_option: "A", correct_options: ["A"],
+  explanation: "", topic: "", difficulty: "medium", published: true,
 };
+
+const typeLabel = (t?: QType) => t === "true_false" ? "Vrai/Faux" : t === "multi" ? "Multi-réponses" : "QCM";
 
 const AdminQuestionBank = () => {
   const [cursusList, setCursusList] = useState<Cursus[]>([]);
