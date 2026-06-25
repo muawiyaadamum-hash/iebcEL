@@ -256,10 +256,13 @@ const AdminQuestionBank = () => {
             {items.map((it, i) => (
               <div key={it.id} className="border rounded p-3 flex items-start justify-between gap-3">
                 <div className="flex-1 text-sm">
-                  <div className="font-medium">Q{i + 1}. {it.question}</div>
+                  <div className="font-medium flex items-center gap-2 flex-wrap">
+                    <span>Q{i + 1}. {it.question}</span>
+                    <Badge variant="secondary" className="text-[10px]">{typeLabel(it.question_type)}</Badge>
+                    {it.topic && <Badge variant="outline" className="text-[10px]">{it.topic}</Badge>}
+                  </div>
                   <div className="text-xs text-muted-foreground mt-1">
-                    Réponse correcte : <b>{it.correct_option}</b>
-                    {it.topic && <> · Thème : {it.topic}</>}
+                    Réponse(s) : <b>{(it.correct_options?.length ? it.correct_options : [it.correct_option]).join(", ")}</b>
                     {!it.published && <> · <span className="text-yellow-600">non publiée</span></>}
                   </div>
                 </div>
