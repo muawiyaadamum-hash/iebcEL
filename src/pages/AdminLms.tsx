@@ -131,6 +131,9 @@ const AdminLms = () => {
                 reloadLessons={loadLessonsFor}
               />
             </TabsContent>
+            <TabsContent value="resources">
+              <AdminModuleResources />
+            </TabsContent>
             <TabsContent value="qcm">
               <AdminQuestionBank />
             </TabsContent>
