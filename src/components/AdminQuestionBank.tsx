@@ -286,18 +286,23 @@ const AdminQuestionBank = () => {
                 <div><Label>Question</Label>
                   <Textarea value={editing.question || ""} onChange={(e) => setEditing({ ...editing, question: e.target.value })} rows={3} />
                 </div>
-                {(["a", "b", "c", "d"] as const).map((k) => (
-                  <div key={k}>
-                    <Label>Option {k.toUpperCase()}</Label>
-                    <Input value={(editing as any)[`option_${k}`] || ""} onChange={(e) => setEditing({ ...editing, [`option_${k}`]: e.target.value })} />
-                  </div>
-                ))}
                 <div className="grid grid-cols-2 gap-3">
-                  <div><Label>Réponse correcte</Label>
-                    <Select value={editing.correct_option || "A"} onValueChange={(v) => setEditing({ ...editing, correct_option: v as any })}>
+                  <div><Label>Type</Label>
+                    <Select value={editing.question_type || "qcm"} onValueChange={(v) => {
+                      const tf = v === "true_false";
+                      setEditing({
+                        ...editing, question_type: v as QType,
+                        option_a: tf ? "Vrai" : (editing.option_a || ""),
+                        option_b: tf ? "Faux" : (editing.option_b || ""),
+                        option_c: tf ? "—" : (editing.option_c || ""),
+                        option_d: tf ? "—" : (editing.option_d || ""),
+                      });
+                    }}>
                       <SelectTrigger><SelectValue /></SelectTrigger>
                       <SelectContent className="bg-popover">
-                        {["A", "B", "C", "D"].map((x) => <SelectItem key={x} value={x}>{x}</SelectItem>)}
+                        <SelectItem value="qcm">QCM (une réponse)</SelectItem>
+                        <SelectItem value="true_false">Vrai / Faux</SelectItem>
+                        <SelectItem value="multi">Réponses multiples</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -310,8 +315,54 @@ const AdminQuestionBank = () => {
                     </Select>
                   </div>
                 </div>
-                <div><Label>Thème (optionnel)</Label>
-                  <Input value={editing.topic || ""} onChange={(e) => setEditing({ ...editing, topic: e.target.value })} />
+                {(["a", "b", "c", "d"] as const).map((k) => {
+                  const isTF = editing.question_type === "true_false";
+                  if (isTF && (k === "c" || k === "d")) return null;
+                  return (
+                    <div key={k}>
+                      <Label>Option {k.toUpperCase()}</Label>
+                      <Input value={(editing as any)[`option_${k}`] || ""} onChange={(e) => setEditing({ ...editing, [`option_${k}`]: e.target.value })} />
+                    </div>
+                  );
+                })}
+                {editing.question_type === "multi" ? (
+                  <div><Label>Bonnes réponses (cocher)</Label>
+                    <div className="flex gap-3 mt-2">
+                      {(["A","B","C","D"] as const).map(x => {
+                        const arr = editing.correct_options || [];
+                        const checked = arr.includes(x);
+                        return (
+                          <label key={x} className="flex items-center gap-1 text-sm">
+                            <input type="checkbox" checked={checked} onChange={(e) => {
+                              const next = e.target.checked ? [...arr, x] : arr.filter(o => o !== x);
+                              setEditing({ ...editing, correct_options: next, correct_option: (next[0] as any) || "A" });
+                            }} />{x}
+                          </label>
+                        );
+                      })}
+                    </div>
+                  </div>
+                ) : (
+                  <div><Label>Réponse correcte</Label>
+                    <Select value={editing.correct_option || "A"} onValueChange={(v) => setEditing({ ...editing, correct_option: v as any, correct_options: [v] })}>
+                      <SelectTrigger><SelectValue /></SelectTrigger>
+                      <SelectContent className="bg-popover">
+                        {(editing.question_type === "true_false" ? ["A","B"] : ["A","B","C","D"]).map((x) => <SelectItem key={x} value={x}>{x}</SelectItem>)}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                )}
+                <div><Label>Thème (module)</Label>
+                  {moduleTopics.length > 0 ? (
+                    <Select value={editing.topic || ""} onValueChange={(v) => setEditing({ ...editing, topic: v })}>
+                      <SelectTrigger><SelectValue placeholder="Aucun" /></SelectTrigger>
+                      <SelectContent className="bg-popover">
+                        {moduleTopics.map(t => <SelectItem key={t} value={t}>{t}</SelectItem>)}
+                      </SelectContent>
+                    </Select>
+                  ) : (
+                    <Input value={editing.topic || ""} onChange={(e) => setEditing({ ...editing, topic: e.target.value })} />
+                  )}
                 </div>
                 <div><Label>Explication (optionnel)</Label>
                   <Textarea value={editing.explanation || ""} onChange={(e) => setEditing({ ...editing, explanation: e.target.value })} rows={2} />
