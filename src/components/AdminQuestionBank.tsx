@@ -81,14 +81,16 @@ const AdminQuestionBank = () => {
       option_b: editing.option_b?.trim() || "",
       option_c: editing.option_c?.trim() || "",
       option_d: editing.option_d?.trim() || "",
-      correct_option: editing.correct_option || "A",
+      correct_option: correct,
+      correct_options,
       explanation: editing.explanation || null,
       topic: editing.topic || null,
       difficulty: editing.difficulty || "medium",
       published: editing.published ?? true,
     };
-    if (!payload.question || !payload.option_a || !payload.option_b || !payload.option_c || !payload.option_d) {
-      toast.error("Question et 4 options requises."); return;
+    const isTF = payload.question_type === "true_false";
+    if (!payload.question || !payload.option_a || !payload.option_b || (!isTF && (!payload.option_c || !payload.option_d))) {
+      toast.error(isTF ? "Question et 2 options (Vrai/Faux) requises." : "Question et 4 options requises."); return;
     }
     const res = editing.id
       ? await supabase.from("exam_question_bank").update(payload).eq("id", editing.id)
