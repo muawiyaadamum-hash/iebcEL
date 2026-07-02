@@ -17,11 +17,12 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogT
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { toast } from "sonner";
 import { useScrollToTop } from "@/hooks/useScrollToTop";
-import { Loader2, Plus, Trash2, Pencil, Shield, CheckCircle2, XCircle, ArrowLeft, BookOpen, Layers, FileText, HelpCircle, Video, FolderUp } from "lucide-react";
+import { Loader2, Plus, Trash2, Pencil, Shield, CheckCircle2, XCircle, ArrowLeft, BookOpen, Layers, FileText, HelpCircle, Video, FolderUp, GraduationCap } from "lucide-react";
 import { fetchPoles, fetchCursusList, fetchModules, fetchLessons, type Pole, type Cursus, type CursusModule, type Lesson } from "@/lib/lms";
 import AdminQuestionBank from "@/components/AdminQuestionBank";
 import AdminLiveSessions from "@/components/AdminLiveSessions";
 import AdminModuleResources from "@/components/AdminModuleResources";
+import AdminExams from "@/components/AdminExams";
 
 const slugify = (s: string) => s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 
@@ -109,6 +110,7 @@ const AdminLms = () => {
               <TabsTrigger value="resources"><FolderUp className="h-4 w-4 mr-1" />Ressources PDF/DOCX</TabsTrigger>
               <TabsTrigger value="qcm"><HelpCircle className="h-4 w-4 mr-1" />Banque QCM</TabsTrigger>
               <TabsTrigger value="visio"><Video className="h-4 w-4 mr-1" />Cours vidéo / visio</TabsTrigger>
+              <TabsTrigger value="exams"><GraduationCap className="h-4 w-4 mr-1" />Examens</TabsTrigger>
               <TabsTrigger value="enrollments">Inscriptions ({enrollments.filter(e => e.status === "pending").length} en attente)</TabsTrigger>
             </TabsList>
 
@@ -139,6 +141,9 @@ const AdminLms = () => {
             </TabsContent>
             <TabsContent value="visio">
               <AdminLiveSessions />
+            </TabsContent>
+            <TabsContent value="exams">
+              <AdminExams />
             </TabsContent>
             <TabsContent value="enrollments">
               <EnrollmentsPanel enrollments={enrollments} onChange={reloadAll} adminId={user.id} />
