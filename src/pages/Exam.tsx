@@ -239,11 +239,19 @@ const Exam = () => {
 
         {/* In-exam view */}
         {!result && questions.length > 0 && current && (
-          <Card>
+          <Card className="select-none">
             <CardHeader>
-              <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center justify-between mb-2 gap-3 flex-wrap">
                 <span className="text-sm text-muted-foreground">Question {currentIdx + 1} / {questions.length}</span>
-                <span className="text-sm font-medium">{answered} répondue(s)</span>
+                <div className="flex items-center gap-3 text-sm">
+                  <span className={`font-mono px-2 py-1 rounded ${timeLeft < 300 ? "bg-red-100 text-red-700" : "bg-muted"}`}>
+                    ⏱ {String(Math.floor(timeLeft / 60)).padStart(2,"0")}:{String(timeLeft % 60).padStart(2,"0")}
+                  </span>
+                  <span className={`px-2 py-1 rounded text-xs ${violations > 0 ? "bg-yellow-100 text-yellow-800" : "bg-muted"}`}>
+                    Avertissements {violations}/{maxViolations}
+                  </span>
+                  <span className="font-medium">{answered} répondue(s)</span>
+                </div>
               </div>
               <Progress value={progress} />
             </CardHeader>
