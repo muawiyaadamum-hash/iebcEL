@@ -45,6 +45,29 @@ const Exam = () => {
   }>(null);
   const [certCode, setCertCode] = useState<string | null>(null);
   const [issuingCert, setIssuingCert] = useState(false);
+  const [timeLeft, setTimeLeft] = useState(EXAM_DURATION_SEC);
+  const examActive = questions.length > 0 && !result;
+
+  const { violations, maxViolations } = useAntiCheat({
+    active: examActive,
+    maxViolations: 3,
+    onForceSubmit: () => { submitExamRef.current?.(); },
+  });
+  const submitExamRef = useRef<() => void>();
+
+  // Countdown timer
+  useEffect(() => {
+    if (!examActive) return;
+    setTimeLeft(EXAM_DURATION_SEC);
+    const iv = setInterval(() => {
+      setTimeLeft((t) => {
+        if (t <= 1) { clearInterval(iv); submitExamRef.current?.(); return 0; }
+        return t - 1;
+      });
+    }, 1000);
+    return () => clearInterval(iv);
+  }, [examActive]);
+
 
   useEffect(() => {
     if (!slug) return;
