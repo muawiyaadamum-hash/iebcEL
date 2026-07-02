@@ -95,7 +95,10 @@ const Exam = () => {
     setAnswers({});
   };
 
-  const submitExam = async () => {
+  // Force-submit path (no confirm) used by anti-cheat / timer
+  useEffect(() => { submitExamRef.current = () => { void submitExamInternal(true); }; });
+
+  const submitExamInternal = async (force = false) => {
     if (!attemptId) return;
     if (answered < questions.length) {
       const ok = window.confirm(`Vous n'avez répondu qu'à ${answered}/${questions.length} questions. Soumettre quand même ?`);
