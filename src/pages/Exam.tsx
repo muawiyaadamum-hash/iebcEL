@@ -296,13 +296,16 @@ const Exam = () => {
             <CardContent className="space-y-4">
               <ul className="text-sm space-y-2 text-muted-foreground">
                 <li>• 50 questions tirées aléatoirement dans la banque officielle.</li>
+                <li>• Durée : 60 minutes (soumission automatique à l'écoulement).</li>
                 <li>• Seuil de réussite : 60% (30/50).</li>
-                <li>• Une seule tentative par session, soumission définitive.</li>
+                <li>• Une seule tentative active, soumission définitive.</li>
                 <li>• Rapport PDF noté téléchargeable à la fin.</li>
               </ul>
               <div className="flex items-start gap-2 p-3 rounded bg-yellow-50 dark:bg-yellow-950/20 border border-yellow-300 text-sm">
-                <AlertTriangle className="h-4 w-4 text-yellow-600 mt-0.5" />
-                Vous devez être inscrit et validé pour ce cursus.
+                <AlertTriangle className="h-4 w-4 text-yellow-600 mt-0.5 shrink-0" />
+                <div>
+                  <b>Mode surveillance activé :</b> plein écran obligatoire, copier/coller et clic-droit désactivés, changement d'onglet / perte de focus / sortie plein écran comptés comme avertissements. <b>3 avertissements = soumission automatique.</b>
+                </div>
               </div>
               <Button onClick={startExam} disabled={starting} size="lg">
                 {starting && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
