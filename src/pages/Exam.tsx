@@ -100,7 +100,7 @@ const Exam = () => {
 
   const submitExamInternal = async (force = false) => {
     if (!attemptId) return;
-    if (answered < questions.length) {
+    if (!force && answered < questions.length) {
       const ok = window.confirm(`Vous n'avez répondu qu'à ${answered}/${questions.length} questions. Soumettre quand même ?`);
       if (!ok) return;
     }
