@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -14,6 +14,9 @@ import { fetchCursusBySlug, type Cursus } from "@/lib/lms";
 import { useAuth } from "@/contexts/AuthContext";
 import { generateExamReportPdf, type ExamReviewItem } from "@/lib/examReport";
 import { generateCertificateCode, generateCertificatePdf } from "@/lib/certificate";
+import { useAntiCheat } from "@/hooks/useAntiCheat";
+
+const EXAM_DURATION_SEC = 60 * 60; // 60 min
 
 interface ExamQuestion {
   id: string;
@@ -42,6 +45,29 @@ const Exam = () => {
   }>(null);
   const [certCode, setCertCode] = useState<string | null>(null);
   const [issuingCert, setIssuingCert] = useState(false);
+  const [timeLeft, setTimeLeft] = useState(EXAM_DURATION_SEC);
+  const examActive = questions.length > 0 && !result;
+
+  const { violations, maxViolations } = useAntiCheat({
+    active: examActive,
+    maxViolations: 3,
+    onForceSubmit: () => { submitExamRef.current?.(); },
+  });
+  const submitExamRef = useRef<() => void>();
+
+  // Countdown timer
+  useEffect(() => {
+    if (!examActive) return;
+    setTimeLeft(EXAM_DURATION_SEC);
+    const iv = setInterval(() => {
+      setTimeLeft((t) => {
+        if (t <= 1) { clearInterval(iv); submitExamRef.current?.(); return 0; }
+        return t - 1;
+      });
+    }, 1000);
+    return () => clearInterval(iv);
+  }, [examActive]);
+
 
   useEffect(() => {
     if (!slug) return;
@@ -69,9 +95,12 @@ const Exam = () => {
     setAnswers({});
   };
 
-  const submitExam = async () => {
+  // Force-submit path (no confirm) used by anti-cheat / timer
+  useEffect(() => { submitExamRef.current = () => { void submitExamInternal(true); }; });
+
+  const submitExamInternal = async (force = false) => {
     if (!attemptId) return;
-    if (answered < questions.length) {
+    if (!force && answered < questions.length) {
       const ok = window.confirm(`Vous n'avez répondu qu'à ${answered}/${questions.length} questions. Soumettre quand même ?`);
       if (!ok) return;
     }
@@ -210,11 +239,19 @@ const Exam = () => {
 
         {/* In-exam view */}
         {!result && questions.length > 0 && current && (
-          <Card>
+          <Card className="select-none">
             <CardHeader>
-              <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center justify-between mb-2 gap-3 flex-wrap">
                 <span className="text-sm text-muted-foreground">Question {currentIdx + 1} / {questions.length}</span>
-                <span className="text-sm font-medium">{answered} répondue(s)</span>
+                <div className="flex items-center gap-3 text-sm">
+                  <span className={`font-mono px-2 py-1 rounded ${timeLeft < 300 ? "bg-red-100 text-red-700" : "bg-muted"}`}>
+                    ⏱ {String(Math.floor(timeLeft / 60)).padStart(2,"0")}:{String(timeLeft % 60).padStart(2,"0")}
+                  </span>
+                  <span className={`px-2 py-1 rounded text-xs ${violations > 0 ? "bg-yellow-100 text-yellow-800" : "bg-muted"}`}>
+                    Avertissements {violations}/{maxViolations}
+                  </span>
+                  <span className="font-medium">{answered} répondue(s)</span>
+                </div>
               </div>
               <Progress value={progress} />
             </CardHeader>
@@ -242,7 +279,7 @@ const Exam = () => {
                 {currentIdx < questions.length - 1 ? (
                   <Button onClick={() => setCurrentIdx((i) => i + 1)}>Suivante</Button>
                 ) : (
-                  <Button onClick={submitExam} disabled={submitting}>
+                  <Button onClick={() => submitExamInternal(false)} disabled={submitting}>
                     {submitting && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
                     Soumettre l'examen
                   </Button>
@@ -259,13 +296,16 @@ const Exam = () => {
             <CardContent className="space-y-4">
               <ul className="text-sm space-y-2 text-muted-foreground">
                 <li>• 50 questions tirées aléatoirement dans la banque officielle.</li>
+                <li>• Durée : 60 minutes (soumission automatique à l'écoulement).</li>
                 <li>• Seuil de réussite : 60% (30/50).</li>
-                <li>• Une seule tentative par session, soumission définitive.</li>
+                <li>• Une seule tentative active, soumission définitive.</li>
                 <li>• Rapport PDF noté téléchargeable à la fin.</li>
               </ul>
               <div className="flex items-start gap-2 p-3 rounded bg-yellow-50 dark:bg-yellow-950/20 border border-yellow-300 text-sm">
-                <AlertTriangle className="h-4 w-4 text-yellow-600 mt-0.5" />
-                Vous devez être inscrit et validé pour ce cursus.
+                <AlertTriangle className="h-4 w-4 text-yellow-600 mt-0.5 shrink-0" />
+                <div>
+                  <b>Mode surveillance activé :</b> plein écran obligatoire, copier/coller et clic-droit désactivés, changement d'onglet / perte de focus / sortie plein écran comptés comme avertissements. <b>3 avertissements = soumission automatique.</b>
+                </div>
               </div>
               <Button onClick={startExam} disabled={starting} size="lg">
                 {starting && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}

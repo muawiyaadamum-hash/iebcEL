@@ -42,6 +42,22 @@ Deno.serve(async (req) => {
       return json({ error: "Inscription non validée pour ce cursus" }, 403);
     }
 
+    // Anti-cheat: block if already passed, or auto-fail any in_progress attempt (single active attempt)
+    const { data: prior } = await admin
+      .from("exam_attempts")
+      .select("id, status, passed")
+      .eq("user_id", userId)
+      .eq("cursus_id", cursusId);
+    if ((prior || []).some((p) => p.passed)) {
+      return json({ error: "Vous avez déjà réussi cet examen." }, 403);
+    }
+    const stale = (prior || []).filter((p) => p.status === "in_progress").map((p) => p.id);
+    if (stale.length > 0) {
+      await admin.from("exam_attempts")
+        .update({ status: "submitted", passed: false, score: 0, submitted_at: new Date().toISOString() })
+        .in("id", stale);
+    }
+
     // Draw random questions
     const { data: drawn, error: drawErr } = await admin
       .rpc("draw_exam_questions", { _cursus_id: cursusId, _n: n });
