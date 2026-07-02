@@ -271,7 +271,7 @@ const Exam = () => {
                 {currentIdx < questions.length - 1 ? (
                   <Button onClick={() => setCurrentIdx((i) => i + 1)}>Suivante</Button>
                 ) : (
-                  <Button onClick={submitExam} disabled={submitting}>
+                  <Button onClick={() => submitExamInternal(false)} disabled={submitting}>
                     {submitting && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
                     Soumettre l'examen
                   </Button>
