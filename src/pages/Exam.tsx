@@ -14,6 +14,9 @@ import { fetchCursusBySlug, type Cursus } from "@/lib/lms";
 import { useAuth } from "@/contexts/AuthContext";
 import { generateExamReportPdf, type ExamReviewItem } from "@/lib/examReport";
 import { generateCertificateCode, generateCertificatePdf } from "@/lib/certificate";
+import { useAntiCheat } from "@/hooks/useAntiCheat";
+
+const EXAM_DURATION_SEC = 60 * 60; // 60 min
 
 interface ExamQuestion {
   id: string;
