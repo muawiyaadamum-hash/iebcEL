@@ -14,6 +14,42 @@ export type Database = {
   }
   public: {
     Tables: {
+      audit_log: {
+        Row: {
+          action: string
+          actor_email: string | null
+          created_at: string
+          entity_id: string | null
+          entity_label: string | null
+          entity_type: string
+          id: string
+          metadata: Json | null
+          user_id: string | null
+        }
+        Insert: {
+          action: string
+          actor_email?: string | null
+          created_at?: string
+          entity_id?: string | null
+          entity_label?: string | null
+          entity_type: string
+          id?: string
+          metadata?: Json | null
+          user_id?: string | null
+        }
+        Update: {
+          action?: string
+          actor_email?: string | null
+          created_at?: string
+          entity_id?: string | null
+          entity_label?: string | null
+          entity_type?: string
+          id?: string
+          metadata?: Json | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       certificates: {
         Row: {
           attempt_id: string | null
@@ -402,6 +438,7 @@ export type Database = {
       lessons: {
         Row: {
           content: string | null
+          content_html: string | null
           created_at: string
           display_order: number
           duration_minutes: number | null
@@ -417,6 +454,7 @@ export type Database = {
         }
         Insert: {
           content?: string | null
+          content_html?: string | null
           created_at?: string
           display_order?: number
           duration_minutes?: number | null
@@ -432,6 +470,7 @@ export type Database = {
         }
         Update: {
           content?: string | null
+          content_html?: string | null
           created_at?: string
           display_order?: number
           duration_minutes?: number | null
