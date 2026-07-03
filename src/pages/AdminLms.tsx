@@ -17,12 +17,15 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogT
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { toast } from "sonner";
 import { useScrollToTop } from "@/hooks/useScrollToTop";
-import { Loader2, Plus, Trash2, Pencil, Shield, CheckCircle2, XCircle, ArrowLeft, BookOpen, Layers, FileText, HelpCircle, Video, FolderUp, GraduationCap } from "lucide-react";
+import { Loader2, Plus, Trash2, Pencil, Shield, CheckCircle2, XCircle, ArrowLeft, BookOpen, Layers, FileText, HelpCircle, Video, FolderUp, GraduationCap, ScrollText } from "lucide-react";
 import { fetchPoles, fetchCursusList, fetchModules, fetchLessons, type Pole, type Cursus, type CursusModule, type Lesson } from "@/lib/lms";
 import AdminQuestionBank from "@/components/AdminQuestionBank";
 import AdminLiveSessions from "@/components/AdminLiveSessions";
 import AdminModuleResources from "@/components/AdminModuleResources";
 import AdminExams from "@/components/AdminExams";
+import AdminAuditLog from "@/components/AdminAuditLog";
+import RichTextEditor from "@/components/RichTextEditor";
+import { logAudit } from "@/lib/audit";
 
 const slugify = (s: string) => s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 
@@ -111,6 +114,7 @@ const AdminLms = () => {
               <TabsTrigger value="qcm"><HelpCircle className="h-4 w-4 mr-1" />Banque QCM</TabsTrigger>
               <TabsTrigger value="visio"><Video className="h-4 w-4 mr-1" />Cours vidéo / visio</TabsTrigger>
               <TabsTrigger value="exams"><GraduationCap className="h-4 w-4 mr-1" />Examens</TabsTrigger>
+              <TabsTrigger value="audit"><ScrollText className="h-4 w-4 mr-1" />Audit</TabsTrigger>
               <TabsTrigger value="enrollments">Inscriptions ({enrollments.filter(e => e.status === "pending").length} en attente)</TabsTrigger>
             </TabsList>
 
@@ -145,6 +149,9 @@ const AdminLms = () => {
             <TabsContent value="exams">
               <AdminExams />
             </TabsContent>
+            <TabsContent value="audit">
+              <AdminAuditLog />
+            </TabsContent>
             <TabsContent value="enrollments">
               <EnrollmentsPanel enrollments={enrollments} onChange={reloadAll} adminId={user.id} />
             </TabsContent>
@@ -167,16 +174,19 @@ function PolesPanel({ poles, onChange }: { poles: Pole[]; onChange: () => void }
 
   const save = async () => {
     const payload = { ...form, slug: form.slug || slugify(form.title) };
-    const { error } = editing
-      ? await supabase.from("poles").update(payload).eq("id", editing.id)
-      : await supabase.from("poles").insert(payload);
+    const { data, error } = editing
+      ? await supabase.from("poles").update(payload).eq("id", editing.id).select().single()
+      : await supabase.from("poles").insert(payload).select().single();
     if (error) return toast.error(error.message);
+    logAudit({ action: editing ? "update" : "create", entity_type: "pole", entity_id: data?.id, entity_label: payload.title });
     toast.success("Pôle enregistré"); setOpen(false); onChange();
   };
   const remove = async (id: string) => {
     if (!confirm("Supprimer ce pôle et tous ses cursus ?")) return;
+    const label = poles.find(p => p.id === id)?.title;
     const { error } = await supabase.from("poles").delete().eq("id", id);
     if (error) return toast.error(error.message);
+    logAudit({ action: "delete", entity_type: "pole", entity_id: id, entity_label: label });
     toast.success("Pôle supprimé"); onChange();
   };
 
@@ -239,16 +249,19 @@ function CursusPanel({ cursus, poles, onChange }: { cursus: Cursus[]; poles: Pol
   const save = async () => {
     const payload: any = { ...form, slug: form.slug || slugify(form.title) };
     delete payload.pole; delete payload.id; delete payload.created_at; delete payload.updated_at;
-    const { error } = editing
-      ? await supabase.from("cursus").update(payload).eq("id", editing.id)
-      : await supabase.from("cursus").insert(payload);
+    const { data, error } = editing
+      ? await supabase.from("cursus").update(payload).eq("id", editing.id).select().single()
+      : await supabase.from("cursus").insert(payload).select().single();
     if (error) return toast.error(error.message);
+    logAudit({ action: editing ? "update" : "create", entity_type: "cursus", entity_id: data?.id, entity_label: payload.title, metadata: { published: payload.published, featured: payload.featured } });
     toast.success("Cursus enregistré"); setOpen(false); onChange();
   };
   const remove = async (id: string) => {
     if (!confirm("Supprimer ce cursus ?")) return;
+    const label = cursus.find(c => c.id === id)?.title;
     const { error } = await supabase.from("cursus").delete().eq("id", id);
     if (error) return toast.error(error.message);
+    logAudit({ action: "delete", entity_type: "cursus", entity_id: id, entity_label: label });
     toast.success("Supprimé"); onChange();
   };
 
@@ -357,25 +370,31 @@ function ModulesLessonsPanel(props: {
     if (!selectedCursusId) return;
     const payload = { ...modForm, cursus_id: selectedCursusId };
     delete (payload as any).id; delete (payload as any).created_at; delete (payload as any).updated_at;
-    const { error } = modEdit ? await supabase.from("cursus_modules").update(payload).eq("id", modEdit.id) : await supabase.from("cursus_modules").insert(payload);
+    const { data, error } = modEdit
+      ? await supabase.from("cursus_modules").update(payload).eq("id", modEdit.id).select().single()
+      : await supabase.from("cursus_modules").insert(payload).select().single();
     if (error) return toast.error(error.message);
+    logAudit({ action: modEdit ? "update" : "create", entity_type: "module", entity_id: data?.id, entity_label: payload.title });
     toast.success("Module enregistré"); setModOpen(false); reloadModules(selectedCursusId);
   };
   const delModule = async (id: string) => {
     if (!confirm("Supprimer ce module ?")) return;
+    const mods = selectedCursusId ? modulesByCursus[selectedCursusId] || [] : [];
+    const label = mods.find(m => m.id === id)?.title;
     const { error } = await supabase.from("cursus_modules").delete().eq("id", id);
     if (error) return toast.error(error.message);
+    logAudit({ action: "delete", entity_type: "module", entity_id: id, entity_label: label });
     if (selectedCursusId) reloadModules(selectedCursusId);
   };
 
   // Lesson dialog
   const [lesOpen, setLesOpen] = useState(false);
   const [lesEdit, setLesEdit] = useState<Lesson | null>(null);
-  const [lesForm, setLesForm] = useState<any>({ title: "", lesson_type: "text", content: "", external_url: "", display_order: 0, required: true, published: true });
+  const [lesForm, setLesForm] = useState<any>({ title: "", lesson_type: "rich", content: "", content_html: "", external_url: "", display_order: 0, required: true, published: true });
   const [file, setFile] = useState<File | null>(null);
 
-  const newLesson = () => { setLesEdit(null); setLesForm({ title: "", lesson_type: "text", content: "", external_url: "", display_order: lessons.length, required: true, published: true }); setFile(null); setLesOpen(true); };
-  const editLesson = (l: Lesson) => { setLesEdit(l); setLesForm({ ...l, content: l.content || "", external_url: l.external_url || "" }); setFile(null); setLesOpen(true); };
+  const newLesson = () => { setLesEdit(null); setLesForm({ title: "", lesson_type: "rich", content: "", content_html: "", external_url: "", display_order: lessons.length, required: true, published: true }); setFile(null); setLesOpen(true); };
+  const editLesson = (l: Lesson) => { setLesEdit(l); setLesForm({ ...l, content: l.content || "", content_html: (l as any).content_html || "", external_url: l.external_url || "" }); setFile(null); setLesOpen(true); };
   const saveLesson = async () => {
     if (!selectedModuleId) return;
     let file_path = lesEdit?.file_path || null;
@@ -384,17 +403,23 @@ function ModulesLessonsPanel(props: {
       const { error: upErr } = await supabase.storage.from("course-content").upload(path, file, { upsert: true });
       if (upErr) return toast.error(upErr.message);
       file_path = path;
+      logAudit({ action: "upload", entity_type: "lesson_file", entity_label: file.name, metadata: { path } });
     }
     const payload: any = { ...lesForm, module_id: selectedModuleId, file_path };
     delete payload.id; delete payload.created_at; delete payload.updated_at;
-    const { error } = lesEdit ? await supabase.from("lessons").update(payload).eq("id", lesEdit.id) : await supabase.from("lessons").insert(payload);
+    const { data, error } = lesEdit
+      ? await supabase.from("lessons").update(payload).eq("id", lesEdit.id).select().single()
+      : await supabase.from("lessons").insert(payload).select().single();
     if (error) return toast.error(error.message);
+    logAudit({ action: lesEdit ? "update" : "create", entity_type: "lesson", entity_id: data?.id, entity_label: payload.title, metadata: { lesson_type: payload.lesson_type, published: payload.published } });
     toast.success("Leçon enregistrée"); setLesOpen(false); reloadLessons(selectedModuleId);
   };
   const delLesson = async (id: string) => {
     if (!confirm("Supprimer cette leçon ?")) return;
+    const lesson = lessons.find(l => l.id === id);
     const { error } = await supabase.from("lessons").delete().eq("id", id);
     if (error) return toast.error(error.message);
+    logAudit({ action: "delete", entity_type: "lesson", entity_id: id, entity_label: lesson?.title });
     if (selectedModuleId) reloadLessons(selectedModuleId);
   };
 
@@ -484,7 +509,7 @@ function ModulesLessonsPanel(props: {
 
       {/* Lesson Dialog */}
       <Dialog open={lesOpen} onOpenChange={setLesOpen}>
-        <DialogContent className="max-w-xl">
+        <DialogContent className="max-w-3xl max-h-[92vh] overflow-y-auto">
           <DialogHeader><DialogTitle>{lesEdit ? "Modifier" : "Nouvelle"} leçon</DialogTitle></DialogHeader>
           <div className="space-y-3">
             <div><Label>Titre</Label><Input value={lesForm.title} onChange={e => setLesForm({ ...lesForm, title: e.target.value })} /></div>
@@ -493,7 +518,8 @@ function ModulesLessonsPanel(props: {
                 <Select value={lesForm.lesson_type} onValueChange={v => setLesForm({ ...lesForm, lesson_type: v })}>
                   <SelectTrigger><SelectValue /></SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="text">Texte</SelectItem>
+                    <SelectItem value="rich">Éditeur riche (WYSIWYG)</SelectItem>
+                    <SelectItem value="text">Texte simple</SelectItem>
                     <SelectItem value="pdf">PDF</SelectItem>
                     <SelectItem value="video">Vidéo</SelectItem>
                     <SelectItem value="link">Lien externe</SelectItem>
@@ -503,6 +529,17 @@ function ModulesLessonsPanel(props: {
               </div>
               <div><Label>Ordre</Label><Input type="number" value={lesForm.display_order} onChange={e => setLesForm({ ...lesForm, display_order: +e.target.value })} /></div>
             </div>
+            {lesForm.lesson_type === "rich" && (
+              <div>
+                <Label>Contenu de la leçon</Label>
+                <RichTextEditor
+                  value={lesForm.content_html}
+                  onChange={html => setLesForm({ ...lesForm, content_html: html })}
+                  uploadPathPrefix={`${selectedCursusId}/${selectedModuleId}/editor`}
+                  placeholder="Titres, listes, images, liens, code…"
+                />
+              </div>
+            )}
             {(lesForm.lesson_type === "text" || lesForm.lesson_type === "live") && (
               <div><Label>Contenu</Label><Textarea rows={5} value={lesForm.content} onChange={e => setLesForm({ ...lesForm, content: e.target.value })} /></div>
             )}
@@ -529,10 +566,17 @@ function ModulesLessonsPanel(props: {
 /* ---------- Enrollments validation ---------- */
 function EnrollmentsPanel({ enrollments, onChange, adminId }: { enrollments: any[]; onChange: () => void; adminId: string }) {
   const update = async (id: string, status: string) => {
+    const row = enrollments.find(e => e.id === id);
     const { error } = await supabase.from("course_enrollments").update({
       status, validated_by: adminId, validated_at: new Date().toISOString(),
     }).eq("id", id);
     if (error) return toast.error(error.message);
+    logAudit({
+      action: status === "validated" ? "validate" : status === "rejected" ? "reject" : "update",
+      entity_type: "enrollment", entity_id: id,
+      entity_label: `${row?.profile?.email || "?"} → ${row?.cursus?.title || "?"}`,
+      metadata: { status },
+    });
     toast.success(status === "validated" ? "Inscription validée" : "Statut mis à jour");
     onChange();
   };

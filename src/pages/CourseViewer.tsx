@@ -167,7 +167,9 @@ const CourseViewer = () => {
                         <span>Leçon {activeLessonIdx + 1}/{currentLessons.length}</span>
                       </div>
                       <h2 className="text-2xl font-bold">{currentLesson.title}</h2>
-                      {currentLesson.content && <div className="prose prose-sm max-w-none whitespace-pre-line">{currentLesson.content}</div>}
+                      {(currentLesson as any).content_html
+                        ? <div className="prose prose-sm dark:prose-invert max-w-none" dangerouslySetInnerHTML={{ __html: (currentLesson as any).content_html }} />
+                        : currentLesson.content && <div className="prose prose-sm max-w-none whitespace-pre-line">{currentLesson.content}</div>}
                       {currentLesson.lesson_type === "pdf" && signedUrl && (
                         <iframe src={signedUrl} className="w-full h-[70vh] rounded border" title={currentLesson.title} />
                       )}
