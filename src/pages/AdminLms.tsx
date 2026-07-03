@@ -497,7 +497,7 @@ function ModulesLessonsPanel(props: {
 
       {/* Lesson Dialog */}
       <Dialog open={lesOpen} onOpenChange={setLesOpen}>
-        <DialogContent className="max-w-xl">
+        <DialogContent className="max-w-3xl max-h-[92vh] overflow-y-auto">
           <DialogHeader><DialogTitle>{lesEdit ? "Modifier" : "Nouvelle"} leçon</DialogTitle></DialogHeader>
           <div className="space-y-3">
             <div><Label>Titre</Label><Input value={lesForm.title} onChange={e => setLesForm({ ...lesForm, title: e.target.value })} /></div>
@@ -506,7 +506,8 @@ function ModulesLessonsPanel(props: {
                 <Select value={lesForm.lesson_type} onValueChange={v => setLesForm({ ...lesForm, lesson_type: v })}>
                   <SelectTrigger><SelectValue /></SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="text">Texte</SelectItem>
+                    <SelectItem value="rich">Éditeur riche (WYSIWYG)</SelectItem>
+                    <SelectItem value="text">Texte simple</SelectItem>
                     <SelectItem value="pdf">PDF</SelectItem>
                     <SelectItem value="video">Vidéo</SelectItem>
                     <SelectItem value="link">Lien externe</SelectItem>
@@ -516,6 +517,17 @@ function ModulesLessonsPanel(props: {
               </div>
               <div><Label>Ordre</Label><Input type="number" value={lesForm.display_order} onChange={e => setLesForm({ ...lesForm, display_order: +e.target.value })} /></div>
             </div>
+            {lesForm.lesson_type === "rich" && (
+              <div>
+                <Label>Contenu de la leçon</Label>
+                <RichTextEditor
+                  value={lesForm.content_html}
+                  onChange={html => setLesForm({ ...lesForm, content_html: html })}
+                  uploadPathPrefix={`${selectedCursusId}/${selectedModuleId}/editor`}
+                  placeholder="Titres, listes, images, liens, code…"
+                />
+              </div>
+            )}
             {(lesForm.lesson_type === "text" || lesForm.lesson_type === "live") && (
               <div><Label>Contenu</Label><Textarea rows={5} value={lesForm.content} onChange={e => setLesForm({ ...lesForm, content: e.target.value })} /></div>
             )}
