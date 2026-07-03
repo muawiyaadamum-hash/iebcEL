@@ -17,12 +17,15 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogT
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { toast } from "sonner";
 import { useScrollToTop } from "@/hooks/useScrollToTop";
-import { Loader2, Plus, Trash2, Pencil, Shield, CheckCircle2, XCircle, ArrowLeft, BookOpen, Layers, FileText, HelpCircle, Video, FolderUp, GraduationCap } from "lucide-react";
+import { Loader2, Plus, Trash2, Pencil, Shield, CheckCircle2, XCircle, ArrowLeft, BookOpen, Layers, FileText, HelpCircle, Video, FolderUp, GraduationCap, ScrollText } from "lucide-react";
 import { fetchPoles, fetchCursusList, fetchModules, fetchLessons, type Pole, type Cursus, type CursusModule, type Lesson } from "@/lib/lms";
 import AdminQuestionBank from "@/components/AdminQuestionBank";
 import AdminLiveSessions from "@/components/AdminLiveSessions";
 import AdminModuleResources from "@/components/AdminModuleResources";
 import AdminExams from "@/components/AdminExams";
+import AdminAuditLog from "@/components/AdminAuditLog";
+import RichTextEditor from "@/components/RichTextEditor";
+import { logAudit } from "@/lib/audit";
 
 const slugify = (s: string) => s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 
@@ -111,6 +114,7 @@ const AdminLms = () => {
               <TabsTrigger value="qcm"><HelpCircle className="h-4 w-4 mr-1" />Banque QCM</TabsTrigger>
               <TabsTrigger value="visio"><Video className="h-4 w-4 mr-1" />Cours vidéo / visio</TabsTrigger>
               <TabsTrigger value="exams"><GraduationCap className="h-4 w-4 mr-1" />Examens</TabsTrigger>
+              <TabsTrigger value="audit"><ScrollText className="h-4 w-4 mr-1" />Audit</TabsTrigger>
               <TabsTrigger value="enrollments">Inscriptions ({enrollments.filter(e => e.status === "pending").length} en attente)</TabsTrigger>
             </TabsList>
 
@@ -144,6 +148,9 @@ const AdminLms = () => {
             </TabsContent>
             <TabsContent value="exams">
               <AdminExams />
+            </TabsContent>
+            <TabsContent value="audit">
+              <AdminAuditLog />
             </TabsContent>
             <TabsContent value="enrollments">
               <EnrollmentsPanel enrollments={enrollments} onChange={reloadAll} adminId={user.id} />
