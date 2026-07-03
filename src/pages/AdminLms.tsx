@@ -174,16 +174,19 @@ function PolesPanel({ poles, onChange }: { poles: Pole[]; onChange: () => void }
 
   const save = async () => {
     const payload = { ...form, slug: form.slug || slugify(form.title) };
-    const { error } = editing
-      ? await supabase.from("poles").update(payload).eq("id", editing.id)
-      : await supabase.from("poles").insert(payload);
+    const { data, error } = editing
+      ? await supabase.from("poles").update(payload).eq("id", editing.id).select().single()
+      : await supabase.from("poles").insert(payload).select().single();
     if (error) return toast.error(error.message);
+    logAudit({ action: editing ? "update" : "create", entity_type: "pole", entity_id: data?.id, entity_label: payload.title });
     toast.success("Pôle enregistré"); setOpen(false); onChange();
   };
   const remove = async (id: string) => {
     if (!confirm("Supprimer ce pôle et tous ses cursus ?")) return;
+    const label = poles.find(p => p.id === id)?.title;
     const { error } = await supabase.from("poles").delete().eq("id", id);
     if (error) return toast.error(error.message);
+    logAudit({ action: "delete", entity_type: "pole", entity_id: id, entity_label: label });
     toast.success("Pôle supprimé"); onChange();
   };
 
@@ -246,16 +249,19 @@ function CursusPanel({ cursus, poles, onChange }: { cursus: Cursus[]; poles: Pol
   const save = async () => {
     const payload: any = { ...form, slug: form.slug || slugify(form.title) };
     delete payload.pole; delete payload.id; delete payload.created_at; delete payload.updated_at;
-    const { error } = editing
-      ? await supabase.from("cursus").update(payload).eq("id", editing.id)
-      : await supabase.from("cursus").insert(payload);
+    const { data, error } = editing
+      ? await supabase.from("cursus").update(payload).eq("id", editing.id).select().single()
+      : await supabase.from("cursus").insert(payload).select().single();
     if (error) return toast.error(error.message);
+    logAudit({ action: editing ? "update" : "create", entity_type: "cursus", entity_id: data?.id, entity_label: payload.title, metadata: { published: payload.published, featured: payload.featured } });
     toast.success("Cursus enregistré"); setOpen(false); onChange();
   };
   const remove = async (id: string) => {
     if (!confirm("Supprimer ce cursus ?")) return;
+    const label = cursus.find(c => c.id === id)?.title;
     const { error } = await supabase.from("cursus").delete().eq("id", id);
     if (error) return toast.error(error.message);
+    logAudit({ action: "delete", entity_type: "cursus", entity_id: id, entity_label: label });
     toast.success("Supprimé"); onChange();
   };
 
@@ -364,14 +370,20 @@ function ModulesLessonsPanel(props: {
     if (!selectedCursusId) return;
     const payload = { ...modForm, cursus_id: selectedCursusId };
     delete (payload as any).id; delete (payload as any).created_at; delete (payload as any).updated_at;
-    const { error } = modEdit ? await supabase.from("cursus_modules").update(payload).eq("id", modEdit.id) : await supabase.from("cursus_modules").insert(payload);
+    const { data, error } = modEdit
+      ? await supabase.from("cursus_modules").update(payload).eq("id", modEdit.id).select().single()
+      : await supabase.from("cursus_modules").insert(payload).select().single();
     if (error) return toast.error(error.message);
+    logAudit({ action: modEdit ? "update" : "create", entity_type: "module", entity_id: data?.id, entity_label: payload.title });
     toast.success("Module enregistré"); setModOpen(false); reloadModules(selectedCursusId);
   };
   const delModule = async (id: string) => {
     if (!confirm("Supprimer ce module ?")) return;
+    const mods = selectedCursusId ? modulesByCursus[selectedCursusId] || [] : [];
+    const label = mods.find(m => m.id === id)?.title;
     const { error } = await supabase.from("cursus_modules").delete().eq("id", id);
     if (error) return toast.error(error.message);
+    logAudit({ action: "delete", entity_type: "module", entity_id: id, entity_label: label });
     if (selectedCursusId) reloadModules(selectedCursusId);
   };
 
