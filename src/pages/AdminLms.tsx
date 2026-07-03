@@ -378,11 +378,11 @@ function ModulesLessonsPanel(props: {
   // Lesson dialog
   const [lesOpen, setLesOpen] = useState(false);
   const [lesEdit, setLesEdit] = useState<Lesson | null>(null);
-  const [lesForm, setLesForm] = useState<any>({ title: "", lesson_type: "text", content: "", external_url: "", display_order: 0, required: true, published: true });
+  const [lesForm, setLesForm] = useState<any>({ title: "", lesson_type: "rich", content: "", content_html: "", external_url: "", display_order: 0, required: true, published: true });
   const [file, setFile] = useState<File | null>(null);
 
-  const newLesson = () => { setLesEdit(null); setLesForm({ title: "", lesson_type: "text", content: "", external_url: "", display_order: lessons.length, required: true, published: true }); setFile(null); setLesOpen(true); };
-  const editLesson = (l: Lesson) => { setLesEdit(l); setLesForm({ ...l, content: l.content || "", external_url: l.external_url || "" }); setFile(null); setLesOpen(true); };
+  const newLesson = () => { setLesEdit(null); setLesForm({ title: "", lesson_type: "rich", content: "", content_html: "", external_url: "", display_order: lessons.length, required: true, published: true }); setFile(null); setLesOpen(true); };
+  const editLesson = (l: Lesson) => { setLesEdit(l); setLesForm({ ...l, content: l.content || "", content_html: (l as any).content_html || "", external_url: l.external_url || "" }); setFile(null); setLesOpen(true); };
   const saveLesson = async () => {
     if (!selectedModuleId) return;
     let file_path = lesEdit?.file_path || null;
@@ -391,17 +391,23 @@ function ModulesLessonsPanel(props: {
       const { error: upErr } = await supabase.storage.from("course-content").upload(path, file, { upsert: true });
       if (upErr) return toast.error(upErr.message);
       file_path = path;
+      logAudit({ action: "upload", entity_type: "lesson_file", entity_label: file.name, metadata: { path } });
     }
     const payload: any = { ...lesForm, module_id: selectedModuleId, file_path };
     delete payload.id; delete payload.created_at; delete payload.updated_at;
-    const { error } = lesEdit ? await supabase.from("lessons").update(payload).eq("id", lesEdit.id) : await supabase.from("lessons").insert(payload);
+    const { data, error } = lesEdit
+      ? await supabase.from("lessons").update(payload).eq("id", lesEdit.id).select().single()
+      : await supabase.from("lessons").insert(payload).select().single();
     if (error) return toast.error(error.message);
+    logAudit({ action: lesEdit ? "update" : "create", entity_type: "lesson", entity_id: data?.id, entity_label: payload.title, metadata: { lesson_type: payload.lesson_type, published: payload.published } });
     toast.success("Leçon enregistrée"); setLesOpen(false); reloadLessons(selectedModuleId);
   };
   const delLesson = async (id: string) => {
     if (!confirm("Supprimer cette leçon ?")) return;
+    const lesson = lessons.find(l => l.id === id);
     const { error } = await supabase.from("lessons").delete().eq("id", id);
     if (error) return toast.error(error.message);
+    logAudit({ action: "delete", entity_type: "lesson", entity_id: id, entity_label: lesson?.title });
     if (selectedModuleId) reloadLessons(selectedModuleId);
   };
 
