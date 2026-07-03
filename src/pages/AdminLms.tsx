@@ -566,10 +566,17 @@ function ModulesLessonsPanel(props: {
 /* ---------- Enrollments validation ---------- */
 function EnrollmentsPanel({ enrollments, onChange, adminId }: { enrollments: any[]; onChange: () => void; adminId: string }) {
   const update = async (id: string, status: string) => {
+    const row = enrollments.find(e => e.id === id);
     const { error } = await supabase.from("course_enrollments").update({
       status, validated_by: adminId, validated_at: new Date().toISOString(),
     }).eq("id", id);
     if (error) return toast.error(error.message);
+    logAudit({
+      action: status === "validated" ? "validate" : status === "rejected" ? "reject" : "update",
+      entity_type: "enrollment", entity_id: id,
+      entity_label: `${row?.profile?.email || "?"} → ${row?.cursus?.title || "?"}`,
+      metadata: { status },
+    });
     toast.success(status === "validated" ? "Inscription validée" : "Statut mis à jour");
     onChange();
   };
