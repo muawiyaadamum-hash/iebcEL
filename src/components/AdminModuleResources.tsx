@@ -220,6 +220,31 @@ const AdminModuleResources = () => {
             </DialogFooter>
           </DialogContent>
         </Dialog>
+
+        <Dialog open={!!preview} onOpenChange={(o) => !o && setPreview(null)}>
+          <DialogContent className="max-w-5xl">
+            <DialogHeader><DialogTitle>{preview?.title}</DialogTitle></DialogHeader>
+            {preview && (() => {
+              const t = preview.type;
+              if (["png","jpg","jpeg","gif","webp","svg"].includes(t)) {
+                return <img src={preview.url} alt={preview.title} className="max-h-[75vh] w-full object-contain" />;
+              }
+              if (t === "pdf") {
+                return <iframe src={preview.url} title={preview.title} className="w-full h-[75vh] border rounded" />;
+              }
+              if (["docx","doc","pptx","ppt","xlsx","xls"].includes(t)) {
+                const office = `https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(preview.url)}`;
+                return <iframe src={office} title={preview.title} className="w-full h-[75vh] border rounded" />;
+              }
+              if (["txt","md","csv","json"].includes(t)) {
+                return <iframe src={preview.url} title={preview.title} className="w-full h-[75vh] border rounded bg-white" />;
+              }
+              return <div className="text-sm text-muted-foreground py-6 text-center">
+                Aperçu non disponible pour ce type de fichier. <a href={preview.url} target="_blank" rel="noreferrer" className="text-primary underline">Télécharger</a>
+              </div>;
+            })()}
+          </DialogContent>
+        </Dialog>
       </CardContent>
     </Card>
   );
