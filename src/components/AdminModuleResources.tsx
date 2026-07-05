@@ -9,7 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
-import { Loader2, Plus, Trash2, Pencil, FileText, Download } from "lucide-react";
+import { Loader2, Plus, Trash2, Pencil, FileText, Download, Eye } from "lucide-react";
 import { toast } from "sonner";
 import { fetchCursusList, fetchModules, type Cursus, type CursusModule } from "@/lib/lms";
 
