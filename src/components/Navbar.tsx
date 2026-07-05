@@ -26,7 +26,7 @@ const Navbar = () => {
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between">
           <Link to="/" className="flex items-center gap-2">
-            <img src={logo} alt="IEBC E-Learning" className="h-9 w-9 rounded-md object-cover opacity-90" />
+            <img src={logo} alt="IEBC — International Economics and Business Corporation" className="h-10 w-10 rounded-full object-contain bg-white ring-1 ring-border/60" />
             <span className="text-base font-semibold tracking-tight text-foreground/90">IEBC E-Learning</span>
           </Link>
 
