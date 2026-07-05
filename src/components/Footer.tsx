@@ -1,7 +1,7 @@
 import { GraduationCap, Mail, MapPin, Phone, MessageCircle, Headphones } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { getWhatsAppLink } from "./WhatsAppButton";
+import { getWhatsAppLink, getSupportMailto, SUPPORT_EMAIL } from "./WhatsAppButton";
 
 const Footer = () => {
   return (
