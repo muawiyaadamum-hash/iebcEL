@@ -169,6 +169,7 @@ const AdminModuleResources = () => {
                   {r.external_url && <a href={r.external_url} target="_blank" rel="noreferrer" className="text-xs text-primary underline">{r.external_url}</a>}
                 </div>
                 <div className="flex gap-1">
+                  {(r.file_path || r.external_url) && <Button size="icon" variant="ghost" title="Aperçu" onClick={() => openPreview(r)}><Eye className="h-4 w-4" /></Button>}
                   {r.file_path && <Button size="icon" variant="ghost" onClick={() => downloadUrl(r.file_path!)}><Download className="h-4 w-4" /></Button>}
                   <Button size="icon" variant="ghost" onClick={() => openEdit(r)}><Pencil className="h-4 w-4" /></Button>
                   <Button size="icon" variant="ghost" onClick={() => remove(r)}><Trash2 className="h-4 w-4 text-destructive" /></Button>
