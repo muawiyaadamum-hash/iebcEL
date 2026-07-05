@@ -13,6 +13,7 @@ import { toast } from "sonner";
 import { useScrollToTop } from "@/hooks/useScrollToTop";
 import { Loader2, ChevronLeft, ChevronRight, CheckCircle2, Circle, Lock, BookOpen, ArrowLeft, FileText, Video, Link2 } from "lucide-react";
 import { fetchCursusBySlug, fetchModules, fetchLessons, fetchEnrollment, type Cursus, type CursusModule, type Lesson } from "@/lib/lms";
+import LessonPdfViewer from "@/components/LessonPdfViewer";
 
 const CourseViewer = () => {
   useScrollToTop();
