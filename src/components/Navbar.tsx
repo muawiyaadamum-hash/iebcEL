@@ -6,7 +6,8 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useLanguage } from "@/contexts/LanguageContext";
 import NotificationBell from "./NotificationBell";
 import LanguageSwitcher from "./LanguageSwitcher";
-import logo from "@/assets/logo.jpg";
+import iebcLogo from "@/assets/iebc-logo.jpg.asset.json";
+const logo = iebcLogo.url;
 
 const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
