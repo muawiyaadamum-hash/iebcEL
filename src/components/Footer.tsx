@@ -1,7 +1,7 @@
 import { GraduationCap, Mail, MapPin, Phone, MessageCircle, Headphones } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { getWhatsAppLink } from "./WhatsAppButton";
+import { getWhatsAppLink, getSupportMailto, SUPPORT_EMAIL } from "./WhatsAppButton";
 
 const Footer = () => {
   return (
@@ -109,12 +109,17 @@ const Footer = () => {
                   className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors"
                 >
                   <Phone className="h-4 w-4 text-primary" />
-                  <span>+237 678 88 10 39</span>
+                  <span>+237 693 12 20 20</span>
                 </a>
               </li>
-              <li className="flex items-center gap-2 text-sm text-muted-foreground">
-                <Mail className="h-4 w-4 text-primary" />
-                <span>admin@mtecsolutions.org</span>
+              <li>
+                <a
+                  href={getSupportMailto("Demande d'information — IEBC E-Learning")}
+                  className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors"
+                >
+                  <Mail className="h-4 w-4 text-primary" />
+                  <span>{SUPPORT_EMAIL}</span>
+                </a>
               </li>
             </ul>
           </div>

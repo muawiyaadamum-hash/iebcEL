@@ -9,7 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
-import { Loader2, Plus, Trash2, Pencil, FileText, Download } from "lucide-react";
+import { Loader2, Plus, Trash2, Pencil, FileText, Download, Eye } from "lucide-react";
 import { toast } from "sonner";
 import { fetchCursusList, fetchModules, type Cursus, type CursusModule } from "@/lib/lms";
 
@@ -36,6 +36,13 @@ const AdminModuleResources = () => {
   const [editing, setEditing] = useState<Partial<Resource> | null>(null);
   const [file, setFile] = useState<File | null>(null);
   const [saving, setSaving] = useState(false);
+  const [preview, setPreview] = useState<{ url: string; type: string; title: string } | null>(null);
+
+  const openPreview = async (r: Resource) => {
+    if (!r.file_path) { if (r.external_url) window.open(r.external_url, "_blank"); return; }
+    const { data } = await supabase.storage.from("course-content").createSignedUrl(r.file_path, 3600);
+    if (data?.signedUrl) setPreview({ url: data.signedUrl, type: (r.file_type || "").toLowerCase(), title: r.title });
+  };
 
   useEffect(() => { fetchCursusList().then(setCursusList); }, []);
   useEffect(() => {
@@ -162,6 +169,7 @@ const AdminModuleResources = () => {
                   {r.external_url && <a href={r.external_url} target="_blank" rel="noreferrer" className="text-xs text-primary underline">{r.external_url}</a>}
                 </div>
                 <div className="flex gap-1">
+                  {(r.file_path || r.external_url) && <Button size="icon" variant="ghost" title="Aperçu" onClick={() => openPreview(r)}><Eye className="h-4 w-4" /></Button>}
                   {r.file_path && <Button size="icon" variant="ghost" onClick={() => downloadUrl(r.file_path!)}><Download className="h-4 w-4" /></Button>}
                   <Button size="icon" variant="ghost" onClick={() => openEdit(r)}><Pencil className="h-4 w-4" /></Button>
                   <Button size="icon" variant="ghost" onClick={() => remove(r)}><Trash2 className="h-4 w-4 text-destructive" /></Button>
@@ -210,6 +218,31 @@ const AdminModuleResources = () => {
               <Button variant="outline" onClick={() => setOpen(false)}>Annuler</Button>
               <Button onClick={save} disabled={saving}>{saving && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}Enregistrer</Button>
             </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
+        <Dialog open={!!preview} onOpenChange={(o) => !o && setPreview(null)}>
+          <DialogContent className="max-w-5xl">
+            <DialogHeader><DialogTitle>{preview?.title}</DialogTitle></DialogHeader>
+            {preview && (() => {
+              const t = preview.type;
+              if (["png","jpg","jpeg","gif","webp","svg"].includes(t)) {
+                return <img src={preview.url} alt={preview.title} className="max-h-[75vh] w-full object-contain" />;
+              }
+              if (t === "pdf") {
+                return <iframe src={preview.url} title={preview.title} className="w-full h-[75vh] border rounded" />;
+              }
+              if (["docx","doc","pptx","ppt","xlsx","xls"].includes(t)) {
+                const office = `https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(preview.url)}`;
+                return <iframe src={office} title={preview.title} className="w-full h-[75vh] border rounded" />;
+              }
+              if (["txt","md","csv","json"].includes(t)) {
+                return <iframe src={preview.url} title={preview.title} className="w-full h-[75vh] border rounded bg-white" />;
+              }
+              return <div className="text-sm text-muted-foreground py-6 text-center">
+                Aperçu non disponible pour ce type de fichier. <a href={preview.url} target="_blank" rel="noreferrer" className="text-primary underline">Télécharger</a>
+              </div>;
+            })()}
           </DialogContent>
         </Dialog>
       </CardContent>

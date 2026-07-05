@@ -2,7 +2,11 @@ import { MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-export const WHATSAPP_NUMBER = "237656987759";
+export const WHATSAPP_NUMBER = "237693122020";
+export const SUPPORT_EMAIL = "support@iebccm.online";
+
+export const getSupportMailto = (subject = "Support IEBC", body = "Bonjour équipe IEBC,\n\nJe souhaite obtenir de l'aide concernant :\n\n") =>
+  `mailto:${SUPPORT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 export const DEFAULT_WHATSAPP_MESSAGE = "Hello Centre de Formation IEBC! I'm interested in your courses and would like to learn more about enrollment options. Please assist me.";
 
 export const getRegistrationMessage = (name: string, email: string, phone: string, courseName?: string) => {
