@@ -36,6 +36,13 @@ const AdminModuleResources = () => {
   const [editing, setEditing] = useState<Partial<Resource> | null>(null);
   const [file, setFile] = useState<File | null>(null);
   const [saving, setSaving] = useState(false);
+  const [preview, setPreview] = useState<{ url: string; type: string; title: string } | null>(null);
+
+  const openPreview = async (r: Resource) => {
+    if (!r.file_path) { if (r.external_url) window.open(r.external_url, "_blank"); return; }
+    const { data } = await supabase.storage.from("course-content").createSignedUrl(r.file_path, 3600);
+    if (data?.signedUrl) setPreview({ url: data.signedUrl, type: (r.file_type || "").toLowerCase(), title: r.title });
+  };
 
   useEffect(() => { fetchCursusList().then(setCursusList); }, []);
   useEffect(() => {
