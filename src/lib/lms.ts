@@ -1,7 +1,8 @@
 import { supabase } from "@/integrations/supabase/client";
 
-export const WHATSAPP_NUMBER = "237656987759";
-export const REGISTRATION_FEE_XAF = 10000;
+export const WHATSAPP_NUMBER = "237693122020";
+export const SUPPORT_EMAIL = "support@iebccm.online";
+export const REGISTRATION_FEE_XAF = 50000;
 
 export interface Pole {
   id: string;
