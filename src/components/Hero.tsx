@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, BookOpen, CheckCircle2, GraduationCap, Users, Video, Award } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
+import { REGISTRATION_FEE_EUR, formatEur } from "@/lib/lms";
 
 const Hero = () => {
   return (
@@ -48,7 +49,7 @@ const Hero = () => {
             <div className="flex flex-col sm:flex-row gap-4">
               <Link to="/register">
                 <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground group">
-                  S'inscrire (10 000 XAF)
+                  S'inscrire ({formatEur(REGISTRATION_FEE_EUR)})
                   <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
                 </Button>
               </Link>
