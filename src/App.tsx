@@ -9,6 +9,7 @@ import { AccessCodeProvider } from "@/contexts/AccessCodeContext";
 import AccessCodeGate from "@/components/AccessCodeGate";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import AIChatbot from "@/components/AIChatbot";
+import FloatingWhatsApp from "@/components/FloatingWhatsApp";
 import Index from "./pages/Index";
 import Courses from "./pages/Courses";
 import CourseDetail from "./pages/CourseDetail";
@@ -76,6 +77,7 @@ const App = () => (
                   <Route path="*" element={<NotFound />} />
                 </Routes>
                 <AIChatbot />
+                <FloatingWhatsApp />
               </BrowserRouter>
             </AccessCodeGate>
           </TooltipProvider>

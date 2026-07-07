@@ -13,7 +13,8 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useScrollToTop } from "@/hooks/useScrollToTop";
 import { Loader2, MessageCircle, CheckCircle2 } from "lucide-react";
 import { getWhatsAppLink, getRegistrationMessage } from "@/components/WhatsAppButton";
-import { REGISTRATION_FEE_XAF } from "@/lib/lms";
+import { REGISTRATION_FEE_XAF, REGISTRATION_FEE_EUR, formatEur } from "@/lib/lms";
+import { WHATSAPP_DISPLAY } from "@/components/WhatsAppButton";
 
 const Register = () => {
   useScrollToTop();
@@ -151,10 +152,10 @@ const Register = () => {
         <div className="container mx-auto px-4 max-w-4xl">
           <div className="text-center mb-12">
             <h1 className="text-4xl md:text-5xl font-bold mb-4">
-              Register for Centre de Formation IEBC
+              Inscription — Centre de Formation IEBC
             </h1>
             <p className="text-lg text-muted-foreground">
-              One-time registration of {REGISTRATION_FEE_XAF.toLocaleString()} XAF for unlimited course access
+              Frais d'inscription unique : <span className="font-semibold text-foreground">{REGISTRATION_FEE_XAF.toLocaleString("fr-FR")} XAF</span> <span className="text-muted-foreground">(~ {formatEur(REGISTRATION_FEE_EUR)})</span>
             </p>
             <p className="text-sm text-muted-foreground mt-2">
               Already have an account?{" "}
@@ -327,13 +328,14 @@ const Register = () => {
             <div className="space-y-6">
               <Card className="bg-gradient-to-br from-primary to-accent text-white border-0">
                 <CardHeader>
-                  <CardTitle className="text-white">Registration Fee</CardTitle>
+                  <CardTitle className="text-white">Frais d'inscription</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="text-center">
-                    <p className="text-4xl font-bold mb-2">{REGISTRATION_FEE_XAF.toLocaleString()} XAF</p>
-                    <p className="text-white/90 text-sm">
-                      One-time payment for lifetime access
+                    <p className="text-4xl font-bold mb-1">{REGISTRATION_FEE_XAF.toLocaleString("fr-FR")} XAF</p>
+                    <p className="text-white/90 text-sm mb-2">Équivalent ~ {formatEur(REGISTRATION_FEE_EUR)}</p>
+                    <p className="text-white/80 text-xs">
+                      Paiement unique · Accès à vie à tous les cursus
                     </p>
                   </div>
                 </CardContent>
@@ -411,20 +413,24 @@ const Register = () => {
 
               <Card>
                 <CardHeader>
-                  <CardTitle>Need Help?</CardTitle>
+                  <CardTitle>Support & Contact</CardTitle>
                 </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-muted-foreground mb-4">
-                    Contact us for assistance with registration
+                <CardContent className="space-y-3">
+                  <p className="text-sm text-muted-foreground">
+                    Notre équipe vous accompagne pour finaliser votre inscription et répondre à vos questions.
                   </p>
+                  <div className="rounded-lg bg-muted p-3 text-sm">
+                    <p className="font-medium">WhatsApp</p>
+                    <p className="text-muted-foreground">{WHATSAPP_DISPLAY}</p>
+                  </div>
                   <a
-                    href={getWhatsAppLink("Hello! I need help with registration at Centre de Formation IEBC.")}
+                    href={getWhatsAppLink("Bonjour ! J'ai besoin d'aide pour mon inscription au Centre de Formation IEBC.")}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    <Button variant="outline" className="w-full border-primary/50 hover:bg-primary/5">
+                    <Button variant="outline" className="w-full border-green-500 text-green-600 hover:bg-green-50 dark:hover:bg-green-950">
                       <MessageCircle className="mr-2 h-4 w-4" />
-                      WhatsApp Support
+                      Contacter le support
                     </Button>
                   </a>
                 </CardContent>
