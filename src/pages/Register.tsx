@@ -413,20 +413,24 @@ const Register = () => {
 
               <Card>
                 <CardHeader>
-                  <CardTitle>Need Help?</CardTitle>
+                  <CardTitle>Support & Contact</CardTitle>
                 </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-muted-foreground mb-4">
-                    Contact us for assistance with registration
+                <CardContent className="space-y-3">
+                  <p className="text-sm text-muted-foreground">
+                    Notre équipe vous accompagne pour finaliser votre inscription et répondre à vos questions.
                   </p>
+                  <div className="rounded-lg bg-muted p-3 text-sm">
+                    <p className="font-medium">WhatsApp</p>
+                    <p className="text-muted-foreground">{WHATSAPP_DISPLAY}</p>
+                  </div>
                   <a
-                    href={getWhatsAppLink("Hello! I need help with registration at Centre de Formation IEBC.")}
+                    href={getWhatsAppLink("Bonjour ! J'ai besoin d'aide pour mon inscription au Centre de Formation IEBC.")}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    <Button variant="outline" className="w-full border-primary/50 hover:bg-primary/5">
+                    <Button variant="outline" className="w-full border-green-500 text-green-600 hover:bg-green-50 dark:hover:bg-green-950">
                       <MessageCircle className="mr-2 h-4 w-4" />
-                      WhatsApp Support
+                      Contacter le support
                     </Button>
                   </a>
                 </CardContent>
