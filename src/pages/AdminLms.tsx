@@ -101,25 +101,33 @@ const AdminLms = () => {
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h1 className="text-3xl font-bold flex items-center gap-2"><Shield className="h-7 w-7 text-primary" />Administration pédagogique</h1>
-              <p className="text-muted-foreground">Gérez pôles, cursus, modules, leçons et inscriptions</p>
+              <h1 className="text-3xl font-bold flex items-center gap-2"><Shield className="h-7 w-7 text-primary" />Super Admin</h1>
+              <p className="text-muted-foreground">Tableau de bord central — utilisateurs, contenus, évaluations, paiements</p>
             </div>
-            <Button variant="outline" onClick={() => navigate("/admin")}><ArrowLeft className="h-4 w-4 mr-2" />Admin général</Button>
+            <Button variant="outline" onClick={() => navigate("/dashboard")}><ArrowLeft className="h-4 w-4 mr-2" />Retour</Button>
           </div>
 
           <Tabs value={tab} onValueChange={setTab} className="space-y-6">
             <TabsList className="flex-wrap h-auto">
+              <TabsTrigger value="overview"><LayoutDashboard className="h-4 w-4 mr-1" />Vue d'ensemble</TabsTrigger>
+              <TabsTrigger value="users"><Users className="h-4 w-4 mr-1" />Utilisateurs</TabsTrigger>
               <TabsTrigger value="poles"><Layers className="h-4 w-4 mr-1" />Pôles ({poles.length})</TabsTrigger>
               <TabsTrigger value="cursus"><BookOpen className="h-4 w-4 mr-1" />Cursus ({cursus.length})</TabsTrigger>
               <TabsTrigger value="modules"><FileText className="h-4 w-4 mr-1" />Modules & leçons</TabsTrigger>
-              <TabsTrigger value="resources"><FolderUp className="h-4 w-4 mr-1" />Ressources PDF/DOCX</TabsTrigger>
+              <TabsTrigger value="resources"><FolderUp className="h-4 w-4 mr-1" />Ressources</TabsTrigger>
               <TabsTrigger value="qcm"><HelpCircle className="h-4 w-4 mr-1" />Banque QCM</TabsTrigger>
-              <TabsTrigger value="visio"><Video className="h-4 w-4 mr-1" />Cours vidéo / visio</TabsTrigger>
+              <TabsTrigger value="visio"><Video className="h-4 w-4 mr-1" />Visio / Vidéo</TabsTrigger>
               <TabsTrigger value="exams"><GraduationCap className="h-4 w-4 mr-1" />Examens</TabsTrigger>
+              <TabsTrigger value="enrollments">Paiements ({enrollments.filter(e => e.status === "pending").length})</TabsTrigger>
               <TabsTrigger value="audit"><ScrollText className="h-4 w-4 mr-1" />Audit</TabsTrigger>
-              <TabsTrigger value="enrollments">Inscriptions ({enrollments.filter(e => e.status === "pending").length} en attente)</TabsTrigger>
             </TabsList>
 
+            <TabsContent value="overview">
+              <AdminOverview />
+            </TabsContent>
+            <TabsContent value="users">
+              <AdminUsers />
+            </TabsContent>
             <TabsContent value="poles">
               <PolesPanel poles={poles} onChange={reloadAll} />
             </TabsContent>
