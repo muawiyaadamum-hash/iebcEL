@@ -131,27 +131,44 @@ const Exam = () => {
     setResult(built);
     setQuestions([]);
 
-    // Phase 4: auto-issue certificate on pass
+    // Auto-issue certificate on pass — requires graded project (40% weight)
     if (built.passed && cursus && user) {
       setIssuingCert(true);
-      const code = generateCertificateCode();
-      const studentName = (user.user_metadata as any)?.full_name || user.email || "Apprenant";
-      const { error: insertErr } = await supabase.from("certificates").insert({
-        user_id: user.id,
-        cursus_id: cursus.id,
-        attempt_id: attemptId,
-        code,
-        student_name: studentName,
-        cursus_title: cursus.title,
-        score: built.score,
-        total: built.total,
-      });
-      setIssuingCert(false);
-      if (insertErr) {
-        toast.error("Certificat non émis : " + insertErr.message);
+      const { data: finalGrade } = await supabase.rpc("compute_final_grade", { _user_id: user.id, _cursus_id: cursus.id });
+      const fg = (finalGrade as any) || {};
+
+      if (!fg.project_grade) {
+        setIssuingCert(false);
+        toast.info("QCM validé ! Certificat en attente de la note du projet (40%). Soumettez votre projet depuis votre tableau de bord.");
+      } else if (!fg.passed) {
+        setIssuingCert(false);
+        toast.warning(`Note finale ${fg.combined_percent}% (Projet ${fg.project_grade}/100 · QCM ${fg.qcm_percent}%). Seuil 60% non atteint.`);
       } else {
-        setCertCode(code);
-        toast.success("Certificat émis avec QR de vérification !");
+        const code = generateCertificateCode();
+        const studentName = (user.user_metadata as any)?.full_name || user.email || "Apprenant";
+        const { data: tpl } = await supabase.from("certificate_templates").select("*").eq("is_default", true).eq("active", true).maybeSingle();
+        const { error: insertErr } = await supabase.from("certificates").insert({
+          user_id: user.id,
+          cursus_id: cursus.id,
+          attempt_id: attemptId,
+          code,
+          student_name: studentName,
+          cursus_title: cursus.title,
+          score: built.score,
+          total: built.total,
+          qcm_score: built.score,
+          qcm_total: built.total,
+          project_grade: fg.project_grade,
+          combined_percent: fg.combined_percent,
+          template_id: tpl?.id ?? null,
+        });
+        setIssuingCert(false);
+        if (insertErr) {
+          toast.error("Certificat non émis : " + insertErr.message);
+        } else {
+          setCertCode(code);
+          toast.success(`Certificat émis (note finale ${fg.combined_percent}%) !`);
+        }
       }
     }
   };
