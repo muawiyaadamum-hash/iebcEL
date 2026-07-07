@@ -108,9 +108,9 @@ const Enroll = () => {
   const goNext = () => {
     if (step === 1 && !user) { navigate("/auth?redirect=/inscription"); return; }
     if (step === 2 && selected.size === 0) { toast.error("Sélectionnez au moins un cursus"); return; }
-    setStep((s) => Math.min(4, (s + 1) as Step));
+    setStep((s) => Math.min(4, s + 1) as Step);
   };
-  const goPrev = () => setStep((s) => Math.max(1, (s - 1) as Step));
+  const goPrev = () => setStep((s) => Math.max(1, s - 1) as Step);
 
   const submit = async () => {
     if (!user) { navigate("/auth?redirect=/inscription"); return; }
