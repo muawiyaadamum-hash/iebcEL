@@ -110,8 +110,93 @@ const AdminOverview = () => {
     { label: "Revenus estimés", value: formatXaf(kpi.estimatedRevenue), icon: Wallet, color: "text-primary bg-primary/10", sub: `${kpi.validatedEnrollments} × ${REGISTRATION_FEE_XAF.toLocaleString("fr-FR")} XAF` },
   ];
 
+  const exportPdfReport = async () => {
+    try {
+      const { jsPDF } = await import("jspdf");
+      const doc = new jsPDF({ unit: "pt", format: "a4" });
+      const now = new Date();
+      const dateStr = now.toLocaleString("fr-FR");
+
+      doc.setFontSize(18);
+      doc.setTextColor(20, 60, 120);
+      doc.text("Rapport statistique — Centre de Formation IEBC", 40, 50);
+      doc.setFontSize(10);
+      doc.setTextColor(90);
+      doc.text(`Généré le ${dateStr}`, 40, 68);
+
+      let y = 100;
+      doc.setFontSize(13);
+      doc.setTextColor(0);
+      doc.text("Indicateurs clés", 40, y);
+      y += 20;
+      doc.setFontSize(10);
+      const rows: [string, string][] = [
+        ["Étudiants", String(kpi.students)],
+        ["Enseignants", String(kpi.teachers)],
+        ["Administrateurs", String(kpi.admins)],
+        ["Cursus publiés", String(kpi.cursusCount)],
+        ["Pôles de formation", String(kpi.polesCount)],
+        ["Inscriptions validées", String(kpi.validatedEnrollments)],
+        ["Inscriptions en attente", String(kpi.pendingEnrollments)],
+        ["Examens soumis", String(kpi.examsAttempts)],
+        ["Examens réussis", String(kpi.examsPassed)],
+        ["Taux de réussite", `${kpi.successRate}%`],
+        ["Certificats délivrés", String(kpi.certificates)],
+        ["Revenus estimés", `${formatXaf(kpi.estimatedRevenue)}`],
+      ];
+      rows.forEach(([label, val]) => {
+        doc.setTextColor(80);
+        doc.text(label, 50, y);
+        doc.setTextColor(0);
+        doc.text(val, 300, y);
+        y += 16;
+      });
+
+      y += 15;
+      doc.setFontSize(13);
+      doc.text("Progression par cursus", 40, y);
+      y += 20;
+      doc.setFontSize(10);
+      if (progressByCursus.length === 0) {
+        doc.setTextColor(120);
+        doc.text("Aucune donnée disponible.", 50, y);
+      } else {
+        progressByCursus.forEach((c) => {
+          if (y > 780) { doc.addPage(); y = 50; }
+          const pct = c.students ? Math.round((c.passed / c.students) * 100) : 0;
+          doc.setTextColor(0);
+          doc.text(c.title.slice(0, 60), 50, y);
+          doc.setTextColor(80);
+          doc.text(`${c.passed}/${c.students} · ${pct}%`, 400, y);
+          y += 16;
+        });
+      }
+
+      doc.setFontSize(8);
+      doc.setTextColor(140);
+      doc.text("IEBC — Rapport confidentiel administrateur", 40, 820);
+
+      doc.save(`iebc-rapport-${now.toISOString().slice(0, 10)}.pdf`);
+      toast.success("Rapport PDF téléchargé");
+    } catch (e) {
+      console.error(e);
+      toast.error("Impossible de générer le rapport");
+    }
+  };
+
   return (
     <div className="space-y-6">
+      {/* Header + export */}
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h2 className="text-lg font-semibold">Vue d'ensemble</h2>
+          <p className="text-sm text-muted-foreground">Statistiques temps réel de la plateforme</p>
+        </div>
+        <Button onClick={exportPdfReport} size="sm" variant="outline">
+          <FileDown className="h-4 w-4 mr-2" /> Exporter rapport PDF
+        </Button>
+      </div>
+
       {/* KPI grid */}
       <div className="grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
         {cards.map((c) => (
