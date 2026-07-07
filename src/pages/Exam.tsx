@@ -40,6 +40,7 @@ const Exam = () => {
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [currentIdx, setCurrentIdx] = useState(0);
   const [submitting, setSubmitting] = useState(false);
+  const [prereq, setPrereq] = useState<{ allowed: boolean; modules_total: number; modules_completed: number; quizzes_total: number; quizzes_passed: number } | null>(null);
   const [result, setResult] = useState<null | {
     score: number; total: number; passed: boolean; review: ExamReviewItem[]; submittedAt: string;
   }>(null);
