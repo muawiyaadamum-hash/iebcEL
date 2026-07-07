@@ -68,4 +68,18 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  build: {
+    // Split heavy vendors into separate chunks (perf: Lot 6)
+    chunkSizeWarningLimit: 1500,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          "react-vendor": ["react", "react-dom", "react-router-dom"],
+          "supabase": ["@supabase/supabase-js"],
+          "pdf-vendor": ["jspdf", "html2canvas", "qrcode"],
+          "docx-vendor": ["docx"],
+        },
+      },
+    },
+  },
 }));
