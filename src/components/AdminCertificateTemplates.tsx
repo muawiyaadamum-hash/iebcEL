@@ -23,9 +23,34 @@ const blank = () => ({
   signatory_title: "Directeur Pédagogique",
   footer_text: "Ce certificat est vérifiable en ligne via son code unique et son QR code.",
   primary_color: "#0F4C81",
+  background_image_url: null as string | null,
   active: true,
   is_default: false,
 });
+
+const readAsCompressedDataUrl = (file: File): Promise<string> =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const img = new Image();
+      img.onload = () => {
+        // Landscape A4 ~ 1754x1240 @150dpi — cap width to 1600px
+        const maxW = 1600;
+        const scale = Math.min(1, maxW / img.width);
+        const canvas = document.createElement("canvas");
+        canvas.width = Math.round(img.width * scale);
+        canvas.height = Math.round(img.height * scale);
+        const ctx = canvas.getContext("2d");
+        if (!ctx) return reject(new Error("Canvas unavailable"));
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        resolve(canvas.toDataURL("image/jpeg", 0.85));
+      };
+      img.onerror = reject;
+      img.src = reader.result as string;
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
 
 const AdminCertificateTemplates = () => {
   const [rows, setRows] = useState<any[]>([]);
@@ -109,6 +134,30 @@ const AdminCertificateTemplates = () => {
                 <div><Label>Titre du signataire</Label><Input value={form.signatory_title} onChange={(e) => setForm({ ...form, signatory_title: e.target.value })} /></div>
               </div>
               <div><Label>Mention légale / pied de page</Label><Textarea rows={2} value={form.footer_text} onChange={(e) => setForm({ ...form, footer_text: e.target.value })} /></div>
+              <div className="space-y-2 rounded-md border p-3">
+                <Label>Image de fond du certificat (JPG, PNG — recommandé A4 paysage 1754×1240)</Label>
+                <p className="text-xs text-muted-foreground">Le nom de l'apprenant, le cursus, la note, le code, la date et le QR code seront ajoutés automatiquement par-dessus.</p>
+                <Input
+                  type="file"
+                  accept="image/jpeg,image/jpg,image/png,image/webp"
+                  onChange={async (e) => {
+                    const file = e.target.files?.[0];
+                    if (!file) return;
+                    if (file.size > 8 * 1024 * 1024) return toast.error("Image trop lourde (max 8 Mo)");
+                    try {
+                      const dataUrl = await readAsCompressedDataUrl(file);
+                      setForm({ ...form, background_image_url: dataUrl });
+                      toast.success("Image chargée");
+                    } catch { toast.error("Impossible de lire l'image"); }
+                  }}
+                />
+                {form.background_image_url && (
+                  <div className="flex items-center gap-3">
+                    <img src={form.background_image_url} alt="Aperçu fond" className="h-24 rounded border object-cover" />
+                    <Button size="sm" variant="ghost" onClick={() => setForm({ ...form, background_image_url: null })}>Retirer l'image</Button>
+                  </div>
+                )}
+              </div>
               <div className="flex gap-6">
                 <div className="flex items-center gap-2"><Switch checked={form.active} onCheckedChange={(v) => setForm({ ...form, active: v })} /><Label>Actif</Label></div>
                 <div className="flex items-center gap-2"><Switch checked={form.is_default} onCheckedChange={(v) => setForm({ ...form, is_default: v })} /><Label>Modèle par défaut</Label></div>

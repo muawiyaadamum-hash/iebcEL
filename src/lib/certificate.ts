@@ -9,6 +9,7 @@ export interface CertificateTemplate {
   signatory_title?: string;
   footer_text?: string;
   primary_color?: string;
+  background_image_url?: string | null;
 }
 
 export interface CertificateData {
@@ -47,24 +48,34 @@ export async function generateCertificatePdf(data: CertificateData): Promise<jsP
   const w = doc.internal.pageSize.getWidth();
   const h = doc.internal.pageSize.getHeight();
 
-  // Frames
-  doc.setDrawColor(pr, pg, pb);
-  doc.setLineWidth(4);
-  doc.rect(24, 24, w - 48, h - 48);
-  doc.setLineWidth(0.6);
-  doc.rect(34, 34, w - 68, h - 68);
+  const bg = tpl.background_image_url;
+  if (bg) {
+    try {
+      const fmt = bg.startsWith("data:image/png") ? "PNG" : "JPEG";
+      doc.addImage(bg, fmt, 0, 0, w, h);
+    } catch (e) {
+      console.warn("Certificate background failed to load", e);
+    }
+  } else {
+    // Frames
+    doc.setDrawColor(pr, pg, pb);
+    doc.setLineWidth(4);
+    doc.rect(24, 24, w - 48, h - 48);
+    doc.setLineWidth(0.6);
+    doc.rect(34, 34, w - 68, h - 68);
 
-  // Header band
-  doc.setFillColor(pr, pg, pb);
-  doc.rect(34, 34, w - 68, 70, "F");
-  doc.setTextColor(255);
-  doc.setFont("helvetica", "bold");
-  doc.setFontSize(22);
-  doc.text(tpl.institution_name || "Centre de Formation IEBC", w / 2, 70, { align: "center" });
-  doc.setFont("helvetica", "normal");
-  doc.setFontSize(12);
-  if (tpl.institution_subtitle) {
-    doc.text(tpl.institution_subtitle, w / 2, 92, { align: "center" });
+    // Header band
+    doc.setFillColor(pr, pg, pb);
+    doc.rect(34, 34, w - 68, 70, "F");
+    doc.setTextColor(255);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(22);
+    doc.text(tpl.institution_name || "Centre de Formation IEBC", w / 2, 70, { align: "center" });
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(12);
+    if (tpl.institution_subtitle) {
+      doc.text(tpl.institution_subtitle, w / 2, 92, { align: "center" });
+    }
   }
 
   // Title

@@ -53,6 +53,7 @@ export type Database = {
       certificate_templates: {
         Row: {
           active: boolean
+          background_image_url: string | null
           created_at: string
           footer_text: string | null
           header_title: string
@@ -68,6 +69,7 @@ export type Database = {
         }
         Insert: {
           active?: boolean
+          background_image_url?: string | null
           created_at?: string
           footer_text?: string | null
           header_title?: string
@@ -83,6 +85,7 @@ export type Database = {
         }
         Update: {
           active?: boolean
+          background_image_url?: string | null
           created_at?: string
           footer_text?: string | null
           header_title?: string
