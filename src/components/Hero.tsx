@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, BookOpen, CheckCircle2, GraduationCap, Users, Video, Award } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
+import { REGISTRATION_FEE_EUR, formatEur } from "@/lib/lms";
 
 const Hero = () => {
   return (
