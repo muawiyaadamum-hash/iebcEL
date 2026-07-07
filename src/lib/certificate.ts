@@ -9,6 +9,7 @@ export interface CertificateTemplate {
   signatory_title?: string;
   footer_text?: string;
   primary_color?: string;
+  background_image_url?: string | null;
 }
 
 export interface CertificateData {
