@@ -43,24 +43,38 @@ Deno.serve(async (req) => {
     }
 
     const ids: string[] = attempt.question_ids || [];
+    const orders: Record<string, string[]> = attempt.option_orders || {};
     const { data: keys } = await admin
       .from("exam_question_bank")
-      .select("id, correct_option, explanation, question, option_a, option_b, option_c, option_d")
+      .select("id, correct_option, correct_options, question_type, explanation, question, option_a, option_b, option_c, option_d")
       .in("id", ids);
 
+    const LETTERS = ["A", "B", "C", "D"];
     let score = 0;
     const review = ids.map((id) => {
-      const k = keys?.find((x) => x.id === id);
-      const given = String(answers[id] ?? "").toUpperCase();
-      const correct = k?.correct_option ?? "";
-      const ok = given && given === correct;
+      const k = keys?.find((x: any) => x.id === id);
+      const givenLetter = String(answers[id] ?? "").toUpperCase();
+      // Un-shuffle: served letter -> original letter (via orders[id])
+      const perm = orders[id] || ["a", "b", "c", "d"];
+      const idx = LETTERS.indexOf(givenLetter);
+      const originalGiven = idx >= 0 && perm[idx] ? perm[idx].toUpperCase() : "";
+      const correct = (k?.correct_option ?? "").toUpperCase();
+      const ok = !!originalGiven && originalGiven === correct;
       if (ok) score++;
+      // Build served options in the shuffled order for review display
+      const servedOptions: Record<string, string> = {};
+      LETTERS.forEach((L, i) => {
+        const orig = perm[i];
+        servedOptions[L] = orig ? (k as any)?.[`option_${orig}`] : "";
+      });
+      // Convert correct to served letter
+      const correctServed = LETTERS[perm.indexOf(correct.toLowerCase())] || correct;
       return {
         id,
         question: k?.question,
-        options: { A: k?.option_a, B: k?.option_b, C: k?.option_c, D: k?.option_d },
-        given,
-        correct,
+        options: { A: servedOptions.A, B: servedOptions.B, C: servedOptions.C, D: servedOptions.D },
+        given: givenLetter,
+        correct: correctServed,
         ok,
         explanation: k?.explanation ?? null,
       };

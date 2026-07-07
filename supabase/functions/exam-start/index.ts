@@ -86,11 +86,34 @@ Deno.serve(async (req) => {
     // Fetch questions WITHOUT correct_option
     const { data: questions } = await admin
       .from("exam_question_bank")
-      .select("id, question, option_a, option_b, option_c, option_d, topic")
+      .select("id, question, option_a, option_b, option_c, option_d, topic, question_type")
       .in("id", ids);
 
-    // Preserve draw order
-    const ordered = ids.map((id) => questions?.find((q) => q.id === id)).filter(Boolean);
+    // Preserve draw order + shuffle answer options per question
+    const LETTERS = ["a", "b", "c", "d"] as const;
+    const orders: Record<string, string[]> = {};
+    const ordered = ids.map((id) => {
+      const q: any = questions?.find((x: any) => x.id === id);
+      if (!q) return null;
+      const isTF = q.question_type === "true_false";
+      const pool = isTF ? ["a", "b"] : ["a", "b", "c", "d"];
+      // Fisher-Yates
+      const perm = [...pool];
+      for (let i = perm.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [perm[i], perm[j]] = [perm[j], perm[i]];
+      }
+      orders[id] = perm; // served letter index -> original letter
+      const out: any = { id: q.id, question: q.question, topic: q.topic, question_type: q.question_type };
+      LETTERS.forEach((L, idx) => {
+        const origLetter = perm[idx];
+        out[`option_${L}`] = origLetter ? q[`option_${origLetter}`] : "—";
+      });
+      return out;
+    }).filter(Boolean);
+
+    // Save shuffle order on attempt for submit-time un-shuffling
+    await admin.from("exam_attempts").update({ option_orders: orders }).eq("id", attempt.id);
 
     return json({ attempt_id: attempt.id, total: n, questions: ordered });
   } catch (e) {

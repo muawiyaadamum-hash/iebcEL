@@ -40,6 +40,7 @@ const Exam = () => {
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [currentIdx, setCurrentIdx] = useState(0);
   const [submitting, setSubmitting] = useState(false);
+  const [prereq, setPrereq] = useState<{ allowed: boolean; modules_total: number; modules_completed: number; quizzes_total: number; quizzes_passed: number } | null>(null);
   const [result, setResult] = useState<null | {
     score: number; total: number; passed: boolean; review: ExamReviewItem[]; submittedAt: string;
   }>(null);
@@ -73,6 +74,13 @@ const Exam = () => {
     if (!slug) return;
     fetchCursusBySlug(slug).then((c) => setCursus(c)).finally(() => setLoading(false));
   }, [slug]);
+
+  // Prerequisite check: 100% progress + all module quizzes passed
+  useEffect(() => {
+    if (!cursus || !user) return;
+    supabase.rpc("can_take_final_exam", { _user_id: user.id, _cursus_id: cursus.id })
+      .then(({ data }) => { if (data) setPrereq(data as any); });
+  }, [cursus, user]);
 
   const answered = Object.keys(answers).length;
   const progress = questions.length ? (answered / questions.length) * 100 : 0;
@@ -259,7 +267,13 @@ const Exam = () => {
               <h2 className="text-lg font-semibold">{current.question}</h2>
               <RadioGroup
                 value={answers[current.id] || ""}
-                onValueChange={(v) => setAnswers((a) => ({ ...a, [current.id]: v }))}
+                onValueChange={(v) => {
+                  setAnswers((a) => ({ ...a, [current.id]: v }));
+                  // Auto-advance to next unanswered question
+                  if (currentIdx < questions.length - 1) {
+                    setTimeout(() => setCurrentIdx((i) => Math.min(i + 1, questions.length - 1)), 250);
+                  }
+                }}
               >
                 {(["A", "B", "C", "D"] as const).map((k) => (
                   <div key={k} className="flex items-start gap-3 p-3 rounded border hover:bg-accent/30">
@@ -307,7 +321,15 @@ const Exam = () => {
                   <b>Mode surveillance activé :</b> plein écran obligatoire, copier/coller et clic-droit désactivés, changement d'onglet / perte de focus / sortie plein écran comptés comme avertissements. <b>3 avertissements = soumission automatique.</b>
                 </div>
               </div>
-              <Button onClick={startExam} disabled={starting} size="lg">
+              {prereq && !prereq.allowed && (
+                <div className="p-3 rounded bg-red-50 dark:bg-red-950/20 border border-red-300 text-sm space-y-1">
+                  <div className="font-semibold text-red-700 dark:text-red-400">Accès à l'examen final verrouillé</div>
+                  <div>Modules terminés : <b>{prereq.modules_completed}/{prereq.modules_total}</b></div>
+                  <div>Quiz de module réussis : <b>{prereq.quizzes_passed}/{prereq.quizzes_total}</b></div>
+                  <div className="text-muted-foreground text-xs mt-1">Terminez 100% de votre progression et validez tous les quiz de module pour débloquer l'examen.</div>
+                </div>
+              )}
+              <Button onClick={startExam} disabled={starting || (prereq !== null && !prereq.allowed)} size="lg">
                 {starting && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
                 Commencer l'examen
               </Button>
