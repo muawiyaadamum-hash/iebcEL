@@ -163,6 +163,12 @@ const AdminLms = () => {
             <TabsContent value="exams">
               <AdminExams />
             </TabsContent>
+            <TabsContent value="projects">
+              <AdminProjects />
+            </TabsContent>
+            <TabsContent value="certificates">
+              <AdminCertificateTemplates />
+            </TabsContent>
             <TabsContent value="audit">
               <AdminAuditLog />
             </TabsContent>
