@@ -321,7 +321,15 @@ const Exam = () => {
                   <b>Mode surveillance activé :</b> plein écran obligatoire, copier/coller et clic-droit désactivés, changement d'onglet / perte de focus / sortie plein écran comptés comme avertissements. <b>3 avertissements = soumission automatique.</b>
                 </div>
               </div>
-              <Button onClick={startExam} disabled={starting} size="lg">
+              {prereq && !prereq.allowed && (
+                <div className="p-3 rounded bg-red-50 dark:bg-red-950/20 border border-red-300 text-sm space-y-1">
+                  <div className="font-semibold text-red-700 dark:text-red-400">Accès à l'examen final verrouillé</div>
+                  <div>Modules terminés : <b>{prereq.modules_completed}/{prereq.modules_total}</b></div>
+                  <div>Quiz de module réussis : <b>{prereq.quizzes_passed}/{prereq.quizzes_total}</b></div>
+                  <div className="text-muted-foreground text-xs mt-1">Terminez 100% de votre progression et validez tous les quiz de module pour débloquer l'examen.</div>
+                </div>
+              )}
+              <Button onClick={startExam} disabled={starting || (prereq !== null && !prereq.allowed)} size="lg">
                 {starting && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
                 Commencer l'examen
               </Button>
