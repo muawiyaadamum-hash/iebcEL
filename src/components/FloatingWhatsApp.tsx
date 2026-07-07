@@ -9,13 +9,17 @@ const FloatingWhatsApp = () => {
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Contacter le support WhatsApp IEBC"
-      className="fixed bottom-24 right-6 z-40 flex h-12 w-12 items-center justify-center rounded-full bg-[#25D366] text-white shadow-lg shadow-[#25D366]/40 transition-transform hover:scale-110 hover:bg-[#1EBE5D]"
+      style={{
+        // Stack above the AI button (h-14 = 56px) with a 12px gap, plus iOS safe area
+        bottom: "calc(env(safe-area-inset-bottom, 0px) + 1rem + 3.5rem + 0.75rem)",
+        right: "calc(env(safe-area-inset-right, 0px) + 1rem)",
+      }}
+      className="fixed z-40 flex h-11 w-11 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-[#25D366] text-white shadow-lg shadow-[#25D366]/40 transition-transform hover:scale-110 hover:bg-[#1EBE5D]"
     >
-      {/* Official WhatsApp glyph */}
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 32 32"
-        className="h-7 w-7"
+        className="h-6 w-6 sm:h-7 sm:w-7"
         fill="currentColor"
         aria-hidden="true"
       >
