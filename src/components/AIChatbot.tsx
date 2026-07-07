@@ -25,6 +25,8 @@ interface Message {
 }
 
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-chat`;
+const MAIN_SITE_URL = "https://iebccm.com";
+const E_LEARNING_URL = "https://iebccm.online";
 
 const FAQ_PROMPTS = [
   "What courses do you offer?",
