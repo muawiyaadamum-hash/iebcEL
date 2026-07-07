@@ -50,43 +50,109 @@ export type Database = {
         }
         Relationships: []
       }
+      certificate_templates: {
+        Row: {
+          active: boolean
+          created_at: string
+          footer_text: string | null
+          header_title: string
+          id: string
+          institution_name: string
+          institution_subtitle: string | null
+          is_default: boolean
+          name: string
+          primary_color: string
+          signatory_name: string
+          signatory_title: string | null
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          footer_text?: string | null
+          header_title?: string
+          id?: string
+          institution_name?: string
+          institution_subtitle?: string | null
+          is_default?: boolean
+          name: string
+          primary_color?: string
+          signatory_name?: string
+          signatory_title?: string | null
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          footer_text?: string | null
+          header_title?: string
+          id?: string
+          institution_name?: string
+          institution_subtitle?: string | null
+          is_default?: boolean
+          name?: string
+          primary_color?: string
+          signatory_name?: string
+          signatory_title?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       certificates: {
         Row: {
           attempt_id: string | null
           code: string
+          combined_percent: number | null
           created_at: string
           cursus_id: string
           cursus_title: string
           id: string
           issued_at: string
+          project_grade: number | null
+          qcm_score: number | null
+          qcm_total: number | null
           score: number
+          signature_hash: string | null
           student_name: string
+          template_id: string | null
           total: number
           user_id: string
         }
         Insert: {
           attempt_id?: string | null
           code: string
+          combined_percent?: number | null
           created_at?: string
           cursus_id: string
           cursus_title: string
           id?: string
           issued_at?: string
+          project_grade?: number | null
+          qcm_score?: number | null
+          qcm_total?: number | null
           score: number
+          signature_hash?: string | null
           student_name: string
+          template_id?: string | null
           total: number
           user_id: string
         }
         Update: {
           attempt_id?: string | null
           code?: string
+          combined_percent?: number | null
           created_at?: string
           cursus_id?: string
           cursus_title?: string
           id?: string
           issued_at?: string
+          project_grade?: number | null
+          qcm_score?: number | null
+          qcm_total?: number | null
           score?: number
+          signature_hash?: string | null
           student_name?: string
+          template_id?: string | null
           total?: number
           user_id?: string
         }
@@ -773,6 +839,7 @@ export type Database = {
         Row: {
           admin_feedback: string | null
           course_id: string
+          cursus_id: string | null
           file_name: string
           file_path: string
           file_size: number | null
@@ -787,6 +854,7 @@ export type Database = {
         Insert: {
           admin_feedback?: string | null
           course_id: string
+          cursus_id?: string | null
           file_name: string
           file_path: string
           file_size?: number | null
@@ -801,6 +869,7 @@ export type Database = {
         Update: {
           admin_feedback?: string | null
           course_id?: string
+          cursus_id?: string | null
           file_name?: string
           file_path?: string
           file_size?: number | null
@@ -812,7 +881,15 @@ export type Database = {
           submitted_at?: string
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "project_submissions_cursus_id_fkey"
+            columns: ["cursus_id"]
+            isOneToOne: false
+            referencedRelation: "cursus"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       quiz_attempts: {
         Row: {
@@ -986,6 +1063,10 @@ export type Database = {
     }
     Functions: {
       can_take_final_exam: {
+        Args: { _cursus_id: string; _user_id: string }
+        Returns: Json
+      }
+      compute_final_grade: {
         Args: { _cursus_id: string; _user_id: string }
         Returns: Json
       }
