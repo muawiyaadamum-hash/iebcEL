@@ -60,6 +60,7 @@ const App = () => (
                       </ProtectedRoute>
                     } />
                     <Route path="/register" element={<Register />} />
+                    <Route path="/inscription" element={<Enroll />} />
                     <Route path="/about" element={<About />} />
                     <Route path="/events" element={<Events />} />
                     <Route path="/install" element={<Install />} />
