@@ -201,10 +201,9 @@ const CourseDetail = () => {
                     </Button>
                   </div>
                 ) : (
-                  <Button size="lg" className="w-full bg-gradient-to-r from-secondary to-secondary/90" onClick={requestEnrollment} disabled={submitting}>
-                    {submitting ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Chargement</> : (
-                      <><MessageCircle className="mr-2 h-4 w-4" />{enrollment?.status === "pending" ? "Renvoyer le message WhatsApp" : "S'inscrire via WhatsApp"}</>
-                    )}
+                  <Button size="lg" className="w-full bg-gradient-to-r from-secondary to-secondary/90" onClick={() => navigate(`/inscription?cursus=${cursus.slug}`)}>
+                    <MessageCircle className="mr-2 h-4 w-4" />
+                    {enrollment?.status === "pending" ? "Reprendre l'inscription" : "S'inscrire à ce cursus"}
                   </Button>
                 )}
 
