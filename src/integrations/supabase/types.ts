@@ -320,6 +320,7 @@ export type Database = {
           created_at: string
           cursus_id: string
           id: string
+          option_orders: Json
           passed: boolean | null
           question_ids: Json
           score: number | null
@@ -334,6 +335,7 @@ export type Database = {
           created_at?: string
           cursus_id: string
           id?: string
+          option_orders?: Json
           passed?: boolean | null
           question_ids?: Json
           score?: number | null
@@ -348,6 +350,7 @@ export type Database = {
           created_at?: string
           cursus_id?: string
           id?: string
+          option_orders?: Json
           passed?: boolean | null
           question_ids?: Json
           score?: number | null
@@ -859,29 +862,38 @@ export type Database = {
         Row: {
           correct_index: number
           created_at: string
+          difficulty: string
           id: string
+          level: string
           options: Json
           order: number
           question: string
           quiz_id: string
+          theme: string | null
         }
         Insert: {
           correct_index: number
           created_at?: string
+          difficulty?: string
           id?: string
+          level?: string
           options: Json
           order?: number
           question: string
           quiz_id: string
+          theme?: string | null
         }
         Update: {
           correct_index?: number
           created_at?: string
+          difficulty?: string
           id?: string
+          level?: string
           options?: Json
           order?: number
           question?: string
           quiz_id?: string
+          theme?: string | null
         }
         Relationships: [
           {
@@ -897,8 +909,11 @@ export type Database = {
         Row: {
           course_id: string
           created_at: string
+          cursus_id: string | null
           description: string | null
           id: string
+          level: string
+          module_id: string | null
           passing_score: number
           title: string
           updated_at: string
@@ -906,8 +921,11 @@ export type Database = {
         Insert: {
           course_id: string
           created_at?: string
+          cursus_id?: string | null
           description?: string | null
           id?: string
+          level?: string
+          module_id?: string | null
           passing_score?: number
           title: string
           updated_at?: string
@@ -915,13 +933,31 @@ export type Database = {
         Update: {
           course_id?: string
           created_at?: string
+          cursus_id?: string | null
           description?: string | null
           id?: string
+          level?: string
+          module_id?: string | null
           passing_score?: number
           title?: string
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "quizzes_cursus_id_fkey"
+            columns: ["cursus_id"]
+            isOneToOne: false
+            referencedRelation: "cursus"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "quizzes_module_id_fkey"
+            columns: ["module_id"]
+            isOneToOne: false
+            referencedRelation: "cursus_modules"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       user_roles: {
         Row: {
@@ -949,6 +985,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      can_take_final_exam: {
+        Args: { _cursus_id: string; _user_id: string }
+        Returns: Json
+      }
       create_admin_user: {
         Args: {
           admin_email: string
