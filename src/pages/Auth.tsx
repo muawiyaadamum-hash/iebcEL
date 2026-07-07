@@ -93,7 +93,11 @@ const Auth = () => {
         title: "Welcome Back!",
         description: "You have successfully logged in."
       });
-      navigate("/dashboard");
+      const { data: authData } = await supabase.auth.getUser();
+      const uid = authData?.user?.id;
+      const path = uid ? await resolveHomeForUser(uid) : "/dashboard";
+      navigate(path);
+
     }
   };
 
