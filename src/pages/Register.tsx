@@ -13,7 +13,8 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useScrollToTop } from "@/hooks/useScrollToTop";
 import { Loader2, MessageCircle, CheckCircle2 } from "lucide-react";
 import { getWhatsAppLink, getRegistrationMessage } from "@/components/WhatsAppButton";
-import { REGISTRATION_FEE_XAF } from "@/lib/lms";
+import { REGISTRATION_FEE_XAF, REGISTRATION_FEE_EUR, formatEur } from "@/lib/lms";
+import { WHATSAPP_DISPLAY } from "@/components/WhatsAppButton";
 
 const Register = () => {
   useScrollToTop();
