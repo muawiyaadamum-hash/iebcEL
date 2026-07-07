@@ -364,7 +364,7 @@ export function CursusPanel({ cursus, poles, onChange }: { cursus: Cursus[]; pol
 }
 
 /* ---------- Modules & Lessons ---------- */
-function ModulesLessonsPanel(props: {
+export function ModulesLessonsPanel(props: {
   cursus: Cursus[];
   selectedCursusId: string | null;
   setSelectedCursusId: (id: string | null) => void;
