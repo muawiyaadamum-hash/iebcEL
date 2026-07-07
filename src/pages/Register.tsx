@@ -328,13 +328,14 @@ const Register = () => {
             <div className="space-y-6">
               <Card className="bg-gradient-to-br from-primary to-accent text-white border-0">
                 <CardHeader>
-                  <CardTitle className="text-white">Registration Fee</CardTitle>
+                  <CardTitle className="text-white">Frais d'inscription</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="text-center">
-                    <p className="text-4xl font-bold mb-2">{REGISTRATION_FEE_XAF.toLocaleString()} XAF</p>
-                    <p className="text-white/90 text-sm">
-                      One-time payment for lifetime access
+                    <p className="text-4xl font-bold mb-1">{REGISTRATION_FEE_XAF.toLocaleString("fr-FR")} XAF</p>
+                    <p className="text-white/90 text-sm mb-2">Équivalent ~ {formatEur(REGISTRATION_FEE_EUR)}</p>
+                    <p className="text-white/80 text-xs">
+                      Paiement unique · Accès à vie à tous les cursus
                     </p>
                   </div>
                 </CardContent>
