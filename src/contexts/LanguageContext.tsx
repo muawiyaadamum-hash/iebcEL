@@ -20,6 +20,7 @@ export const translations: Translations = {
   "nav.dashboard": { en: "Dashboard", fr: "Tableau de bord" },
   "nav.admin": { en: "Admin", fr: "Admin" },
   "nav.logout": { en: "Logout", fr: "Déconnexion" },
+  "nav.language": { en: "Language", fr: "Langue" },
   
   // Hero
   "hero.title": { en: "Learn Skills for the Technology Era", fr: "Apprenez les compétences de l'ère technologique" },

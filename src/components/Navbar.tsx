@@ -175,9 +175,9 @@ const Navbar = () => {
 
                 <div className="border-t px-4 py-4 space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs uppercase tracking-wide text-muted-foreground">
-                      {t("nav.language") || "Language"}
-                    </span>
+                  <span className="text-xs uppercase tracking-wide text-muted-foreground">
+                    {t("nav.language")}
+                  </span>
                     <LanguageSwitcher />
                   </div>
 
