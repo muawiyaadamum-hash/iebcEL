@@ -2,8 +2,10 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Users, GraduationCap, BookOpen, Award, TrendingUp, Wallet, Activity, Loader2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Users, GraduationCap, BookOpen, Award, TrendingUp, Wallet, Activity, Loader2, FileDown } from "lucide-react";
 import { REGISTRATION_FEE_XAF, formatXaf } from "@/lib/lms";
+import { toast } from "sonner";
 
 type Kpi = {
   students: number;
