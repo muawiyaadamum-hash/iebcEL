@@ -226,7 +226,11 @@ const [messages, setMessages] = useState<Message[]>([]);
       {/* Auto Popup Greeting */}
       {showPopup && !isOpen && (
         <div 
-          className="fixed bottom-40 right-6 z-40 animate-in slide-in-from-right-5 fade-in duration-300"
+          style={{
+            bottom: "calc(env(safe-area-inset-bottom, 0px) + 1rem + 3.5rem + 3rem + 0.75rem)",
+            right: "calc(env(safe-area-inset-right, 0px) + 1rem)",
+          }}
+          className="fixed z-40 animate-in slide-in-from-right-5 fade-in duration-300"
         >
           <div className="bg-gradient-to-r from-primary to-accent text-primary-foreground rounded-2xl rounded-br-md p-4 shadow-lg max-w-[250px] relative">
             <button 
