@@ -119,6 +119,29 @@ const Dashboard = () => {
               )}
             </TabsContent>
 
+            <TabsContent value="projects">
+              {validated.length === 0 ? (
+                <Card><CardContent className="py-12 text-center">
+                  <FileCheck2 className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
+                  <h3 className="text-lg font-semibold mb-2">Aucun cursus validé</h3>
+                  <p className="text-muted-foreground">Vous pourrez déposer votre projet dès qu'une inscription sera validée.</p>
+                </CardContent></Card>
+              ) : (
+                <div className="grid gap-4">
+                  {validated.map((e) => (
+                    <ProjectSubmissionCard
+                      key={e.id}
+                      cursusId={e.cursus.id}
+                      cursusTitle={e.cursus.title}
+                      cursusSlug={e.cursus.slug}
+                      userId={user!.id}
+                    />
+                  ))}
+                </div>
+              )}
+            </TabsContent>
+
+
             <TabsContent value="profile">
               <Card>
                 <CardHeader><CardTitle className="flex items-center gap-2"><User className="h-5 w-5" />Mes informations</CardTitle><CardDescription>Détails de votre compte apprenant</CardDescription></CardHeader>
