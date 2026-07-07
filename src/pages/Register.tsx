@@ -152,10 +152,10 @@ const Register = () => {
         <div className="container mx-auto px-4 max-w-4xl">
           <div className="text-center mb-12">
             <h1 className="text-4xl md:text-5xl font-bold mb-4">
-              Register for Centre de Formation IEBC
+              Inscription — Centre de Formation IEBC
             </h1>
             <p className="text-lg text-muted-foreground">
-              One-time registration of {REGISTRATION_FEE_XAF.toLocaleString()} XAF for unlimited course access
+              Frais d'inscription unique : <span className="font-semibold text-foreground">{REGISTRATION_FEE_XAF.toLocaleString("fr-FR")} XAF</span> <span className="text-muted-foreground">(~ {formatEur(REGISTRATION_FEE_EUR)})</span>
             </p>
             <p className="text-sm text-muted-foreground mt-2">
               Already have an account?{" "}
