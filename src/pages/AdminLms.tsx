@@ -120,6 +120,8 @@ const AdminLms = () => {
               <TabsTrigger value="qcm"><HelpCircle className="h-4 w-4 mr-1" />Banque QCM</TabsTrigger>
               <TabsTrigger value="visio"><Video className="h-4 w-4 mr-1" />Visio / Vidéo</TabsTrigger>
               <TabsTrigger value="exams"><GraduationCap className="h-4 w-4 mr-1" />Examens</TabsTrigger>
+              <TabsTrigger value="projects"><FileCheck2 className="h-4 w-4 mr-1" />Projets</TabsTrigger>
+              <TabsTrigger value="certificates"><Award className="h-4 w-4 mr-1" />Certificats</TabsTrigger>
               <TabsTrigger value="enrollments">Paiements ({enrollments.filter(e => e.status === "pending").length})</TabsTrigger>
               <TabsTrigger value="audit"><ScrollText className="h-4 w-4 mr-1" />Audit</TabsTrigger>
             </TabsList>
