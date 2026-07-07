@@ -238,6 +238,24 @@ const AdminQuestionBank = () => {
               <span>{aiImporting ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Sparkles className="h-4 w-4 mr-2" />}Import IA (PDF/DOCX/JSON)</span>
             </Button>
           </label>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" disabled={!cursusId || items.length === 0}>
+                <FileDown className="h-4 w-4 mr-2" />Exporter
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="bg-popover">
+              {(() => {
+                const title = cursusList.find(c => c.id === cursusId)?.title || "Banque IEBC";
+                return <>
+                  <DropdownMenuItem onClick={() => exportBankCsv(items)}>Export CSV</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => exportBankJson(items)}>Export JSON</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => exportBankPdf(items, title)}>Export PDF</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => exportBankDocx(items, title)}>Export DOCX</DropdownMenuItem>
+                </>;
+              })()}
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
 
         <p className="text-xs text-muted-foreground">
