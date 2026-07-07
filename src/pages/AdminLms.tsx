@@ -257,7 +257,7 @@ export function PolesPanel({ poles, onChange }: { poles: Pole[]; onChange: () =>
 }
 
 /* ---------- Cursus ---------- */
-function CursusPanel({ cursus, poles, onChange }: { cursus: Cursus[]; poles: Pole[]; onChange: () => void }) {
+export function CursusPanel({ cursus, poles, onChange }: { cursus: Cursus[]; poles: Pole[]; onChange: () => void }) {
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<Cursus | null>(null);
   const blank = () => ({ pole_id: poles[0]?.id || "", title: "", slug: "", description: "", objectives: "", level: "Débutant", duration_hours: 0, duration_label: "", price_xaf: 0, registration_fee_xaf: 65000, modality: "en_ligne", certification: true, featured: false, published: true, display_order: 0 });
