@@ -1,7 +1,15 @@
 import { Button } from "@/components/ui/button";
-import { Menu, X, User, LogOut } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Menu, X, User, LogOut, LayoutDashboard, ChevronDown } from "lucide-react";
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLanguage } from "@/contexts/LanguageContext";
 import NotificationBell from "./NotificationBell";
@@ -14,6 +22,7 @@ const Navbar = () => {
   const { user, signOut } = useAuth();
   const { t } = useLanguage();
   const navigate = useNavigate();
+  const { pathname } = useLocation();
 
   const handleSignOut = async () => {
     await signOut();
@@ -21,113 +30,122 @@ const Navbar = () => {
     setMobileMenuOpen(false);
   };
 
+  const navLinks = [
+    { to: "/", label: t("nav.home") },
+    { to: "/courses", label: t("nav.courses") },
+    { to: "/about", label: t("nav.about") },
+    { to: "/events", label: t("nav.events") },
+  ];
+
+  const isActive = (to: string) => (to === "/" ? pathname === "/" : pathname.startsWith(to));
+
   return (
     <nav className="sticky top-0 z-50 w-full border-b border-border/60 bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/70">
       <div className="container mx-auto px-4">
-        <div className="flex h-16 items-center justify-between">
-          <Link to="/" className="flex items-center gap-2">
-            <img src={logo} alt="IEBC — International Economics and Business Corporation" className="h-10 w-10 rounded-full object-contain bg-white ring-1 ring-border/60" />
-            <span className="text-base font-semibold tracking-tight text-foreground/90">IEBC E-Learning</span>
+        <div className="flex h-16 items-center justify-between gap-4">
+          <Link to="/" className="flex items-center gap-2 shrink-0">
+            <img
+              src={logo}
+              alt="IEBC — International Economics and Business Corporation"
+              className="h-9 w-9 rounded-full object-contain bg-white ring-1 ring-border/60"
+            />
+            <span className="text-base font-semibold tracking-tight text-foreground/90 hidden sm:inline">
+              IEBC E-Learning
+            </span>
           </Link>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-6">
-            <Link to="/" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-              {t("nav.home")}
-            </Link>
-            <Link to="/courses" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-              {t("nav.courses")}
-            </Link>
-            <Link to="/about" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-              {t("nav.about")}
-            </Link>
-            <Link to="/events" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-              {t("nav.events")}
-            </Link>
+          {/* Desktop Navigation - center */}
+          <div className="hidden md:flex items-center gap-1 flex-1 justify-center">
+            {navLinks.map((l) => (
+              <Link
+                key={l.to}
+                to={l.to}
+                className={`px-3 py-1.5 rounded-md text-sm transition-colors ${
+                  isActive(l.to)
+                    ? "text-foreground bg-muted"
+                    : "text-muted-foreground hover:text-foreground hover:bg-muted/60"
+                }`}
+              >
+                {l.label}
+              </Link>
+            ))}
+          </div>
 
+          {/* Desktop Actions - right */}
+          <div className="hidden md:flex items-center gap-1 shrink-0">
             <LanguageSwitcher />
-
-            <NotificationBell />
+            {user && <NotificationBell />}
 
             {user ? (
-              <>
-                <Link to="/dashboard" className="text-sm text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1">
-                  <User className="h-4 w-4" />
-                  {t("nav.dashboard")}
-                </Link>
-                <Button variant="ghost" size="sm" onClick={handleSignOut}>
-                  <LogOut className="h-4 w-4 mr-2" />
-                  {t("nav.logout")}
-                </Button>
-              </>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="sm" className="gap-1.5">
+                    <User className="h-4 w-4" />
+                    <ChevronDown className="h-3.5 w-3.5 opacity-60" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-52">
+                  <DropdownMenuLabel className="truncate">
+                    {user.email}
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={() => navigate("/dashboard")}>
+                    <LayoutDashboard className="h-4 w-4 mr-2" />
+                    {t("nav.dashboard")}
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={handleSignOut}>
+                    <LogOut className="h-4 w-4 mr-2" />
+                    {t("nav.logout")}
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             ) : (
-              <>
+              <div className="flex items-center gap-2 ml-1">
                 <Link to="/auth">
                   <Button variant="ghost" size="sm">
                     {t("nav.login")}
                   </Button>
                 </Link>
                 <Link to="/register">
-                  <Button size="sm" variant="outline">
-                    {t("nav.register")}
-                  </Button>
+                  <Button size="sm">{t("nav.register")}</Button>
                 </Link>
-              </>
+              </div>
             )}
           </div>
 
           {/* Mobile Menu Button */}
           <button
             className="md:hidden"
+            aria-label="Toggle menu"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           >
-            {mobileMenuOpen ? (
-              <X className="h-6 w-6" />
-            ) : (
-              <Menu className="h-6 w-6" />
-            )}
+            {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
           </button>
         </div>
 
         {/* Mobile Navigation */}
         {mobileMenuOpen && (
-          <div className="md:hidden py-4 space-y-4">
-            <div className="flex justify-end mb-2">
+          <div className="md:hidden py-4 space-y-3 border-t border-border/60">
+            <div className="flex items-center justify-between">
               <LanguageSwitcher />
+              {user && <NotificationBell />}
             </div>
-            <Link
-              to="/"
-              className="block text-sm font-medium text-foreground hover:text-primary transition-colors"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              {t("nav.home")}
-            </Link>
-            <Link
-              to="/courses"
-              className="block text-sm font-medium text-foreground hover:text-primary transition-colors"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              {t("nav.courses")}
-            </Link>
-            <Link
-              to="/about"
-              className="block text-sm font-medium text-foreground hover:text-primary transition-colors"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              {t("nav.about")}
-            </Link>
-            <Link
-              to="/events"
-              className="block text-sm font-medium text-foreground hover:text-primary transition-colors"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              {t("nav.events")}
-            </Link>
+            {navLinks.map((l) => (
+              <Link
+                key={l.to}
+                to={l.to}
+                className="block text-sm font-medium text-foreground hover:text-primary transition-colors"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                {l.label}
+              </Link>
+            ))}
             {user ? (
               <>
                 <Link
                   to="/dashboard"
-                  className="block text-sm font-medium text-foreground hover:text-primary transition-colors flex items-center gap-2"
+                  className="text-sm font-medium text-foreground hover:text-primary transition-colors flex items-center gap-2"
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   <User className="h-4 w-4" />
@@ -139,18 +157,16 @@ const Navbar = () => {
                 </Button>
               </>
             ) : (
-              <>
+              <div className="space-y-2">
                 <Link to="/auth" onClick={() => setMobileMenuOpen(false)}>
-                  <Button variant="outline" className="w-full mb-2">
+                  <Button variant="outline" className="w-full">
                     {t("nav.login")}
                   </Button>
                 </Link>
                 <Link to="/register" onClick={() => setMobileMenuOpen(false)}>
-                  <Button className="w-full bg-gradient-to-r from-secondary to-secondary/90">
-                    {t("nav.register")}
-                  </Button>
+                  <Button className="w-full">{t("nav.register")}</Button>
                 </Link>
-              </>
+              </div>
             )}
           </div>
         )}
