@@ -1,8 +1,15 @@
 import { supabase } from "@/integrations/supabase/client";
 
-export const WHATSAPP_NUMBER = "237693122020";
+export const WHATSAPP_NUMBER = "221706584859";
+export const WHATSAPP_DISPLAY = "+221 70 658 48 59";
 export const SUPPORT_EMAIL = "support@iebccm.online";
-export const REGISTRATION_FEE_XAF = 50000;
+export const REGISTRATION_FEE_XAF = 65000;
+// XAF / EUR are pegged (1 EUR = 655.957 XAF)
+export const XAF_TO_EUR = 655.957;
+export const REGISTRATION_FEE_EUR = Math.round((REGISTRATION_FEE_XAF / XAF_TO_EUR) * 100) / 100;
+export function formatEur(amount: number): string {
+  return `${amount.toFixed(2).replace(".", ",")} €`;
+}
 
 export interface Pole {
   id: string;
