@@ -240,7 +240,7 @@ function PolesPanel({ poles, onChange }: { poles: Pole[]; onChange: () => void }
 function CursusPanel({ cursus, poles, onChange }: { cursus: Cursus[]; poles: Pole[]; onChange: () => void }) {
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<Cursus | null>(null);
-  const blank = () => ({ pole_id: poles[0]?.id || "", title: "", slug: "", description: "", objectives: "", level: "Débutant", duration_hours: 0, duration_label: "", price_xaf: 0, registration_fee_xaf: 50000, modality: "en_ligne", certification: true, featured: false, published: true, display_order: 0 });
+  const blank = () => ({ pole_id: poles[0]?.id || "", title: "", slug: "", description: "", objectives: "", level: "Débutant", duration_hours: 0, duration_label: "", price_xaf: 0, registration_fee_xaf: 65000, modality: "en_ligne", certification: true, featured: false, published: true, display_order: 0 });
   const [form, setForm] = useState<any>(blank());
 
   const openNew = () => { setEditing(null); setForm({ ...blank(), display_order: cursus.length }); setOpen(true); };
