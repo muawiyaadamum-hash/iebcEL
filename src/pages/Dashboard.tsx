@@ -8,9 +8,10 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Loader2, BookOpen, Award, Clock, GraduationCap, User, LogOut, ChevronRight, Hourglass, CheckCircle2, XCircle, Shield } from "lucide-react";
+import { Loader2, BookOpen, Award, Clock, GraduationCap, User, LogOut, ChevronRight, Hourglass, CheckCircle2, XCircle, Shield, FileCheck2 } from "lucide-react";
 import { useScrollToTop } from "@/hooks/useScrollToTop";
 import { fetchMyEnrollments, formatXaf } from "@/lib/lms";
+import ProjectSubmissionCard from "@/components/ProjectSubmissionCard";
 
 const Dashboard = () => {
   useScrollToTop();
@@ -70,6 +71,7 @@ const Dashboard = () => {
           <Tabs defaultValue="cursus" className="space-y-6">
             <TabsList>
               <TabsTrigger value="cursus">Mes cursus</TabsTrigger>
+              <TabsTrigger value="projects"><FileCheck2 className="h-4 w-4 mr-1" />Mes projets</TabsTrigger>
               <TabsTrigger value="profile">Profil</TabsTrigger>
             </TabsList>
 
@@ -116,6 +118,29 @@ const Dashboard = () => {
                 </div>
               )}
             </TabsContent>
+
+            <TabsContent value="projects">
+              {validated.length === 0 ? (
+                <Card><CardContent className="py-12 text-center">
+                  <FileCheck2 className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
+                  <h3 className="text-lg font-semibold mb-2">Aucun cursus validé</h3>
+                  <p className="text-muted-foreground">Vous pourrez déposer votre projet dès qu'une inscription sera validée.</p>
+                </CardContent></Card>
+              ) : (
+                <div className="grid gap-4">
+                  {validated.map((e) => (
+                    <ProjectSubmissionCard
+                      key={e.id}
+                      cursusId={e.cursus.id}
+                      cursusTitle={e.cursus.title}
+                      cursusSlug={e.cursus.slug}
+                      userId={user!.id}
+                    />
+                  ))}
+                </div>
+              )}
+            </TabsContent>
+
 
             <TabsContent value="profile">
               <Card>

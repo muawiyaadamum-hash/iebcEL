@@ -17,7 +17,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogT
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { toast } from "sonner";
 import { useScrollToTop } from "@/hooks/useScrollToTop";
-import { Loader2, Plus, Trash2, Pencil, Shield, CheckCircle2, XCircle, ArrowLeft, BookOpen, Layers, FileText, HelpCircle, Video, FolderUp, GraduationCap, ScrollText, LayoutDashboard, Users } from "lucide-react";
+import { Loader2, Plus, Trash2, Pencil, Shield, CheckCircle2, XCircle, ArrowLeft, BookOpen, Layers, FileText, HelpCircle, Video, FolderUp, GraduationCap, ScrollText, LayoutDashboard, Users, Award, FileCheck2 } from "lucide-react";
 import { fetchPoles, fetchCursusList, fetchModules, fetchLessons, type Pole, type Cursus, type CursusModule, type Lesson } from "@/lib/lms";
 import AdminQuestionBank from "@/components/AdminQuestionBank";
 import AdminLiveSessions from "@/components/AdminLiveSessions";
@@ -26,6 +26,8 @@ import AdminExams from "@/components/AdminExams";
 import AdminAuditLog from "@/components/AdminAuditLog";
 import AdminOverview from "@/components/AdminOverview";
 import AdminUsers from "@/components/AdminUsers";
+import AdminProjects from "@/components/AdminProjects";
+import AdminCertificateTemplates from "@/components/AdminCertificateTemplates";
 import RichTextEditor from "@/components/RichTextEditor";
 import { logAudit } from "@/lib/audit";
 
@@ -118,6 +120,8 @@ const AdminLms = () => {
               <TabsTrigger value="qcm"><HelpCircle className="h-4 w-4 mr-1" />Banque QCM</TabsTrigger>
               <TabsTrigger value="visio"><Video className="h-4 w-4 mr-1" />Visio / Vidéo</TabsTrigger>
               <TabsTrigger value="exams"><GraduationCap className="h-4 w-4 mr-1" />Examens</TabsTrigger>
+              <TabsTrigger value="projects"><FileCheck2 className="h-4 w-4 mr-1" />Projets</TabsTrigger>
+              <TabsTrigger value="certificates"><Award className="h-4 w-4 mr-1" />Certificats</TabsTrigger>
               <TabsTrigger value="enrollments">Paiements ({enrollments.filter(e => e.status === "pending").length})</TabsTrigger>
               <TabsTrigger value="audit"><ScrollText className="h-4 w-4 mr-1" />Audit</TabsTrigger>
             </TabsList>
@@ -158,6 +162,12 @@ const AdminLms = () => {
             </TabsContent>
             <TabsContent value="exams">
               <AdminExams />
+            </TabsContent>
+            <TabsContent value="projects">
+              <AdminProjects />
+            </TabsContent>
+            <TabsContent value="certificates">
+              <AdminCertificateTemplates />
             </TabsContent>
             <TabsContent value="audit">
               <AdminAuditLog />
