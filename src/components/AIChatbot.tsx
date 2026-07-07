@@ -260,8 +260,12 @@ const [messages, setMessages] = useState<Message[]>([]);
       <Button
         onClick={() => setIsOpen(!isOpen)}
         aria-label="Ouvrir l'assistant IA"
+        style={{
+          bottom: "calc(env(safe-area-inset-bottom, 0px) + 1rem)",
+          right: "calc(env(safe-area-inset-right, 0px) + 1rem)",
+        }}
         className={cn(
-          "fixed bottom-6 right-6 z-40 h-14 w-14 rounded-full shadow-lg p-0",
+          "fixed z-40 h-12 w-12 sm:h-14 sm:w-14 rounded-full shadow-lg p-0",
           "bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90",
           "transition-all duration-300 flex flex-col items-center justify-center gap-0.5",
           isOpen && "scale-0 opacity-0"
@@ -273,14 +277,17 @@ const [messages, setMessages] = useState<Message[]>([]);
 
       {/* Chat Window */}
       <div
+        style={{
+          bottom: "calc(env(safe-area-inset-bottom, 0px) + 1rem)",
+          right: "calc(env(safe-area-inset-right, 0px) + 1rem)",
+        }}
         className={cn(
-          "fixed bottom-6 right-6 z-50 w-[380px] max-w-[calc(100vw-48px)]",
+          "fixed z-50 w-[380px] max-w-[calc(100vw-2rem)]",
           "bg-background border border-border rounded-2xl shadow-2xl",
           "flex flex-col overflow-hidden",
           "transition-all duration-300 origin-bottom-right",
           isOpen ? "scale-100 opacity-100" : "scale-0 opacity-0 pointer-events-none"
         )}
-        style={{ height: "min(600px, calc(100vh - 100px))" }}
       >
         {/* Header */}
         <div className="bg-gradient-to-r from-primary to-accent p-4 text-primary-foreground">
