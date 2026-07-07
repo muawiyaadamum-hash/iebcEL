@@ -333,7 +333,22 @@ const Auth = () => {
               )}
             </CardContent>
           </Card>
+
+          <div className="mt-6 text-center">
+            <button
+              type="button"
+              onClick={() => navigate("/auth?to=/pedagogique")}
+              className="text-sm text-muted-foreground hover:text-primary underline underline-offset-4 inline-flex items-center gap-1"
+            >
+              <GraduationCap className="h-4 w-4" />
+              Espace Pédagogique / Formateurs — Se connecter
+            </button>
+            <p className="text-xs text-muted-foreground mt-2">
+              Les comptes pédagogiques sont créés par un administrateur.
+            </p>
+          </div>
         </div>
+
       </section>
 
       <Footer />
