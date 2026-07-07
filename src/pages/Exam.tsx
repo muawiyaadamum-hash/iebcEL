@@ -176,14 +176,20 @@ const Exam = () => {
   const downloadCertificate = async () => {
     if (!result || !cursus || !certCode || !user) return;
     const verifyUrl = `${window.location.origin}/verify/${certCode}`;
+    const { data: cert } = await supabase.from("certificates").select("*, template:certificate_templates(*)").eq("code", certCode).maybeSingle();
     const doc = await generateCertificatePdf({
       code: certCode,
       studentName: (user.user_metadata as any)?.full_name || user.email || "Apprenant",
       cursusTitle: cursus.title,
       score: result.score,
       total: result.total,
+      qcmScore: cert?.qcm_score ?? result.score,
+      qcmTotal: cert?.qcm_total ?? result.total,
+      projectGrade: cert?.project_grade ?? undefined,
+      combinedPercent: cert?.combined_percent ?? undefined,
       issuedAt: result.submittedAt,
       verifyUrl,
+      template: (cert as any)?.template ?? null,
     });
     doc.save(`Certificat-IEBC-${cursus.slug}-${certCode}.pdf`);
   };
