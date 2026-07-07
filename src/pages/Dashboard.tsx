@@ -71,6 +71,7 @@ const Dashboard = () => {
           <Tabs defaultValue="cursus" className="space-y-6">
             <TabsList>
               <TabsTrigger value="cursus">Mes cursus</TabsTrigger>
+              <TabsTrigger value="projects"><FileCheck2 className="h-4 w-4 mr-1" />Mes projets</TabsTrigger>
               <TabsTrigger value="profile">Profil</TabsTrigger>
             </TabsList>
 
