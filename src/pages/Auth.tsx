@@ -48,6 +48,7 @@ const Auth = () => {
     const list = (roles || []).map((r: any) => r.role);
     if (list.includes("admin")) return "/admin";
     if (list.includes("responsable_pedagogique") || list.includes("formateur")) return "/pedagogique";
+    if (list.includes("student")) return "/etudiant";
     return "/dashboard";
   };
 

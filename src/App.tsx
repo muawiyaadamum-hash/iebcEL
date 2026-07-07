@@ -68,6 +68,11 @@ const App = () => (
                         <Dashboard />
                       </ProtectedRoute>
                     } />
+                    <Route path="/etudiant" element={
+                      <ProtectedRoute>
+                        <Dashboard />
+                      </ProtectedRoute>
+                    } />
                     <Route path="/admin" element={
                       <ProtectedRoute>
                         <AdminLms />
