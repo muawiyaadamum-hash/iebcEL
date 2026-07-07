@@ -41,11 +41,23 @@ const Auth = () => {
     confirmPassword: ""
   });
 
+  const resolveHomeForUser = async (userId: string): Promise<string> => {
+    const to = searchParams.get("to");
+    if (to && to.startsWith("/")) return to;
+    const { data: roles } = await supabase.from("user_roles").select("role").eq("user_id", userId);
+    const list = (roles || []).map((r: any) => r.role);
+    if (list.includes("admin")) return "/admin";
+    if (list.includes("responsable_pedagogique") || list.includes("formateur")) return "/pedagogique";
+    return "/dashboard";
+  };
+
   useEffect(() => {
     if (!loading && user) {
-      navigate("/dashboard");
+      resolveHomeForUser(user.id).then((path) => navigate(path));
     }
-  }, [user, loading, navigate]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user, loading]);
+
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
