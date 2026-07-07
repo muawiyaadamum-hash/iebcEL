@@ -1,28 +1,30 @@
 import { MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { REGISTRATION_FEE_XAF, REGISTRATION_FEE_EUR, formatEur } from "@/lib/lms";
 
-export const WHATSAPP_NUMBER = "237693122020";
+export const WHATSAPP_NUMBER = "221706584859";
+export const WHATSAPP_DISPLAY = "+221 70 658 48 59";
 export const SUPPORT_EMAIL = "support@iebccm.online";
 
 export const getSupportMailto = (subject = "Support IEBC", body = "Bonjour équipe IEBC,\n\nJe souhaite obtenir de l'aide concernant :\n\n") =>
   `mailto:${SUPPORT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-export const DEFAULT_WHATSAPP_MESSAGE = "Hello Centre de Formation IEBC! I'm interested in your courses and would like to learn more about enrollment options. Please assist me.";
+export const DEFAULT_WHATSAPP_MESSAGE = "Bonjour Centre de Formation IEBC ! Je souhaite obtenir plus d'informations sur vos cursus et la procédure d'inscription.";
 
 export const getRegistrationMessage = (name: string, email: string, phone: string, courseName?: string) => {
-  const courseInfo = courseName ? `\n- Course Interest: ${courseName}` : '';
-  return `Hello Centre de Formation IEBC!
+  const courseInfo = courseName ? `\n- Cursus : ${courseName}` : '';
+  return `Bonjour Centre de Formation IEBC !
 
-I would like to register for your learning platform.
+Je souhaite finaliser mon inscription à la plateforme.
 
-*My Details:*
-- Name: ${name}
-- Email: ${email}
-- Phone: ${phone}${courseInfo}
+*Mes informations :*
+- Nom : ${name}
+- Email : ${email}
+- Téléphone : ${phone}${courseInfo}
 
-Registration Fee: 10,000 XAF
+Frais d'inscription : ${REGISTRATION_FEE_XAF.toLocaleString("fr-FR")} XAF (~ ${formatEur(REGISTRATION_FEE_EUR)})
 
-Please provide me with the payment details and registration instructions. Thank you!`;
+Merci de me communiquer la procédure de paiement.`;
 };
 
 interface WhatsAppButtonProps {
