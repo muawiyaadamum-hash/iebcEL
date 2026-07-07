@@ -18,6 +18,7 @@ const Courses = lazy(() => import("./pages/Courses"));
 const CourseDetail = lazy(() => import("./pages/CourseDetail"));
 const CourseViewer = lazy(() => import("./pages/CourseViewer"));
 const Register = lazy(() => import("./pages/Register"));
+const Enroll = lazy(() => import("./pages/Enroll"));
 const About = lazy(() => import("./pages/About"));
 const Install = lazy(() => import("./pages/Install"));
 const Auth = lazy(() => import("./pages/Auth"));
