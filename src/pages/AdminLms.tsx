@@ -17,7 +17,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogT
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { toast } from "sonner";
 import { useScrollToTop } from "@/hooks/useScrollToTop";
-import { Loader2, Plus, Trash2, Pencil, Shield, CheckCircle2, XCircle, ArrowLeft, BookOpen, Layers, FileText, HelpCircle, Video, FolderUp, GraduationCap, ScrollText, LayoutDashboard, Users } from "lucide-react";
+import { Loader2, Plus, Trash2, Pencil, Shield, CheckCircle2, XCircle, ArrowLeft, BookOpen, Layers, FileText, HelpCircle, Video, FolderUp, GraduationCap, ScrollText, LayoutDashboard, Users, Award, FileCheck2 } from "lucide-react";
 import { fetchPoles, fetchCursusList, fetchModules, fetchLessons, type Pole, type Cursus, type CursusModule, type Lesson } from "@/lib/lms";
 import AdminQuestionBank from "@/components/AdminQuestionBank";
 import AdminLiveSessions from "@/components/AdminLiveSessions";
@@ -26,6 +26,8 @@ import AdminExams from "@/components/AdminExams";
 import AdminAuditLog from "@/components/AdminAuditLog";
 import AdminOverview from "@/components/AdminOverview";
 import AdminUsers from "@/components/AdminUsers";
+import AdminProjects from "@/components/AdminProjects";
+import AdminCertificateTemplates from "@/components/AdminCertificateTemplates";
 import RichTextEditor from "@/components/RichTextEditor";
 import { logAudit } from "@/lib/audit";
 
