@@ -255,14 +255,16 @@ const [messages, setMessages] = useState<Message[]>([]);
       {/* Chat Toggle Button */}
       <Button
         onClick={() => setIsOpen(!isOpen)}
+        aria-label="Ouvrir l'assistant IA"
         className={cn(
-          "fixed bottom-6 right-6 z-50 h-14 w-14 rounded-full shadow-lg",
+          "fixed bottom-6 right-6 z-40 h-14 w-14 rounded-full shadow-lg p-0",
           "bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90",
-          "transition-all duration-300",
+          "transition-all duration-300 flex flex-col items-center justify-center gap-0.5",
           isOpen && "scale-0 opacity-0"
         )}
       >
-        <MessageCircle className="h-6 w-6" />
+        <Sparkles className="h-4 w-4" />
+        <span className="text-[10px] font-bold leading-none tracking-wide">IA</span>
       </Button>
 
       {/* Chat Window */}
