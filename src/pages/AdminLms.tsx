@@ -101,12 +101,17 @@ const AdminLms = () => {
       <Navbar />
       <section className="py-8">
         <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center justify-between mb-6 flex-wrap gap-3">
             <div>
               <h1 className="text-3xl font-bold flex items-center gap-2"><Shield className="h-7 w-7 text-primary" />Super Admin</h1>
               <p className="text-muted-foreground">Tableau de bord central — utilisateurs, contenus, évaluations, paiements</p>
             </div>
-            <Button variant="outline" onClick={() => navigate("/dashboard")}><ArrowLeft className="h-4 w-4 mr-2" />Retour</Button>
+            <div className="flex gap-2">
+              <Button variant="secondary" onClick={() => navigate("/pedagogique")}>
+                <GraduationCap className="h-4 w-4 mr-2" />Espace Pédagogique
+              </Button>
+              <Button variant="outline" onClick={() => navigate("/dashboard")}><ArrowLeft className="h-4 w-4 mr-2" />Retour</Button>
+            </div>
           </div>
 
           <Tabs value={tab} onValueChange={setTab} className="space-y-6">
@@ -184,7 +189,7 @@ const AdminLms = () => {
 };
 
 /* ---------- Pôles ---------- */
-function PolesPanel({ poles, onChange }: { poles: Pole[]; onChange: () => void }) {
+export function PolesPanel({ poles, onChange }: { poles: Pole[]; onChange: () => void }) {
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<Pole | null>(null);
   const [form, setForm] = useState({ title: "", slug: "", description: "", display_order: 0, published: true });
@@ -257,7 +262,7 @@ function PolesPanel({ poles, onChange }: { poles: Pole[]; onChange: () => void }
 }
 
 /* ---------- Cursus ---------- */
-function CursusPanel({ cursus, poles, onChange }: { cursus: Cursus[]; poles: Pole[]; onChange: () => void }) {
+export function CursusPanel({ cursus, poles, onChange }: { cursus: Cursus[]; poles: Pole[]; onChange: () => void }) {
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<Cursus | null>(null);
   const blank = () => ({ pole_id: poles[0]?.id || "", title: "", slug: "", description: "", objectives: "", level: "Débutant", duration_hours: 0, duration_label: "", price_xaf: 0, registration_fee_xaf: 65000, modality: "en_ligne", certification: true, featured: false, published: true, display_order: 0 });
@@ -364,7 +369,7 @@ function CursusPanel({ cursus, poles, onChange }: { cursus: Cursus[]; poles: Pol
 }
 
 /* ---------- Modules & Lessons ---------- */
-function ModulesLessonsPanel(props: {
+export function ModulesLessonsPanel(props: {
   cursus: Cursus[];
   selectedCursusId: string | null;
   setSelectedCursusId: (id: string | null) => void;

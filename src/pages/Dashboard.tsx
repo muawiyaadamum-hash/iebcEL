@@ -43,7 +43,9 @@ const Dashboard = () => {
 
   const validated = enrollments.filter(e => e.status === "validated");
   const pending = enrollments.filter(e => e.status === "pending");
-  const isStaff = roles.some(r => ["admin", "responsable_pedagogique", "formateur", "comptable"].includes(r));
+  const isAdmin = roles.includes("admin");
+  const isPedagogique = roles.some(r => ["responsable_pedagogique", "formateur"].includes(r));
+  const isStaff = isAdmin || isPedagogique || roles.includes("comptable");
 
   return (
     <div className="min-h-screen bg-background">
@@ -55,8 +57,10 @@ const Dashboard = () => {
               <h1 className="text-3xl font-bold mb-1">Bienvenue, {profile?.full_name?.split(" ")[0] || "apprenant"} !</h1>
               <p className="text-muted-foreground">Espace apprenant — Centre de Formation IEBC</p>
             </div>
-            <div className="flex gap-2">
-              {isStaff && <Button variant="outline" size="sm" onClick={() => navigate("/admin")}><Shield className="h-4 w-4 mr-2" />Espace staff</Button>}
+            <div className="flex gap-2 flex-wrap">
+              {isAdmin && <Button variant="outline" size="sm" onClick={() => navigate("/admin")}><Shield className="h-4 w-4 mr-2" />Super Admin</Button>}
+              {(isAdmin || isPedagogique) && <Button variant="outline" size="sm" onClick={() => navigate("/pedagogique")}><GraduationCap className="h-4 w-4 mr-2" />Espace Pédagogique</Button>}
+              {isStaff && !isAdmin && !isPedagogique && <Button variant="outline" size="sm" onClick={() => navigate("/admin")}><Shield className="h-4 w-4 mr-2" />Espace staff</Button>}
               <Button variant="outline" size="sm" onClick={async () => { await signOut(); navigate("/"); }}><LogOut className="h-4 w-4 mr-2" />Déconnexion</Button>
             </div>
           </div>

@@ -23,6 +23,7 @@ const Install = lazy(() => import("./pages/Install"));
 const Auth = lazy(() => import("./pages/Auth"));
 const Dashboard = lazy(() => import("./pages/Dashboard"));
 const AdminLms = lazy(() => import("./pages/AdminLms"));
+const PedagogicalDashboard = lazy(() => import("./pages/PedagogicalDashboard"));
 const Exam = lazy(() => import("./pages/Exam"));
 const Events = lazy(() => import("./pages/Events"));
 const VerifyCertificate = lazy(() => import("./pages/VerifyCertificate"));
@@ -70,6 +71,11 @@ const App = () => (
                     <Route path="/admin" element={
                       <ProtectedRoute>
                         <AdminLms />
+                      </ProtectedRoute>
+                    } />
+                    <Route path="/pedagogique" element={
+                      <ProtectedRoute>
+                        <PedagogicalDashboard />
                       </ProtectedRoute>
                     } />
                     <Route path="/exam/:slug" element={
