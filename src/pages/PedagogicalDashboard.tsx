@@ -93,7 +93,7 @@ const PedagogicalDashboard = () => {
             <Button onClick={() => navigate("/dashboard")}>Retour</Button>
           </div>
         </section>
-        <Footer />
+
       </div>
     );
   }
