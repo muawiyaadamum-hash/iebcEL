@@ -36,7 +36,7 @@ const AdminLms = () => {
   const navigate = useNavigate();
   const { user, loading: authLoading } = useAuth();
   const [allowed, setAllowed] = useState<boolean | null>(null);
-  const [tab, setTab] = useState("poles");
+  const [tab, setTab] = useState("overview");
 
   // Data
   const [poles, setPoles] = useState<Pole[]>([]);
