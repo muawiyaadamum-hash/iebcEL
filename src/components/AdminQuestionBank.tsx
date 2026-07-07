@@ -7,10 +7,12 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Loader2, Plus, Trash2, Upload, Pencil, Sparkles } from "lucide-react";
+import { Loader2, Plus, Trash2, Upload, Pencil, Sparkles, FileDown } from "lucide-react";
 import { toast } from "sonner";
 import { fetchCursusList, fetchModules, type Cursus } from "@/lib/lms";
 import { Badge } from "@/components/ui/badge";
+import { exportBankCsv, exportBankJson, exportBankPdf, exportBankDocx } from "@/lib/questionBankExport";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
 type QType = "qcm" | "true_false" | "multi";
 
