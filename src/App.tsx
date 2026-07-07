@@ -18,6 +18,7 @@ const Courses = lazy(() => import("./pages/Courses"));
 const CourseDetail = lazy(() => import("./pages/CourseDetail"));
 const CourseViewer = lazy(() => import("./pages/CourseViewer"));
 const Register = lazy(() => import("./pages/Register"));
+const Enroll = lazy(() => import("./pages/Enroll"));
 const About = lazy(() => import("./pages/About"));
 const Install = lazy(() => import("./pages/Install"));
 const Auth = lazy(() => import("./pages/Auth"));
@@ -59,6 +60,7 @@ const App = () => (
                       </ProtectedRoute>
                     } />
                     <Route path="/register" element={<Register />} />
+                    <Route path="/inscription" element={<Enroll />} />
                     <Route path="/about" element={<About />} />
                     <Route path="/events" element={<Events />} />
                     <Route path="/install" element={<Install />} />
