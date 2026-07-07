@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useScrollToTop } from "@/hooks/useScrollToTop";
@@ -94,7 +93,7 @@ const PedagogicalDashboard = () => {
             <Button onClick={() => navigate("/dashboard")}>Retour</Button>
           </div>
         </section>
-        <Footer />
+
       </div>
     );
   }
@@ -102,14 +101,14 @@ const PedagogicalDashboard = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      <section className="py-8">
+      <section className="py-6">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between mb-6 flex-wrap gap-3">
             <div>
-              <h1 className="text-3xl font-bold flex items-center gap-2">
+              <h1 className="text-2xl md:text-3xl font-bold flex items-center gap-2">
                 <GraduationCap className="h-7 w-7 text-primary" />Espace Pédagogique
               </h1>
-              <p className="text-muted-foreground">
+              <p className="text-sm text-muted-foreground">
                 Gestion des cursus, modules, ressources, évaluations et certifications
               </p>
             </div>
@@ -125,46 +124,52 @@ const PedagogicalDashboard = () => {
             </div>
           </div>
 
-          <Tabs value={tab} onValueChange={setTab} className="space-y-6">
-            <TabsList className="flex-wrap h-auto">
-              <TabsTrigger value="cursus"><BookOpen className="h-4 w-4 mr-1" />Cursus ({cursus.length})</TabsTrigger>
-              <TabsTrigger value="poles"><Layers className="h-4 w-4 mr-1" />Pôles ({poles.length})</TabsTrigger>
-              <TabsTrigger value="modules"><FileText className="h-4 w-4 mr-1" />Modules & leçons</TabsTrigger>
-              <TabsTrigger value="resources"><FolderUp className="h-4 w-4 mr-1" />Ressources</TabsTrigger>
-              <TabsTrigger value="qcm"><HelpCircle className="h-4 w-4 mr-1" />Banque QCM</TabsTrigger>
-              <TabsTrigger value="visio"><Video className="h-4 w-4 mr-1" />Visio / Vidéo</TabsTrigger>
-              <TabsTrigger value="exams"><GraduationCap className="h-4 w-4 mr-1" />Examens</TabsTrigger>
-              <TabsTrigger value="projects"><FileCheck2 className="h-4 w-4 mr-1" />Projets</TabsTrigger>
-              <TabsTrigger value="certificates"><Award className="h-4 w-4 mr-1" />Certificats</TabsTrigger>
-            </TabsList>
+          <Tabs value={tab} onValueChange={setTab} orientation="vertical" className="md:grid md:grid-cols-[240px_1fr] md:gap-6 space-y-4 md:space-y-0">
+            <aside className="md:sticky md:top-4 md:self-start">
+              <div className="rounded-lg border bg-card p-2 shadow-sm">
+                <TabsList className="flex md:flex-col h-auto w-full bg-transparent gap-1 p-0 flex-wrap md:flex-nowrap">
+                  <TabsTrigger value="cursus" className="w-full md:justify-start data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"><BookOpen className="h-4 w-4 mr-2" />Cursus ({cursus.length})</TabsTrigger>
+                  <TabsTrigger value="poles" className="w-full md:justify-start data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"><Layers className="h-4 w-4 mr-2" />Pôles ({poles.length})</TabsTrigger>
+                  <TabsTrigger value="modules" className="w-full md:justify-start data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"><FileText className="h-4 w-4 mr-2" />Modules & leçons</TabsTrigger>
+                  <TabsTrigger value="resources" className="w-full md:justify-start data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"><FolderUp className="h-4 w-4 mr-2" />Ressources</TabsTrigger>
+                  <TabsTrigger value="qcm" className="w-full md:justify-start data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"><HelpCircle className="h-4 w-4 mr-2" />Banque QCM</TabsTrigger>
+                  <TabsTrigger value="visio" className="w-full md:justify-start data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"><Video className="h-4 w-4 mr-2" />Visio / Vidéo</TabsTrigger>
+                  <TabsTrigger value="exams" className="w-full md:justify-start data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"><GraduationCap className="h-4 w-4 mr-2" />Examens</TabsTrigger>
+                  <TabsTrigger value="projects" className="w-full md:justify-start data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"><FileCheck2 className="h-4 w-4 mr-2" />Projets</TabsTrigger>
+                  <TabsTrigger value="certificates" className="w-full md:justify-start data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"><Award className="h-4 w-4 mr-2" />Certificats</TabsTrigger>
+                </TabsList>
+              </div>
+            </aside>
 
-            <TabsContent value="cursus"><CursusPanel cursus={cursus} poles={poles} onChange={reloadAll} /></TabsContent>
-            <TabsContent value="poles"><PolesPanel poles={poles} onChange={reloadAll} /></TabsContent>
-            <TabsContent value="modules">
-              <ModulesLessonsPanel
-                cursus={cursus}
-                selectedCursusId={selectedCursusId}
-                setSelectedCursusId={(id) => { setSelectedCursusId(id); setSelectedModuleId(null); if (id) loadModulesFor(id); }}
-                modulesByCursus={modulesByCursus}
-                lessonsByModule={lessonsByModule}
-                selectedModuleId={selectedModuleId}
-                setSelectedModuleId={(id) => { setSelectedModuleId(id); if (id) loadLessonsFor(id); }}
-                reloadModules={loadModulesFor}
-                reloadLessons={loadLessonsFor}
-              />
-            </TabsContent>
-            <TabsContent value="resources"><AdminModuleResources /></TabsContent>
-            <TabsContent value="qcm"><AdminQuestionBank /></TabsContent>
-            <TabsContent value="visio"><AdminLiveSessions /></TabsContent>
-            <TabsContent value="exams"><AdminExams /></TabsContent>
-            <TabsContent value="projects"><AdminProjects /></TabsContent>
-            <TabsContent value="certificates"><AdminCertificateTemplates /></TabsContent>
+            <div className="min-w-0">
+              <TabsContent value="cursus" className="mt-0"><CursusPanel cursus={cursus} poles={poles} onChange={reloadAll} /></TabsContent>
+              <TabsContent value="poles" className="mt-0"><PolesPanel poles={poles} onChange={reloadAll} /></TabsContent>
+              <TabsContent value="modules" className="mt-0">
+                <ModulesLessonsPanel
+                  cursus={cursus}
+                  selectedCursusId={selectedCursusId}
+                  setSelectedCursusId={(id) => { setSelectedCursusId(id); setSelectedModuleId(null); if (id) loadModulesFor(id); }}
+                  modulesByCursus={modulesByCursus}
+                  lessonsByModule={lessonsByModule}
+                  selectedModuleId={selectedModuleId}
+                  setSelectedModuleId={(id) => { setSelectedModuleId(id); if (id) loadLessonsFor(id); }}
+                  reloadModules={loadModulesFor}
+                  reloadLessons={loadLessonsFor}
+                />
+              </TabsContent>
+              <TabsContent value="resources" className="mt-0"><AdminModuleResources /></TabsContent>
+              <TabsContent value="qcm" className="mt-0"><AdminQuestionBank /></TabsContent>
+              <TabsContent value="visio" className="mt-0"><AdminLiveSessions /></TabsContent>
+              <TabsContent value="exams" className="mt-0"><AdminExams /></TabsContent>
+              <TabsContent value="projects" className="mt-0"><AdminProjects /></TabsContent>
+              <TabsContent value="certificates" className="mt-0"><AdminCertificateTemplates /></TabsContent>
+            </div>
           </Tabs>
         </div>
       </section>
-      <Footer />
     </div>
   );
 };
+
 
 export default PedagogicalDashboard;

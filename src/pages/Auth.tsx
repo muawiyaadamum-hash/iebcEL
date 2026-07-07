@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -40,11 +41,23 @@ const Auth = () => {
     confirmPassword: ""
   });
 
+  const resolveHomeForUser = async (userId: string): Promise<string> => {
+    const to = searchParams.get("to");
+    if (to && to.startsWith("/")) return to;
+    const { data: roles } = await supabase.from("user_roles").select("role").eq("user_id", userId);
+    const list = (roles || []).map((r: any) => r.role);
+    if (list.includes("admin")) return "/admin";
+    if (list.includes("responsable_pedagogique") || list.includes("formateur")) return "/pedagogique";
+    return "/dashboard";
+  };
+
   useEffect(() => {
     if (!loading && user) {
-      navigate("/dashboard");
+      resolveHomeForUser(user.id).then((path) => navigate(path));
     }
-  }, [user, loading, navigate]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user, loading]);
+
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -80,7 +93,11 @@ const Auth = () => {
         title: "Welcome Back!",
         description: "You have successfully logged in."
       });
-      navigate("/dashboard");
+      const { data: authData } = await supabase.auth.getUser();
+      const uid = authData?.user?.id;
+      const path = uid ? await resolveHomeForUser(uid) : "/dashboard";
+      navigate(path);
+
     }
   };
 
@@ -316,7 +333,22 @@ const Auth = () => {
               )}
             </CardContent>
           </Card>
+
+          <div className="mt-6 text-center">
+            <button
+              type="button"
+              onClick={() => navigate("/auth?to=/pedagogique")}
+              className="text-sm text-muted-foreground hover:text-primary underline underline-offset-4 inline-flex items-center gap-1"
+            >
+              <GraduationCap className="h-4 w-4" />
+              Espace Pédagogique / Formateurs — Se connecter
+            </button>
+            <p className="text-xs text-muted-foreground mt-2">
+              Les comptes pédagogiques sont créés par un administrateur.
+            </p>
+          </div>
         </div>
+
       </section>
 
       <Footer />
