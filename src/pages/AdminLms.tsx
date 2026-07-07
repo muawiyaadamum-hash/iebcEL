@@ -92,7 +92,8 @@ const AdminLms = () => {
         <h1 className="text-3xl font-bold mb-4">Accès refusé</h1>
         <p className="text-muted-foreground mb-6">Réservé à l'admin et au responsable pédagogique.</p>
         <Button onClick={() => navigate("/dashboard")}>Retour</Button>
-      </div></section><Footer /></div>
+      </div></section></div>
+
   );
 
   return (
