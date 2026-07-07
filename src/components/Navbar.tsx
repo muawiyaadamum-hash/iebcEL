@@ -7,7 +7,15 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Menu, X, User, LogOut, LayoutDashboard, ChevronDown } from "lucide-react";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+  SheetClose,
+} from "@/components/ui/sheet";
+import { Menu, User, LogOut, LayoutDashboard, ChevronDown } from "lucide-react";
 import { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
@@ -18,7 +26,7 @@ import iebcLogo from "@/assets/iebc-logo.jpg.asset.json";
 const logo = iebcLogo.url;
 
 const Navbar = () => {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const { user, signOut } = useAuth();
   const { t } = useLanguage();
   const navigate = useNavigate();
@@ -27,7 +35,7 @@ const Navbar = () => {
   const handleSignOut = async () => {
     await signOut();
     navigate("/");
-    setMobileMenuOpen(false);
+    setMobileOpen(false);
   };
 
   const navLinks = [
@@ -85,9 +93,7 @@ const Navbar = () => {
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-52">
-                  <DropdownMenuLabel className="truncate">
-                    {user.email}
-                  </DropdownMenuLabel>
+                  <DropdownMenuLabel className="truncate">{user.email}</DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={() => navigate("/dashboard")}>
                     <LayoutDashboard className="h-4 w-4 mr-2" />
@@ -114,62 +120,93 @@ const Navbar = () => {
             )}
           </div>
 
-          {/* Mobile Menu Button */}
-          <button
-            className="md:hidden"
-            aria-label="Toggle menu"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          >
-            {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-          </button>
-        </div>
-
-        {/* Mobile Navigation */}
-        {mobileMenuOpen && (
-          <div className="md:hidden py-4 space-y-3 border-t border-border/60">
-            <div className="flex items-center justify-between">
-              <LanguageSwitcher />
-              {user && <NotificationBell />}
-            </div>
-            {navLinks.map((l) => (
-              <Link
-                key={l.to}
-                to={l.to}
-                className="block text-sm font-medium text-foreground hover:text-primary transition-colors"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                {l.label}
-              </Link>
-            ))}
-            {user ? (
-              <>
-                <Link
-                  to="/dashboard"
-                  className="text-sm font-medium text-foreground hover:text-primary transition-colors flex items-center gap-2"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  <User className="h-4 w-4" />
-                  {t("nav.dashboard")}
-                </Link>
-                <Button variant="outline" className="w-full" onClick={handleSignOut}>
-                  <LogOut className="h-4 w-4 mr-2" />
-                  {t("nav.logout")}
+          {/* Mobile: notif + hamburger */}
+          <div className="md:hidden flex items-center gap-1">
+            {user && <NotificationBell />}
+            <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
+              <SheetTrigger asChild>
+                <Button variant="ghost" size="icon" aria-label="Open menu">
+                  <Menu className="h-6 w-6" />
                 </Button>
-              </>
-            ) : (
-              <div className="space-y-2">
-                <Link to="/auth" onClick={() => setMobileMenuOpen(false)}>
-                  <Button variant="outline" className="w-full">
-                    {t("nav.login")}
-                  </Button>
-                </Link>
-                <Link to="/register" onClick={() => setMobileMenuOpen(false)}>
-                  <Button className="w-full">{t("nav.register")}</Button>
-                </Link>
-              </div>
-            )}
+              </SheetTrigger>
+              <SheetContent side="right" className="w-[85vw] max-w-sm p-0 flex flex-col">
+                <SheetHeader className="px-6 py-4 border-b text-left">
+                  <SheetTitle className="flex items-center gap-2">
+                    <img
+                      src={logo}
+                      alt=""
+                      className="h-8 w-8 rounded-full object-contain bg-white ring-1 ring-border/60"
+                    />
+                    <span>IEBC E-Learning</span>
+                  </SheetTitle>
+                </SheetHeader>
+
+                <div className="flex-1 overflow-y-auto px-4 py-4 space-y-1">
+                  {navLinks.map((l) => (
+                    <SheetClose asChild key={l.to}>
+                      <Link
+                        to={l.to}
+                        className={`block rounded-md px-3 py-2.5 text-sm font-medium transition-colors ${
+                          isActive(l.to)
+                            ? "bg-muted text-foreground"
+                            : "text-foreground/80 hover:bg-muted/60 hover:text-foreground"
+                        }`}
+                      >
+                        {l.label}
+                      </Link>
+                    </SheetClose>
+                  ))}
+
+                  {user && (
+                    <>
+                      <div className="my-3 h-px bg-border" />
+                      <SheetClose asChild>
+                        <Link
+                          to="/dashboard"
+                          className="flex items-center gap-2 rounded-md px-3 py-2.5 text-sm font-medium text-foreground/80 hover:bg-muted/60 hover:text-foreground transition-colors"
+                        >
+                          <LayoutDashboard className="h-4 w-4" />
+                          {t("nav.dashboard")}
+                        </Link>
+                      </SheetClose>
+                    </>
+                  )}
+                </div>
+
+                <div className="border-t px-4 py-4 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs uppercase tracking-wide text-muted-foreground">
+                      {t("nav.language") || "Language"}
+                    </span>
+                    <LanguageSwitcher />
+                  </div>
+
+                  {user ? (
+                    <Button variant="outline" className="w-full" onClick={handleSignOut}>
+                      <LogOut className="h-4 w-4 mr-2" />
+                      {t("nav.logout")}
+                    </Button>
+                  ) : (
+                    <div className="grid grid-cols-2 gap-2">
+                      <SheetClose asChild>
+                        <Link to="/auth">
+                          <Button variant="outline" className="w-full">
+                            {t("nav.login")}
+                          </Button>
+                        </Link>
+                      </SheetClose>
+                      <SheetClose asChild>
+                        <Link to="/register">
+                          <Button className="w-full">{t("nav.register")}</Button>
+                        </Link>
+                      </SheetClose>
+                    </div>
+                  )}
+                </div>
+              </SheetContent>
+            </Sheet>
           </div>
-        )}
+        </div>
       </div>
     </nav>
   );
