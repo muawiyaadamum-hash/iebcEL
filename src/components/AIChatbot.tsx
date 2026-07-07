@@ -460,6 +460,24 @@ const [messages, setMessages] = useState<Message[]>([]);
             >
               Chat on WhatsApp
             </a>
+            {" · "}
+            <a
+              href={MAIN_SITE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-primary hover:underline"
+            >
+              iebccm.com
+            </a>
+            {" · "}
+            <a
+              href={E_LEARNING_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-primary hover:underline"
+            >
+              iebccm.online
+            </a>
           </p>
         </div>
       </div>
