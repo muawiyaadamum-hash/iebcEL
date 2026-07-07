@@ -8,9 +8,10 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Loader2, BookOpen, Award, Clock, GraduationCap, User, LogOut, ChevronRight, Hourglass, CheckCircle2, XCircle, Shield } from "lucide-react";
+import { Loader2, BookOpen, Award, Clock, GraduationCap, User, LogOut, ChevronRight, Hourglass, CheckCircle2, XCircle, Shield, FileCheck2 } from "lucide-react";
 import { useScrollToTop } from "@/hooks/useScrollToTop";
 import { fetchMyEnrollments, formatXaf } from "@/lib/lms";
+import ProjectSubmissionCard from "@/components/ProjectSubmissionCard";
 
 const Dashboard = () => {
   useScrollToTop();
