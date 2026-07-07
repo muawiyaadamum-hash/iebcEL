@@ -184,7 +184,7 @@ const AdminLms = () => {
 };
 
 /* ---------- Pôles ---------- */
-function PolesPanel({ poles, onChange }: { poles: Pole[]; onChange: () => void }) {
+export function PolesPanel({ poles, onChange }: { poles: Pole[]; onChange: () => void }) {
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<Pole | null>(null);
   const [form, setForm] = useState({ title: "", slug: "", description: "", display_order: 0, published: true });
