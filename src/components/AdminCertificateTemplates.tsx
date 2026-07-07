@@ -23,9 +23,34 @@ const blank = () => ({
   signatory_title: "Directeur Pédagogique",
   footer_text: "Ce certificat est vérifiable en ligne via son code unique et son QR code.",
   primary_color: "#0F4C81",
+  background_image_url: null as string | null,
   active: true,
   is_default: false,
 });
+
+const readAsCompressedDataUrl = (file: File): Promise<string> =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const img = new Image();
+      img.onload = () => {
+        // Landscape A4 ~ 1754x1240 @150dpi — cap width to 1600px
+        const maxW = 1600;
+        const scale = Math.min(1, maxW / img.width);
+        const canvas = document.createElement("canvas");
+        canvas.width = Math.round(img.width * scale);
+        canvas.height = Math.round(img.height * scale);
+        const ctx = canvas.getContext("2d");
+        if (!ctx) return reject(new Error("Canvas unavailable"));
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        resolve(canvas.toDataURL("image/jpeg", 0.85));
+      };
+      img.onerror = reject;
+      img.src = reader.result as string;
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
 
 const AdminCertificateTemplates = () => {
   const [rows, setRows] = useState<any[]>([]);
