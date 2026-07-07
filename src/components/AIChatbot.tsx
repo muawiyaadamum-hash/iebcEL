@@ -280,6 +280,7 @@ const [messages, setMessages] = useState<Message[]>([]);
         style={{
           bottom: "calc(env(safe-area-inset-bottom, 0px) + 1rem)",
           right: "calc(env(safe-area-inset-right, 0px) + 1rem)",
+          height: "min(600px, calc(100dvh - 6rem))",
         }}
         className={cn(
           "fixed z-50 w-[380px] max-w-[calc(100vw-2rem)]",
