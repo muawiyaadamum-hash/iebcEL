@@ -10,7 +10,7 @@ const FloatingWhatsApp = () => {
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Contacter le support WhatsApp IEBC"
-      className="fixed bottom-24 right-5 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-green-500 text-white shadow-lg shadow-green-500/40 transition-transform hover:scale-110 hover:bg-green-600 md:bottom-6"
+      className="fixed bottom-24 right-6 z-40 flex h-12 w-12 items-center justify-center rounded-full bg-green-500 text-white shadow-lg shadow-green-500/40 transition-transform hover:scale-110 hover:bg-green-600"
     >
       <MessageCircle className="h-7 w-7" />
       <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-30" />

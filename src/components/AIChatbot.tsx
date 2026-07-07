@@ -226,7 +226,7 @@ const [messages, setMessages] = useState<Message[]>([]);
       {/* Auto Popup Greeting */}
       {showPopup && !isOpen && (
         <div 
-          className="fixed bottom-24 right-6 z-50 animate-in slide-in-from-right-5 fade-in duration-300"
+          className="fixed bottom-40 right-6 z-40 animate-in slide-in-from-right-5 fade-in duration-300"
         >
           <div className="bg-gradient-to-r from-primary to-accent text-primary-foreground rounded-2xl rounded-br-md p-4 shadow-lg max-w-[250px] relative">
             <button 
