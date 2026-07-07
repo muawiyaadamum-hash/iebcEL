@@ -32,6 +32,8 @@ const FAQ_PROMPTS = [
   "What is the course fee?",
   "I need help with my enrollment",
   "Chat with support on WhatsApp",
+  "Visit the main IEBC website",
+  "Visit the e-learning platform",
 ];
 
 const GREETING_MESSAGE = `👋 Hi there! I'm IEBC Bot, your 24/7 AI support assistant.
