@@ -75,6 +75,13 @@ const Exam = () => {
     fetchCursusBySlug(slug).then((c) => setCursus(c)).finally(() => setLoading(false));
   }, [slug]);
 
+  // Prerequisite check: 100% progress + all module quizzes passed
+  useEffect(() => {
+    if (!cursus || !user) return;
+    supabase.rpc("can_take_final_exam", { _user_id: user.id, _cursus_id: cursus.id })
+      .then(({ data }) => { if (data) setPrereq(data as any); });
+  }, [cursus, user]);
+
   const answered = Object.keys(answers).length;
   const progress = questions.length ? (answered / questions.length) * 100 : 0;
   const current = questions[currentIdx];
