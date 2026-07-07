@@ -25,6 +25,8 @@ interface Message {
 }
 
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-chat`;
+const MAIN_SITE_URL = "https://iebccm.com";
+const E_LEARNING_URL = "https://iebccm.online";
 
 const FAQ_PROMPTS = [
   "What courses do you offer?",
@@ -32,6 +34,8 @@ const FAQ_PROMPTS = [
   "What is the course fee?",
   "I need help with my enrollment",
   "Chat with support on WhatsApp",
+  "Visit the main IEBC website",
+  "Visit the e-learning platform",
 ];
 
 const GREETING_MESSAGE = `👋 Hi there! I'm IEBC Bot, your 24/7 AI support assistant.
@@ -178,8 +182,27 @@ const [messages, setMessages] = useState<Message[]>([]);
     // Mark conversation as started
     setHasStartedConversation(true);
 
+    // Handle website redirects
+    const lowerText = text.toLowerCase();
+    if (lowerText.includes('main iebc website') || lowerText.includes('site principal iebc')) {
+      window.open(MAIN_SITE_URL, '_blank');
+      setMessages(prev => [...prev, 
+        { role: "user", content: text },
+        { role: "assistant", content: "I'm opening the main IEBC website (iebccm.com) for you. 🌐" }
+      ]);
+      return;
+    }
+    if (lowerText.includes('e-learning platform') || lowerText.includes('plateforme e-learning')) {
+      window.open(E_LEARNING_URL, '_blank');
+      setMessages(prev => [...prev, 
+        { role: "user", content: text },
+        { role: "assistant", content: "I'm opening the IEBC e-learning platform (iebccm.online) for you. 🎓" }
+      ]);
+      return;
+    }
+
     // Handle WhatsApp redirect
-    if (text.toLowerCase().includes('whatsapp')) {
+    if (lowerText.includes('whatsapp')) {
       window.open(getWhatsAppLink("Hello Centre de Formation IEBC! I need assistance and would like to chat with your support team."), '_blank');
       setMessages(prev => [...prev, 
         { role: "user", content: text },
@@ -436,6 +459,24 @@ const [messages, setMessages] = useState<Message[]>([]);
               className="text-primary hover:underline"
             >
               Chat on WhatsApp
+            </a>
+            {" · "}
+            <a
+              href={MAIN_SITE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-primary hover:underline"
+            >
+              iebccm.com
+            </a>
+            {" · "}
+            <a
+              href={E_LEARNING_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-primary hover:underline"
+            >
+              iebccm.online
             </a>
           </p>
         </div>
