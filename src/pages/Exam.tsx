@@ -267,7 +267,13 @@ const Exam = () => {
               <h2 className="text-lg font-semibold">{current.question}</h2>
               <RadioGroup
                 value={answers[current.id] || ""}
-                onValueChange={(v) => setAnswers((a) => ({ ...a, [current.id]: v }))}
+                onValueChange={(v) => {
+                  setAnswers((a) => ({ ...a, [current.id]: v }));
+                  // Auto-advance to next unanswered question
+                  if (currentIdx < questions.length - 1) {
+                    setTimeout(() => setCurrentIdx((i) => Math.min(i + 1, questions.length - 1)), 250);
+                  }
+                }}
               >
                 {(["A", "B", "C", "D"] as const).map((k) => (
                   <div key={k} className="flex items-start gap-3 p-3 rounded border hover:bg-accent/30">
