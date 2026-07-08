@@ -543,30 +543,54 @@ const AdminPartnerCertificates = () => {
                 <div><Label>Pied de page</Label><Textarea rows={2} value={form.footer_text || ""} onChange={(e) => setForm({ ...form, footer_text: e.target.value })} /></div>
 
                 <div className="rounded-md border p-3 space-y-3 bg-muted/30">
-                  <Label className="text-base">Fond du certificat</Label>
-                  <p className="text-xs text-muted-foreground">Uploader une image OU générer avec l'IA. Nom, cursus, code et QR sont ajoutés par-dessus.</p>
+                  <div className="flex items-center justify-between flex-wrap gap-2">
+                    <Label className="text-base">Fond du certificat</Label>
+                    {form.template_bg_url && (
+                      <div className="flex items-center gap-2 text-xs">
+                        <Badge variant="outline">v{form.template_version || 1}</Badge>
+                        <Badge variant="secondary">
+                          {form.template_source === "upload" && "Téléversé"}
+                          {form.template_source === "ai" && "IA"}
+                          {form.template_source === "ai-from-model" && "IA depuis modèle"}
+                          {(!form.template_source || form.template_source === "none") && "—"}
+                        </Badge>
+                        {form.template_updated_at && (
+                          <span className="text-muted-foreground">{new Date(form.template_updated_at).toLocaleDateString()}</span>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                  <p className="text-xs text-muted-foreground">Chaque nouveau téléversement ou régénération IA remplace l'ancien layout et incrémente la version. L'IA peut aussi partir d'un modèle admin téléversé.</p>
                   <div className="space-y-2">
-                    <Label className="text-sm">Option 1 — Upload</Label>
+                    <Label className="text-sm">Option 1 — Téléverser un modèle professionnel</Label>
                     <Input type="file" accept="image/jpeg,image/jpg,image/png,image/webp" onChange={(e) => e.target.files?.[0] && uploadImage(e.target.files[0], "template_bg_url")} />
                   </div>
                   <div className="space-y-2">
-                    <Label className="text-sm">Option 2 — IA</Label>
+                    <Label className="text-sm">Option 2 — Générer avec l'IA</Label>
                     <Textarea rows={3} placeholder="Ex: bordure dorée baroque, fond ivoire..." value={form.template_prompt || ""} onChange={(e) => setForm({ ...form, template_prompt: e.target.value })} />
-                    <Button type="button" variant="outline" size="sm" onClick={generateWithAi} disabled={aiLoading}>
-                      {aiLoading ? <Loader2 className="h-4 w-4 mr-1 animate-spin" /> : <Sparkles className="h-4 w-4 mr-1" />}Générer avec l'IA
-                    </Button>
+                    <div className="flex gap-2 flex-wrap">
+                      <Button type="button" variant="outline" size="sm" onClick={() => generateWithAi(false)} disabled={aiLoading}>
+                        {aiLoading ? <Loader2 className="h-4 w-4 mr-1 animate-spin" /> : <Sparkles className="h-4 w-4 mr-1" />}Générer (nouveau)
+                      </Button>
+                      {form.template_bg_url && (
+                        <Button type="button" variant="outline" size="sm" onClick={() => generateWithAi(true)} disabled={aiLoading}>
+                          {aiLoading ? <Loader2 className="h-4 w-4 mr-1 animate-spin" /> : <Sparkles className="h-4 w-4 mr-1" />}Générer depuis le modèle téléversé
+                        </Button>
+                      )}
+                    </div>
                   </div>
                   {form.template_bg_url && (
                     <div className="flex items-center gap-3 pt-2 border-t">
                       <img src={form.template_bg_url} alt="Aperçu" className="h-24 rounded border object-cover" />
                       <div className="space-x-2">
                         <Button size="sm" variant="outline" onClick={previewTemplate}><Eye className="h-4 w-4 mr-1" />Aperçu PDF</Button>
-                        <Button size="sm" variant="ghost" onClick={() => setForm({ ...form, template_bg_url: null })}>Retirer</Button>
+                        <Button size="sm" variant="ghost" onClick={() => setForm({ ...form, template_bg_url: null, template_source: "none" })}>Retirer</Button>
                       </div>
                     </div>
                   )}
                 </div>
               </TabsContent>
+
 
               <TabsContent value="settings" className="space-y-3 pt-3">
                 <div><Label>Ordre d'affichage</Label><Input type="number" value={form.display_order || 0} onChange={(e) => setForm({ ...form, display_order: Number(e.target.value) })} /></div>
