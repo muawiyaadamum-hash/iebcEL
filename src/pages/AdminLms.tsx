@@ -130,6 +130,7 @@ const AdminLms = () => {
                   <TabsTrigger value="exams" className="w-full md:justify-start data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"><GraduationCap className="h-4 w-4 mr-2" />Examens</TabsTrigger>
                   <TabsTrigger value="projects" className="w-full md:justify-start data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"><FileCheck2 className="h-4 w-4 mr-2" />Projets</TabsTrigger>
                   <TabsTrigger value="certificates" className="w-full md:justify-start data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"><Award className="h-4 w-4 mr-2" />Certificats</TabsTrigger>
+                  <TabsTrigger value="partner_certs" className="w-full md:justify-start data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"><Award className="h-4 w-4 mr-2" />Certificats conjoints</TabsTrigger>
                   <TabsTrigger value="enrollments" className="w-full md:justify-start data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">Paiements ({enrollments.filter(e => e.status === "pending").length})</TabsTrigger>
                   <TabsTrigger value="audit" className="w-full md:justify-start data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"><ScrollText className="h-4 w-4 mr-2" />Audit</TabsTrigger>
                 </TabsList>
