@@ -307,6 +307,7 @@ const AdminPartnerCertificates = () => {
         footer_text: studentsFor.footer_text,
         primary_color: studentsFor.primary_color,
         background_image_url: studentsFor.template_bg_url,
+        layout: studentsFor.layout,
       },
     });
     doc.save(`certificat-${cert.code}.pdf`);
