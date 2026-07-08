@@ -824,15 +824,25 @@ export type Database = {
           active: boolean
           created_at: string
           description: string | null
+          display_order: number
+          duration: string | null
+          end_date: string | null
           footer_text: string | null
           header_title: string | null
+          hero_image_url: string | null
+          highlights: Json
           id: string
+          location: string | null
+          long_description: string | null
           name: string
+          partner_logo_url: string | null
           partner_name: string
+          partner_url: string | null
           primary_color: string | null
           signatory_name: string | null
           signatory_title: string | null
           slug: string
+          start_date: string | null
           status: string
           template_bg_url: string | null
           template_prompt: string | null
@@ -842,15 +852,25 @@ export type Database = {
           active?: boolean
           created_at?: string
           description?: string | null
+          display_order?: number
+          duration?: string | null
+          end_date?: string | null
           footer_text?: string | null
           header_title?: string | null
+          hero_image_url?: string | null
+          highlights?: Json
           id?: string
+          location?: string | null
+          long_description?: string | null
           name: string
+          partner_logo_url?: string | null
           partner_name: string
+          partner_url?: string | null
           primary_color?: string | null
           signatory_name?: string | null
           signatory_title?: string | null
           slug: string
+          start_date?: string | null
           status?: string
           template_bg_url?: string | null
           template_prompt?: string | null
@@ -860,15 +880,25 @@ export type Database = {
           active?: boolean
           created_at?: string
           description?: string | null
+          display_order?: number
+          duration?: string | null
+          end_date?: string | null
           footer_text?: string | null
           header_title?: string | null
+          hero_image_url?: string | null
+          highlights?: Json
           id?: string
+          location?: string | null
+          long_description?: string | null
           name?: string
+          partner_logo_url?: string | null
           partner_name?: string
+          partner_url?: string | null
           primary_color?: string | null
           signatory_name?: string | null
           signatory_title?: string | null
           slug?: string
+          start_date?: string | null
           status?: string
           template_bg_url?: string | null
           template_prompt?: string | null
