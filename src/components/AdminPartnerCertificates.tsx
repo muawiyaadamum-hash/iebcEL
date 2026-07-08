@@ -478,7 +478,7 @@ const AdminPartnerCertificates = () => {
         </div>
         <Dialog open={dlgOpen} onOpenChange={setDlgOpen}>
           <DialogTrigger asChild><Button onClick={openNew}><Plus className="h-4 w-4 mr-1" />Nouveau programme</Button></DialogTrigger>
-          <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+          <DialogContent className="max-w-5xl max-h-[90vh] overflow-y-auto">
             <DialogHeader><DialogTitle>{editing ? "Modifier le programme" : "Nouveau programme conjoint"}</DialogTitle></DialogHeader>
             <Tabs defaultValue="general">
               <TabsList className="grid grid-cols-5 w-full">
