@@ -161,6 +161,7 @@ const AdminLms = () => {
               <TabsContent value="exams" className="mt-0"><AdminExams /></TabsContent>
               <TabsContent value="projects" className="mt-0"><AdminProjects /></TabsContent>
               <TabsContent value="certificates" className="mt-0"><AdminCertificateTemplates /></TabsContent>
+              <TabsContent value="partner_certs" className="mt-0"><AdminPartnerCertificates /></TabsContent>
               <TabsContent value="audit" className="mt-0"><AdminAuditLog /></TabsContent>
               <TabsContent value="enrollments" className="mt-0"><EnrollmentsPanel enrollments={enrollments} onChange={reloadAll} adminId={user.id} /></TabsContent>
             </div>
