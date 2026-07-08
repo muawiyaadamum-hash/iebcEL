@@ -18,10 +18,17 @@ Deno.serve(async (req) => {
       });
     }
 
-    const fullPrompt = `Certificate background, A4 landscape, elegant academic style. ${prompt}. 
-Partner: ${partnerName || 'Partner Institution'}. Program: ${programName || 'Joint Program'}.
-LEAVE THE CENTER LARGELY EMPTY (student name, cursus, code and QR will be overlaid). 
-Decorative border, subtle gradients, professional colors. NO placeholder text, NO lorem ipsum, NO fake names.`;
+    const fullPrompt = `Design an ELEGANT, PROFESSIONAL CERTIFICATE BACKGROUND ONLY. A4 landscape format (1600x1131 aspect). Style guidance from admin: "${prompt}".
+
+STRICT RULES — the generated image MUST follow ALL of these:
+1. ABSOLUTELY NO TEXT of any kind anywhere on the image — no words, no letters, no numbers, no titles, no "CERTIFICATE", no "CERTIFICAT", no "OF COMPLETION", no institution names, no signatures, no dates, no placeholder text like "Name Surname", no "Lorem Ipsum", no Latin script, no non-Latin script, no calligraphy words. Zero text.
+2. NO fake logos, NO fake seals with text inside, NO fake signatures. Decorative wax seals or medallions are OK ONLY if they contain no letters/numbers.
+3. Leave the ENTIRE CENTER (middle 75% of width, middle 65% of height) COMPLETELY EMPTY / clean neutral background — this space is reserved for overlaid text that will be added later programmatically. Do not draw ribbons, banners, or decorative flourishes through this central zone.
+4. Decoration lives ONLY at the four corners and along the outer edges: ornamental borders, corner filigree, subtle gradients, a decorative frame, optional bottom-corner wax seal (textless), optional small abstract crest at the top center that must sit in the top 12% only.
+5. Professional color palette matching the institution's brand. Clean, high-end, executive academic feel. High resolution, crisp lines.
+
+Context for style only (do NOT render any of these words in the image): partner is "${partnerName || 'Partner Institution'}", program is "${programName || 'Joint Program'}".`;
+
 
     const resp = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
       method: 'POST',
