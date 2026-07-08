@@ -9,9 +9,11 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
-import { Plus, Pencil, Trash2, Eye, Star, Loader2 } from "lucide-react";
-import { generateCertificatePdf, generateCertificateCode } from "@/lib/certificate";
+import { Plus, Pencil, Trash2, Eye, Star, Loader2, LayoutTemplate } from "lucide-react";
+import { generateCertificatePdf, generateCertificateCode, CertificateLayout } from "@/lib/certificate";
+import CertificateLayoutEditor from "@/components/CertificateLayoutEditor";
 import { logAudit } from "@/lib/audit";
 
 const blank = () => ({
