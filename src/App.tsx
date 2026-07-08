@@ -93,6 +93,8 @@ const App = () => (
                       </ProtectedRoute>
                     } />
                     <Route path="/verify/:code" element={<VerifyCertificate />} />
+                    <Route path="/partners/:slug" element={<PartnerProgram />} />
+                    <Route path="/verify-partner/:code" element={<VerifyPartnerCertificate />} />
                     <Route path="/live/:id" element={
                       <ProtectedRoute>
                         <LiveSession />
