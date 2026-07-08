@@ -12,8 +12,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
-import { Plus, Pencil, Trash2, Loader2, Sparkles, Upload, Users, Eye, ExternalLink, QrCode, FileText } from "lucide-react";
-import { generateCertificatePdf, generateCertificateCode } from "@/lib/certificate";
+import { Plus, Pencil, Trash2, Loader2, Sparkles, Upload, Users, Eye, ExternalLink, QrCode, FileText, LayoutTemplate } from "lucide-react";
+import { generateCertificatePdf, generateCertificateCode, CertificateLayout } from "@/lib/certificate";
+import CertificateLayoutEditor from "@/components/CertificateLayoutEditor";
 import { logAudit } from "@/lib/audit";
 
 const slugify = (s: string) => s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
