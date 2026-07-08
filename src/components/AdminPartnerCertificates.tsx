@@ -481,10 +481,11 @@ const AdminPartnerCertificates = () => {
           <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
             <DialogHeader><DialogTitle>{editing ? "Modifier le programme" : "Nouveau programme conjoint"}</DialogTitle></DialogHeader>
             <Tabs defaultValue="general">
-              <TabsList className="grid grid-cols-4 w-full">
+              <TabsList className="grid grid-cols-5 w-full">
                 <TabsTrigger value="general">Général</TabsTrigger>
-                <TabsTrigger value="cms"><FileText className="h-4 w-4 mr-1" />Contenu CMS</TabsTrigger>
-                <TabsTrigger value="template">Modèle certificat</TabsTrigger>
+                <TabsTrigger value="cms"><FileText className="h-4 w-4 mr-1" />Contenu</TabsTrigger>
+                <TabsTrigger value="template">Modèle</TabsTrigger>
+                <TabsTrigger value="layout"><LayoutTemplate className="h-4 w-4 mr-1" />Mise en page</TabsTrigger>
                 <TabsTrigger value="settings">Réglages</TabsTrigger>
               </TabsList>
 
