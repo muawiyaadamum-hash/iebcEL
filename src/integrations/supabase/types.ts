@@ -61,6 +61,7 @@ export type Database = {
           institution_name: string
           institution_subtitle: string | null
           is_default: boolean
+          layout: Json | null
           name: string
           primary_color: string
           signatory_name: string
@@ -77,6 +78,7 @@ export type Database = {
           institution_name?: string
           institution_subtitle?: string | null
           is_default?: boolean
+          layout?: Json | null
           name: string
           primary_color?: string
           signatory_name?: string
@@ -93,6 +95,7 @@ export type Database = {
           institution_name?: string
           institution_subtitle?: string | null
           is_default?: boolean
+          layout?: Json | null
           name?: string
           primary_color?: string
           signatory_name?: string
@@ -835,6 +838,7 @@ export type Database = {
           hero_image_url: string | null
           highlights: Json
           id: string
+          layout: Json | null
           location: string | null
           long_description: string | null
           name: string
@@ -866,6 +870,7 @@ export type Database = {
           hero_image_url?: string | null
           highlights?: Json
           id?: string
+          layout?: Json | null
           location?: string | null
           long_description?: string | null
           name: string
@@ -897,6 +902,7 @@ export type Database = {
           hero_image_url?: string | null
           highlights?: Json
           id?: string
+          layout?: Json | null
           location?: string | null
           long_description?: string | null
           name?: string
