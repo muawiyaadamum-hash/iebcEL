@@ -846,6 +846,9 @@ export type Database = {
           status: string
           template_bg_url: string | null
           template_prompt: string | null
+          template_source: string
+          template_updated_at: string | null
+          template_version: number
           updated_at: string
         }
         Insert: {
@@ -874,6 +877,9 @@ export type Database = {
           status?: string
           template_bg_url?: string | null
           template_prompt?: string | null
+          template_source?: string
+          template_updated_at?: string | null
+          template_version?: number
           updated_at?: string
         }
         Update: {
@@ -902,6 +908,9 @@ export type Database = {
           status?: string
           template_bg_url?: string | null
           template_prompt?: string | null
+          template_source?: string
+          template_updated_at?: string | null
+          template_version?: number
           updated_at?: string
         }
         Relationships: []
