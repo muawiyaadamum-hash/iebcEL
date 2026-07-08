@@ -27,6 +27,7 @@ import AdminOverview from "@/components/AdminOverview";
 import AdminUsers from "@/components/AdminUsers";
 import AdminProjects from "@/components/AdminProjects";
 import AdminCertificateTemplates from "@/components/AdminCertificateTemplates";
+import AdminPartnerCertificates from "@/components/AdminPartnerCertificates";
 import RichTextEditor from "@/components/RichTextEditor";
 import { logAudit } from "@/lib/audit";
 
@@ -129,6 +130,7 @@ const AdminLms = () => {
                   <TabsTrigger value="exams" className="w-full md:justify-start data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"><GraduationCap className="h-4 w-4 mr-2" />Examens</TabsTrigger>
                   <TabsTrigger value="projects" className="w-full md:justify-start data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"><FileCheck2 className="h-4 w-4 mr-2" />Projets</TabsTrigger>
                   <TabsTrigger value="certificates" className="w-full md:justify-start data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"><Award className="h-4 w-4 mr-2" />Certificats</TabsTrigger>
+                  <TabsTrigger value="partner_certs" className="w-full md:justify-start data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"><Award className="h-4 w-4 mr-2" />Certificats conjoints</TabsTrigger>
                   <TabsTrigger value="enrollments" className="w-full md:justify-start data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">Paiements ({enrollments.filter(e => e.status === "pending").length})</TabsTrigger>
                   <TabsTrigger value="audit" className="w-full md:justify-start data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"><ScrollText className="h-4 w-4 mr-2" />Audit</TabsTrigger>
                 </TabsList>
@@ -159,6 +161,7 @@ const AdminLms = () => {
               <TabsContent value="exams" className="mt-0"><AdminExams /></TabsContent>
               <TabsContent value="projects" className="mt-0"><AdminProjects /></TabsContent>
               <TabsContent value="certificates" className="mt-0"><AdminCertificateTemplates /></TabsContent>
+              <TabsContent value="partner_certs" className="mt-0"><AdminPartnerCertificates /></TabsContent>
               <TabsContent value="audit" className="mt-0"><AdminAuditLog /></TabsContent>
               <TabsContent value="enrollments" className="mt-0"><EnrollmentsPanel enrollments={enrollments} onChange={reloadAll} adminId={user.id} /></TabsContent>
             </div>

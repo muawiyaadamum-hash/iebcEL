@@ -760,6 +760,122 @@ export type Database = {
         }
         Relationships: []
       }
+      partner_certificates: {
+        Row: {
+          code: string
+          created_at: string
+          expires_at: string | null
+          id: string
+          issued_at: string | null
+          notes: string | null
+          program_id: string
+          revoked_at: string | null
+          score: number | null
+          status: Database["public"]["Enums"]["partner_cert_status"]
+          student_email: string | null
+          student_name: string
+          total: number | null
+          updated_at: string
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          issued_at?: string | null
+          notes?: string | null
+          program_id: string
+          revoked_at?: string | null
+          score?: number | null
+          status?: Database["public"]["Enums"]["partner_cert_status"]
+          student_email?: string | null
+          student_name: string
+          total?: number | null
+          updated_at?: string
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          issued_at?: string | null
+          notes?: string | null
+          program_id?: string
+          revoked_at?: string | null
+          score?: number | null
+          status?: Database["public"]["Enums"]["partner_cert_status"]
+          student_email?: string | null
+          student_name?: string
+          total?: number | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "partner_certificates_program_id_fkey"
+            columns: ["program_id"]
+            isOneToOne: false
+            referencedRelation: "partner_programs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      partner_programs: {
+        Row: {
+          active: boolean
+          created_at: string
+          description: string | null
+          footer_text: string | null
+          header_title: string | null
+          id: string
+          name: string
+          partner_name: string
+          primary_color: string | null
+          signatory_name: string | null
+          signatory_title: string | null
+          slug: string
+          status: string
+          template_bg_url: string | null
+          template_prompt: string | null
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          description?: string | null
+          footer_text?: string | null
+          header_title?: string | null
+          id?: string
+          name: string
+          partner_name: string
+          primary_color?: string | null
+          signatory_name?: string | null
+          signatory_title?: string | null
+          slug: string
+          status?: string
+          template_bg_url?: string | null
+          template_prompt?: string | null
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          description?: string | null
+          footer_text?: string | null
+          header_title?: string | null
+          id?: string
+          name?: string
+          partner_name?: string
+          primary_color?: string | null
+          signatory_name?: string | null
+          signatory_title?: string | null
+          slug?: string
+          status?: string
+          template_bg_url?: string | null
+          template_prompt?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       poles: {
         Row: {
           created_at: string
@@ -1115,6 +1231,7 @@ export type Database = {
         | "formateur"
         | "responsable_pedagogique"
         | "comptable"
+      partner_cert_status: "pending" | "issued" | "revoked" | "expired"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -1249,6 +1366,7 @@ export const Constants = {
         "responsable_pedagogique",
         "comptable",
       ],
+      partner_cert_status: ["pending", "issued", "revoked", "expired"],
     },
   },
 } as const
