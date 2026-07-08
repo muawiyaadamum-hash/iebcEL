@@ -121,17 +121,27 @@ const AdminPartnerCertificates = () => {
     setDlgOpen(true);
   };
 
-  const generateWithAi = async () => {
-    if (!form.template_prompt?.trim()) return toast.error("Décrivez le visuel souhaité");
+  const generateWithAi = async (fromModel = false) => {
+    if (!fromModel && !form.template_prompt?.trim()) return toast.error("Décrivez le visuel souhaité");
+    if (fromModel && !form.template_bg_url) return toast.error("Uploadez d'abord un modèle");
     setAiLoading(true);
     try {
       const { data, error } = await supabase.functions.invoke("generate-partner-template", {
-        body: { prompt: form.template_prompt, partnerName: form.partner_name, programName: form.name },
+        body: {
+          prompt: form.template_prompt || "clean, faithful re-interpretation of the uploaded model",
+          partnerName: form.partner_name,
+          programName: form.name,
+          sourceImageUrl: fromModel ? form.template_bg_url : undefined,
+        },
       });
       if (error) throw error;
       if (data?.image) {
-        setForm({ ...form, template_bg_url: data.image });
-        toast.success("Modèle généré par l'IA");
+        setForm((f: any) => ({
+          ...f,
+          template_bg_url: data.image,
+          template_source: fromModel ? "ai-from-model" : "ai",
+        }));
+        toast.success(fromModel ? "Modèle IA généré depuis votre upload" : "Modèle généré par l'IA");
       } else {
         toast.error(data?.error || "Aucune image générée");
       }
@@ -146,12 +156,19 @@ const AdminPartnerCertificates = () => {
     if (!form.name?.trim()) return toast.error("Nom du programme requis");
     if (!form.partner_name?.trim()) return toast.error("Nom du partenaire requis");
     const slug = form.slug?.trim() || slugify(form.name);
+    const templateChanged = !editing || editing.template_bg_url !== form.template_bg_url;
+    const nextVersion = templateChanged ? (Number(editing?.template_version) || 0) + 1 : (editing?.template_version || 1);
     const payload: any = {
       ...form,
       slug,
       start_date: form.start_date || null,
       end_date: form.end_date || null,
       highlights: (form.highlights || []).filter((h: string) => h?.trim()),
+      template_version: nextVersion,
+      template_source: templateChanged
+        ? (form.template_bg_url ? (form.template_source && form.template_source !== "none" ? form.template_source : "upload") : "none")
+        : form.template_source,
+      template_updated_at: templateChanged ? new Date().toISOString() : form.template_updated_at,
     };
     delete payload.id; delete payload.created_at; delete payload.updated_at;
     const { data, error } = editing
@@ -159,7 +176,7 @@ const AdminPartnerCertificates = () => {
       : await supabase.from("partner_programs").insert(payload).select().single();
     if (error) return toast.error(error.message);
     logAudit({ action: editing ? "update" : "create", entity_type: "partner_program", entity_id: data?.id, entity_label: payload.name });
-    toast.success("Programme enregistré");
+    toast.success(templateChanged ? `Programme enregistré (modèle v${nextVersion})` : "Programme enregistré");
     setDlgOpen(false); load();
   };
 
