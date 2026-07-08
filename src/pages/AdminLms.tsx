@@ -27,6 +27,7 @@ import AdminOverview from "@/components/AdminOverview";
 import AdminUsers from "@/components/AdminUsers";
 import AdminProjects from "@/components/AdminProjects";
 import AdminCertificateTemplates from "@/components/AdminCertificateTemplates";
+import AdminPartnerCertificates from "@/components/AdminPartnerCertificates";
 import RichTextEditor from "@/components/RichTextEditor";
 import { logAudit } from "@/lib/audit";
 
