@@ -34,6 +34,9 @@ const blankProgram = () => ({
   hero_image_url: null as string | null,
   template_bg_url: null as string | null,
   template_prompt: "",
+  template_version: 1,
+  template_source: "none" as "none" | "upload" | "ai" | "ai-from-model",
+  template_updated_at: null as string | null,
   primary_color: "#0F4C81",
   signatory_name: "Direction Pédagogique",
   signatory_title: "Directeur Pédagogique",
@@ -118,17 +121,27 @@ const AdminPartnerCertificates = () => {
     setDlgOpen(true);
   };
 
-  const generateWithAi = async () => {
-    if (!form.template_prompt?.trim()) return toast.error("Décrivez le visuel souhaité");
+  const generateWithAi = async (fromModel = false) => {
+    if (!fromModel && !form.template_prompt?.trim()) return toast.error("Décrivez le visuel souhaité");
+    if (fromModel && !form.template_bg_url) return toast.error("Uploadez d'abord un modèle");
     setAiLoading(true);
     try {
       const { data, error } = await supabase.functions.invoke("generate-partner-template", {
-        body: { prompt: form.template_prompt, partnerName: form.partner_name, programName: form.name },
+        body: {
+          prompt: form.template_prompt || "clean, faithful re-interpretation of the uploaded model",
+          partnerName: form.partner_name,
+          programName: form.name,
+          sourceImageUrl: fromModel ? form.template_bg_url : undefined,
+        },
       });
       if (error) throw error;
       if (data?.image) {
-        setForm({ ...form, template_bg_url: data.image });
-        toast.success("Modèle généré par l'IA");
+        setForm((f: any) => ({
+          ...f,
+          template_bg_url: data.image,
+          template_source: fromModel ? "ai-from-model" : "ai",
+        }));
+        toast.success(fromModel ? "Modèle IA généré depuis votre upload" : "Modèle généré par l'IA");
       } else {
         toast.error(data?.error || "Aucune image générée");
       }
@@ -143,12 +156,19 @@ const AdminPartnerCertificates = () => {
     if (!form.name?.trim()) return toast.error("Nom du programme requis");
     if (!form.partner_name?.trim()) return toast.error("Nom du partenaire requis");
     const slug = form.slug?.trim() || slugify(form.name);
+    const templateChanged = !editing || editing.template_bg_url !== form.template_bg_url;
+    const nextVersion = templateChanged ? (Number(editing?.template_version) || 0) + 1 : (editing?.template_version || 1);
     const payload: any = {
       ...form,
       slug,
       start_date: form.start_date || null,
       end_date: form.end_date || null,
       highlights: (form.highlights || []).filter((h: string) => h?.trim()),
+      template_version: nextVersion,
+      template_source: templateChanged
+        ? (form.template_bg_url ? (form.template_source && form.template_source !== "none" ? form.template_source : "upload") : "none")
+        : form.template_source,
+      template_updated_at: templateChanged ? new Date().toISOString() : form.template_updated_at,
     };
     delete payload.id; delete payload.created_at; delete payload.updated_at;
     const { data, error } = editing
@@ -156,7 +176,7 @@ const AdminPartnerCertificates = () => {
       : await supabase.from("partner_programs").insert(payload).select().single();
     if (error) return toast.error(error.message);
     logAudit({ action: editing ? "update" : "create", entity_type: "partner_program", entity_id: data?.id, entity_label: payload.name });
-    toast.success("Programme enregistré");
+    toast.success(templateChanged ? `Programme enregistré (modèle v${nextVersion})` : "Programme enregistré");
     setDlgOpen(false); load();
   };
 
@@ -317,7 +337,7 @@ const AdminPartnerCertificates = () => {
     if (file.size > 8 * 1024 * 1024) return toast.error("Max 8 Mo");
     try {
       const url = await readAsCompressedDataUrl(file, field === "partner_logo_url" ? 400 : 1600);
-      setForm((f: any) => ({ ...f, [field]: url }));
+      setForm((f: any) => ({ ...f, [field]: url, ...(field === "template_bg_url" ? { template_source: "upload" } : {}) }));
       toast.success("Image chargée");
     } catch { toast.error("Erreur lecture image"); }
   };
@@ -523,30 +543,54 @@ const AdminPartnerCertificates = () => {
                 <div><Label>Pied de page</Label><Textarea rows={2} value={form.footer_text || ""} onChange={(e) => setForm({ ...form, footer_text: e.target.value })} /></div>
 
                 <div className="rounded-md border p-3 space-y-3 bg-muted/30">
-                  <Label className="text-base">Fond du certificat</Label>
-                  <p className="text-xs text-muted-foreground">Uploader une image OU générer avec l'IA. Nom, cursus, code et QR sont ajoutés par-dessus.</p>
+                  <div className="flex items-center justify-between flex-wrap gap-2">
+                    <Label className="text-base">Fond du certificat</Label>
+                    {form.template_bg_url && (
+                      <div className="flex items-center gap-2 text-xs">
+                        <Badge variant="outline">v{form.template_version || 1}</Badge>
+                        <Badge variant="secondary">
+                          {form.template_source === "upload" && "Téléversé"}
+                          {form.template_source === "ai" && "IA"}
+                          {form.template_source === "ai-from-model" && "IA depuis modèle"}
+                          {(!form.template_source || form.template_source === "none") && "—"}
+                        </Badge>
+                        {form.template_updated_at && (
+                          <span className="text-muted-foreground">{new Date(form.template_updated_at).toLocaleDateString()}</span>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                  <p className="text-xs text-muted-foreground">Chaque nouveau téléversement ou régénération IA remplace l'ancien layout et incrémente la version. L'IA peut aussi partir d'un modèle admin téléversé.</p>
                   <div className="space-y-2">
-                    <Label className="text-sm">Option 1 — Upload</Label>
+                    <Label className="text-sm">Option 1 — Téléverser un modèle professionnel</Label>
                     <Input type="file" accept="image/jpeg,image/jpg,image/png,image/webp" onChange={(e) => e.target.files?.[0] && uploadImage(e.target.files[0], "template_bg_url")} />
                   </div>
                   <div className="space-y-2">
-                    <Label className="text-sm">Option 2 — IA</Label>
+                    <Label className="text-sm">Option 2 — Générer avec l'IA</Label>
                     <Textarea rows={3} placeholder="Ex: bordure dorée baroque, fond ivoire..." value={form.template_prompt || ""} onChange={(e) => setForm({ ...form, template_prompt: e.target.value })} />
-                    <Button type="button" variant="outline" size="sm" onClick={generateWithAi} disabled={aiLoading}>
-                      {aiLoading ? <Loader2 className="h-4 w-4 mr-1 animate-spin" /> : <Sparkles className="h-4 w-4 mr-1" />}Générer avec l'IA
-                    </Button>
+                    <div className="flex gap-2 flex-wrap">
+                      <Button type="button" variant="outline" size="sm" onClick={() => generateWithAi(false)} disabled={aiLoading}>
+                        {aiLoading ? <Loader2 className="h-4 w-4 mr-1 animate-spin" /> : <Sparkles className="h-4 w-4 mr-1" />}Générer (nouveau)
+                      </Button>
+                      {form.template_bg_url && (
+                        <Button type="button" variant="outline" size="sm" onClick={() => generateWithAi(true)} disabled={aiLoading}>
+                          {aiLoading ? <Loader2 className="h-4 w-4 mr-1 animate-spin" /> : <Sparkles className="h-4 w-4 mr-1" />}Générer depuis le modèle téléversé
+                        </Button>
+                      )}
+                    </div>
                   </div>
                   {form.template_bg_url && (
                     <div className="flex items-center gap-3 pt-2 border-t">
                       <img src={form.template_bg_url} alt="Aperçu" className="h-24 rounded border object-cover" />
                       <div className="space-x-2">
                         <Button size="sm" variant="outline" onClick={previewTemplate}><Eye className="h-4 w-4 mr-1" />Aperçu PDF</Button>
-                        <Button size="sm" variant="ghost" onClick={() => setForm({ ...form, template_bg_url: null })}>Retirer</Button>
+                        <Button size="sm" variant="ghost" onClick={() => setForm({ ...form, template_bg_url: null, template_source: "none" })}>Retirer</Button>
                       </div>
                     </div>
                   )}
                 </div>
               </TabsContent>
+
 
               <TabsContent value="settings" className="space-y-3 pt-3">
                 <div><Label>Ordre d'affichage</Label><Input type="number" value={form.display_order || 0} onChange={(e) => setForm({ ...form, display_order: Number(e.target.value) })} /></div>

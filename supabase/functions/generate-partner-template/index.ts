@@ -11,14 +11,18 @@ Deno.serve(async (req) => {
       });
     }
 
-    const { prompt, partnerName, programName } = await req.json();
+    const { prompt, partnerName, programName, sourceImageUrl } = await req.json();
     if (!prompt || typeof prompt !== 'string' || prompt.length > 2000) {
       return new Response(JSON.stringify({ error: 'Prompt invalide' }), {
         status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
 
-    const fullPrompt = `Design an ELEGANT, PROFESSIONAL CERTIFICATE BACKGROUND ONLY. A4 landscape format (1600x1131 aspect). Style guidance from admin: "${prompt}".
+    const basePrompt = sourceImageUrl
+      ? `You are given an EXISTING certificate template image uploaded by an administrator. Produce a NEW clean version that PRESERVES its overall visual identity — colors, borders, decorative motifs, corner ornaments, seals — but STRIPS every pre-existing text/name/date/placeholder from it and CLEARS the center completely so overlay text can be added programmatically. Additional stylistic guidance from admin: "${prompt}".`
+      : `Design an ELEGANT, PROFESSIONAL CERTIFICATE BACKGROUND ONLY. A4 landscape format (1600x1131 aspect). Style guidance from admin: "${prompt}".`;
+
+    const fullPrompt = `${basePrompt}
 
 STRICT RULES — the generated image MUST follow ALL of these:
 1. ABSOLUTELY NO TEXT of any kind anywhere on the image — no words, no letters, no numbers, no titles, no "CERTIFICATE", no "CERTIFICAT", no "OF COMPLETION", no institution names, no signatures, no dates, no placeholder text like "Name Surname", no "Lorem Ipsum", no Latin script, no non-Latin script, no calligraphy words. Zero text.
@@ -29,13 +33,17 @@ STRICT RULES — the generated image MUST follow ALL of these:
 
 Context for style only (do NOT render any of these words in the image): partner is "${partnerName || 'Partner Institution'}", program is "${programName || 'Joint Program'}".`;
 
+    const userContent: any[] = [{ type: 'text', text: fullPrompt }];
+    if (sourceImageUrl && typeof sourceImageUrl === 'string') {
+      userContent.push({ type: 'image_url', image_url: { url: sourceImageUrl } });
+    }
 
     const resp = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Lovable-API-Key': key },
       body: JSON.stringify({
         model: 'google/gemini-2.5-flash-image',
-        messages: [{ role: 'user', content: fullPrompt }],
+        messages: [{ role: 'user', content: userContent }],
         modalities: ['image', 'text'],
       }),
     });
@@ -56,7 +64,7 @@ Context for style only (do NOT render any of these words in the image): partner 
       });
     }
 
-    return new Response(JSON.stringify({ image: imageUrl }), {
+    return new Response(JSON.stringify({ image: imageUrl, source: sourceImageUrl ? 'ai-from-model' : 'ai' }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
   } catch (e) {
