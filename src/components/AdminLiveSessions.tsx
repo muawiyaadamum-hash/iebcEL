@@ -18,7 +18,7 @@ interface LiveSession {
   cursus_id: string;
   title: string;
   description: string | null;
-  provider: "jitsi" | "external";
+  provider: "platform" | "external";
   room_name: string | null;
   external_url: string | null;
   scheduled_at: string;
@@ -28,7 +28,7 @@ interface LiveSession {
 }
 
 const blank = (): Partial<LiveSession> => ({
-  title: "", description: "", provider: "jitsi", room_name: "", external_url: "",
+  title: "", description: "", provider: "platform", external_url: "",
   scheduled_at: new Date(Date.now() + 3600_000).toISOString().slice(0, 16),
   duration_minutes: 60, status: "scheduled", published: true,
 });
@@ -53,8 +53,8 @@ const AdminLiveSessions = () => {
       cursus_id: editing.cursus_id,
       title: editing.title,
       description: editing.description || null,
-      provider: editing.provider || "jitsi",
-      room_name: editing.provider === "jitsi" ? (editing.room_name || `iebc-${Date.now()}`) : null,
+      provider: editing.provider || "platform",
+      room_name: null,
       external_url: editing.provider === "external" ? editing.external_url || null : null,
       scheduled_at: new Date(editing.scheduled_at as any).toISOString(),
       duration_minutes: editing.duration_minutes || 60,
@@ -87,7 +87,7 @@ const AdminLiveSessions = () => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="flex items-center gap-2"><Video className="h-5 w-5" />Cours en visio (Jitsi / externe)</CardTitle>
+        <CardTitle className="flex items-center gap-2"><Video className="h-5 w-5" />Cours en visio (diffusion intégrée)</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="flex flex-wrap items-end gap-3">
@@ -155,20 +155,16 @@ const AdminLiveSessions = () => {
                   <div><Label>Date et heure</Label><Input type="datetime-local" value={editing.scheduled_at as any || ""} onChange={(e) => setEditing({ ...editing, scheduled_at: e.target.value as any })} /></div>
                   <div><Label>Durée (min)</Label><Input type="number" value={editing.duration_minutes || 60} onChange={(e) => setEditing({ ...editing, duration_minutes: +e.target.value })} /></div>
                 </div>
-                <div><Label>Fournisseur</Label>
-                  <Select value={editing.provider || "jitsi"} onValueChange={(v: any) => setEditing({ ...editing, provider: v })}>
+                <div><Label>Mode de diffusion</Label>
+                  <Select value={editing.provider || "platform"} onValueChange={(v: any) => setEditing({ ...editing, provider: v })}>
                     <SelectTrigger><SelectValue /></SelectTrigger>
                     <SelectContent className="bg-popover">
-                      <SelectItem value="jitsi">Jitsi Meet (intégré, gratuit)</SelectItem>
+                      <SelectItem value="platform">Diffusion plateforme (caméra + partage d'écran + chat)</SelectItem>
                       <SelectItem value="external">Lien externe (Zoom / Meet / Teams)</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
-                {editing.provider === "jitsi" ? (
-                  <div><Label>Nom de la salle (optionnel)</Label>
-                    <Input value={editing.room_name || ""} onChange={(e) => setEditing({ ...editing, room_name: e.target.value })} placeholder="auto-généré si vide" />
-                  </div>
-                ) : (
+                {editing.provider === "external" && (
                   <div><Label>URL de la réunion</Label>
                     <Input value={editing.external_url || ""} onChange={(e) => setEditing({ ...editing, external_url: e.target.value })} placeholder="https://zoom.us/j/..." />
                   </div>

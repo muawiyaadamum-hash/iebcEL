@@ -1,59 +1,53 @@
-# Plan — Refonte IEBC E-Learning
+# Module de diffusion des cours en direct (intégré)
 
-Le périmètre demandé est vaste (~20 chantiers). Pour livrer proprement sans casser l'existant, je propose de découper en **6 lots** livrés séquentiellement. Confirme le lot par lequel commencer (ou "tout dans l'ordre").
+Remplacer Jitsi par un module de diffusion natif : l'instructeur diffuse sa caméra, son micro et éventuellement son écran depuis la plateforme ; les étudiants regardent en direct et discutent dans un chat, sans quitter le site ni ouvrir d'onglet tiers.
 
-## Lot 1 — Config & contacts (rapide)
-- Frais d'inscription : **65 000 XAF** (~99 €), affiché avec devise + équivalent EUR sur `/register` et cartes cursus
-- Support **WhatsApp +221 70 658 48 59** partout (remplace 693122020) avec messages pré-remplis
-- Bouton WhatsApp flottant permanent sur toutes les pages (composant global dans `App.tsx`)
-- Page `/register` refondue : prix, devise, procédure d'inscription pas-à-pas, contact support
+## Ce qui change côté utilisateur
 
-## Lot 2 — Super Admin Dashboard
-- Nouvelle route `/admin` réorganisée avec onglets consolidés :
-  - **Vue d'ensemble** (KPIs) : nb étudiants, inscriptions, taux réussite, revenus estimés, progression moyenne, activité récente
-  - **Utilisateurs** : liste + filtres par rôle (étudiant/enseignant/admin), promotion/rétrogradation, suspension
-  - **Pédagogie** : Pôles / Cursus / Modules / Leçons (existe déjà, à polir)
-  - **Évaluations** : Quiz, Examens, Banque de questions, Projets
-  - **Certificats** : modèles + signataires (nouveau)
-  - **Paiements** : historique validations WhatsApp
-  - **Rapports** : export CSV/PDF
-  - **Audit** (existe)
+- **Instructeur (admin ou rôle enseignant)** : bouton « Démarrer la diffusion » sur la page de session. Aperçu caméra, micro, partage d'écran, indicateur « En direct ». Bouton « Terminer » qui coupe et marque la session comme `ended`.
+- **Étudiant** : ouvre la même page `/live/:id`, voit le flux vidéo de l'instructeur, avec chat texte en direct, compteur de participants, et une bannière « hors ligne / en attente » quand l'instructeur n'a pas encore démarré.
+- **Admin** : plus de choix « Jitsi » dans le formulaire de session. Deux modes seulement : `Diffusion plateforme` (par défaut) ou `Lien externe` (Zoom / Meet / Teams inchangé).
 
-## Lot 3 — Pôles & Cursus enrichis
-- Champ `responsable` (nom + photo) sur `poles`
-- Sur `cursus` : `competences` (array), `conditions_admission` (text), objectifs déjà présents
-- UI admin + affichage public enrichi (page détail cursus)
+## Fonctionnement technique
 
-## Lot 4 — Quiz par module + Banque de questions étendue
-- Table `quiz_questions` : ajouter `difficulty`, `theme`, `question_type` (qcm/vrai-faux/reponse-courte)
-- Génération auto d'un quiz vide à la création d'un module
-- Expérience QCM : **auto-avance** sur validation (Entrée / bouton Suivant)
-- **Randomisation A/B/C/D** à chaque tentative (shuffle côté serveur dans `exam-start`)
-- Export résultats : CSV, JSON, PDF, DOCX
-- **Restriction examen final** : blocage tant que progression < 100% + quiz non validés, message explicatif
+Utilise **WebRTC** navigateur-à-navigateurs pour la vidéo et **Supabase Realtime** pour le signaling et le chat. Aucun serveur média externe.
 
-## Lot 5 — Projet fin de formation + Certificats avancés
-- Note finale = **40% projet + 60% QCM** (calcul dans `exam-submit` + trigger certificat)
-- UI étudiant : téléverser projet, voir statut/note/commentaires (table `project_submissions` existe)
-- UI admin correcteur : noter + commenter
-- **Modèles de certificats** (nouvelle table `certificate_templates`) :
-  - Plusieurs modèles, signataires configurables, activation/désactivation
-  - Prévisualisation avant publication
-  - QR code de vérification (existe), numéro unique (existe)
-  - Génération PDF automatique après validation (40/60)
+- **Signaling** : canal Realtime `live:<sessionId>` sur lequel on échange les événements `presence` (qui est là), `offer`, `answer`, `ice-candidate`, `chat`, `stream-state`.
+- **Topologie** : SFU-léger côté client — l'instructeur ouvre une `RTCPeerConnection` par étudiant connecté (mesh depuis le broadcaster). Convient jusqu'à ~30-50 spectateurs simultanés, ce qui couvre les cohortes actuelles. Au-delà, on documente la limite ; on pourra brancher un vrai SFU plus tard sans changer l'UX.
+- **Chat live** : messages diffusés via le même canal Realtime, stockés en mémoire côté client pendant la session (pas de persistance à cette étape — évolution possible plus tard).
+- **Contrôle d'accès** : la page vérifie que l'utilisateur est connecté et inscrit au cursus (règle déjà en place pour `live_sessions.published`), sinon écran d'accès refusé.
+- **STUN** : serveurs STUN publics Google (gratuits, standards). Pas besoin de TURN dans la majorité des cas ; on ajoutera un TURN si des étudiants derrière NAT strict échouent.
 
-## Lot 6 — Performance, sécurité, chatbot, responsive
-- **Perf** : lazy-loading routes (`React.lazy`), compression images (`vite-imagetools`), preload LCP, cache React Query aggressif, index DB sur colonnes chaudes
-- **Responsive** : audit mobile/tablette sur toutes les pages clés
-- **Chatbot IEBC** : mise à jour du system prompt (formations IEBC, procédures, tarif 65k, WhatsApp +221)
-- **Sécurité** : vérification RLS, audit log étendu (déjà en place), rate-limit edge functions
-- **Ressources pédagogiques** : section "Bibliographie" + "Liens utiles" sur module (déjà partiellement via `module_resources`)
+## Étapes d'implémentation
 
-## Détails techniques
-- Migrations SQL groupées par lot (avec GRANTs sur toute nouvelle table)
-- Edge functions modifiées : `exam-start` (shuffle options), `exam-submit` (score 40/60), `ai-chat` (nouveau prompt IEBC)
-- Nouveaux composants : `FloatingWhatsApp`, `AdminUsers`, `AdminCertificateTemplates`, `AdminReports`, `ProjectSubmission`
-- Pas de changement de stack — reste React/Vite/Tailwind/Supabase
+1. **Migration DB** : renommer `provider = 'jitsi'` en `platform` dans `live_sessions` (compat descendante : les anciennes lignes sont converties). Ajouter `broadcaster_id uuid` et `started_at timestamptz` pour suivre l'état.
+2. **Nouveau composant `LiveBroadcast.tsx`** : logique WebRTC + Realtime, deux vues (broadcaster / viewer), overlay chat.
+3. **Réécrire `src/pages/LiveSession.tsx`** : détecter le rôle de l'utilisateur (broadcaster si admin ou propriétaire de la session, sinon viewer) et monter `LiveBroadcast`.
+4. **Mettre à jour `AdminLiveSessions.tsx`** : retirer l'option Jitsi et le champ `room_name`, garder seulement `Diffusion plateforme` vs `Lien externe`. Le titre de la carte devient « Cours en visio ».
+5. **Nettoyage** : retirer toute mention Jitsi dans le code et les commentaires ; garder le lien `/live/:id` inchangé.
 
-## Question
-Par quel lot veux-tu commencer ? Je recommande l'ordre **1 → 2 → 4 → 5 → 3 → 6** (impact utilisateur décroissant). Réponds "go" pour enchaîner dans cet ordre, ou nomme un lot précis.
+## Limites assumées à cette étape
+
+- Diffusion mesh, adaptée aux classes moyennes (jusqu'à ~30-50 viewers). Pas d'enregistrement côté serveur.
+- Chat en mémoire (non persistant).
+- Un seul broadcaster à la fois par session.
+
+## Détails techniques (section technique)
+
+```text
+Broadcaster                Supabase Realtime               Viewers
+   |  join channel live:<id> -----------------------> presence sync
+   |  <---- viewer joined event -----------------------|
+   |  createOffer ---- broadcast:offer(to=viewerId) -->|
+   |  <--- broadcast:answer(from=viewerId) -----------|
+   |  <--> ice-candidates (both ways) <---------------|
+   |                                                   |
+   |  MediaStream (getUserMedia + getDisplayMedia)     |
+   |  attached to each RTCPeerConnection --------------> <video>
+```
+
+- `RTCPeerConnection({ iceServers: [{ urls: ["stun:stun.l.google.com:19302"] }] })`
+- Le broadcaster surveille les événements presence pour ouvrir une PC par nouveau viewer et fermer proprement à la déconnexion.
+- Les viewers envoient une seule offer en arrivant ; ils reçoivent le flux en tracks distants et le rendent dans un `<video autoplay playsinline>`.
+- Le chat utilise `channel.send({ type: 'broadcast', event: 'chat', payload })`.
+- Nettoyage : `pc.close()` sur unmount et à la fin de la session, `stream.getTracks().forEach(t => t.stop())`.

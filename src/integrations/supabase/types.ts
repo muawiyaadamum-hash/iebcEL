@@ -568,6 +568,7 @@ export type Database = {
       }
       live_sessions: {
         Row: {
+          broadcaster_id: string | null
           created_at: string
           cursus_id: string
           description: string | null
@@ -588,6 +589,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          broadcaster_id?: string | null
           created_at?: string
           cursus_id: string
           description?: string | null
@@ -608,6 +610,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          broadcaster_id?: string | null
           created_at?: string
           cursus_id?: string
           description?: string | null
