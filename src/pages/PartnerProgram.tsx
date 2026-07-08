@@ -50,17 +50,54 @@ const PartnerProgram = () => {
           <Card><CardContent className="py-16 text-center"><h1 className="text-2xl font-bold mb-2">Programme introuvable</h1><p className="text-muted-foreground">Ce programme conjoint n'existe pas ou n'est plus actif.</p></CardContent></Card>
         ) : (
           <>
+            {program.hero_image_url && (
+              <div className="mb-6 rounded-lg overflow-hidden border relative" style={{ borderColor: program.primary_color }}>
+                <img src={program.hero_image_url} alt={program.name} className="w-full h-48 sm:h-64 object-cover" />
+              </div>
+            )}
             <Card className="mb-6" style={{ borderTopColor: program.primary_color, borderTopWidth: 4 }}>
               <CardHeader>
-                <div className="flex items-center gap-3">
-                  <Award className="h-8 w-8" style={{ color: program.primary_color }} />
-                  <div>
+                <div className="flex items-center gap-3 flex-wrap">
+                  {program.partner_logo_url ? (
+                    <img src={program.partner_logo_url} alt={program.partner_name} className="h-12 w-12 object-contain rounded border p-1" />
+                  ) : (
+                    <Award className="h-8 w-8" style={{ color: program.primary_color }} />
+                  )}
+                  <div className="flex-1 min-w-0">
                     <CardTitle className="text-2xl">{program.name}</CardTitle>
-                    <CardDescription>Programme conjoint avec <strong>{program.partner_name}</strong></CardDescription>
+                    <CardDescription>
+                      Programme conjoint avec{" "}
+                      {program.partner_url ? (
+                        <a href={program.partner_url} target="_blank" rel="noreferrer" className="underline font-semibold">{program.partner_name}</a>
+                      ) : (
+                        <strong>{program.partner_name}</strong>
+                      )}
+                    </CardDescription>
                   </div>
                 </div>
               </CardHeader>
-              {program.description && <CardContent><p className="text-muted-foreground whitespace-pre-line">{program.description}</p></CardContent>}
+              <CardContent className="space-y-4">
+                {program.description && <p className="text-muted-foreground whitespace-pre-line">{program.description}</p>}
+                {(program.duration || program.location || program.start_date || program.end_date) && (
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-sm">
+                    {program.duration && <div className="p-3 rounded border bg-muted/30"><div className="text-xs text-muted-foreground">Durée</div><div className="font-medium">{program.duration}</div></div>}
+                    {program.location && <div className="p-3 rounded border bg-muted/30"><div className="text-xs text-muted-foreground">Lieu</div><div className="font-medium">{program.location}</div></div>}
+                    {program.start_date && <div className="p-3 rounded border bg-muted/30"><div className="text-xs text-muted-foreground">Début</div><div className="font-medium">{new Date(program.start_date).toLocaleDateString("fr-FR")}</div></div>}
+                    {program.end_date && <div className="p-3 rounded border bg-muted/30"><div className="text-xs text-muted-foreground">Fin</div><div className="font-medium">{new Date(program.end_date).toLocaleDateString("fr-FR")}</div></div>}
+                  </div>
+                )}
+                {program.long_description && (
+                  <div className="prose prose-sm max-w-none whitespace-pre-line text-foreground/90 border-t pt-4">{program.long_description}</div>
+                )}
+                {Array.isArray(program.highlights) && program.highlights.length > 0 && (
+                  <div className="border-t pt-4">
+                    <h3 className="font-semibold mb-2">Points forts</h3>
+                    <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground">
+                      {program.highlights.map((h: string, i: number) => <li key={i}>{h}</li>)}
+                    </ul>
+                  </div>
+                )}
+              </CardContent>
             </Card>
 
             <Card>
