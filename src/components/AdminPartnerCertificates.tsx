@@ -158,7 +158,7 @@ const AdminPartnerCertificates = () => {
     }
     const { error } = await supabase.from("partner_certificates").insert(inserts);
     if (error) return toast.error(error.message);
-    logAudit({ action: "import", entity_type: "partner_certificates", entity_id: studentsFor.id, entity_label: `${inserts.length} laureats` });
+    logAudit({ action: "create", entity_type: "partner_certificates", entity_id: studentsFor.id, entity_label: `Import ${inserts.length} laureats` });
     toast.success(`${inserts.length} certificat(s) importé(s)`);
     setCsvOpen(false); setCsvText(""); reloadStudents();
   };
