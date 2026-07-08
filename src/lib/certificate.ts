@@ -56,6 +56,22 @@ export async function generateCertificatePdf(data: CertificateData): Promise<jsP
     } catch (e) {
       console.warn("Certificate background failed to load", e);
     }
+
+    // Semi-transparent white panel to guarantee readability over any background art/text.
+    // Anything the AI or the uploaded template drew in this zone is masked so overlays never chevauche.
+    const panelX = w * 0.08;
+    const panelY = 130;
+    const panelW = w - panelX * 2;
+    const panelH = h - panelY - 130;
+    const gs = doc.GState({ opacity: 0.82 });
+    doc.setGState(gs);
+    doc.setFillColor(255, 255, 255);
+    doc.roundedRect(panelX, panelY, panelW, panelH, 10, 10, "F");
+    doc.setGState(doc.GState({ opacity: 1 }));
+    // Thin accent border around the panel
+    doc.setDrawColor(pr, pg, pb);
+    doc.setLineWidth(0.8);
+    doc.roundedRect(panelX, panelY, panelW, panelH, 10, 10);
   } else {
     // Frames
     doc.setDrawColor(pr, pg, pb);
@@ -77,6 +93,18 @@ export async function generateCertificatePdf(data: CertificateData): Promise<jsP
       doc.text(tpl.institution_subtitle, w / 2, 92, { align: "center" });
     }
   }
+
+  const hasBg = !!bg;
+  // When a background is present, reduce the title size slightly and use the panel area
+  const titleY = hasBg ? 175 : 160;
+  const introY = hasBg ? 210 : 200;
+  const nameY = hasBg ? 250 : 240;
+  const nameLineY = hasBg ? 262 : 252;
+  const bodyIntroY = hasBg ? 293 : 285;
+  const cursusY = hasBg ? 320 : 315;
+  const scoreY = hasBg ? 350 : 345;
+  const footerNoteY = hasBg ? 378 : 375;
+
 
   // Title
   doc.setTextColor(pr, pg, pb);
