@@ -45,6 +45,7 @@ const blankProgram = () => ({
   footer_text: "Certificat conjoint vérifiable en ligne via QR code.",
   display_order: 0,
   active: true,
+  layout: null as CertificateLayout | null,
 });
 
 const blankCert = () => ({
