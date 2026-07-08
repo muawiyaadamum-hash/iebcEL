@@ -87,7 +87,7 @@ const AdminLiveSessions = () => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="flex items-center gap-2"><Video className="h-5 w-5" />Cours en visio (Jitsi / externe)</CardTitle>
+        <CardTitle className="flex items-center gap-2"><Video className="h-5 w-5" />Cours en visio (diffusion intégrée)</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="flex flex-wrap items-end gap-3">
