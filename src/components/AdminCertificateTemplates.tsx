@@ -26,9 +26,11 @@ const blank = () => ({
   footer_text: "Ce certificat est vérifiable en ligne via son code unique et son QR code.",
   primary_color: "#0F4C81",
   background_image_url: null as string | null,
+  layout: null as CertificateLayout | null,
   active: true,
   is_default: false,
 });
+
 
 const readAsCompressedDataUrl = (file: File): Promise<string> =>
   new Promise((resolve, reject) => {
