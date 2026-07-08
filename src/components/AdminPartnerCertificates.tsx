@@ -12,8 +12,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
-import { Plus, Pencil, Trash2, Loader2, Sparkles, Upload, Users, Eye, ExternalLink, QrCode, FileText } from "lucide-react";
-import { generateCertificatePdf, generateCertificateCode } from "@/lib/certificate";
+import { Plus, Pencil, Trash2, Loader2, Sparkles, Upload, Users, Eye, ExternalLink, QrCode, FileText, LayoutTemplate } from "lucide-react";
+import { generateCertificatePdf, generateCertificateCode, CertificateLayout } from "@/lib/certificate";
+import CertificateLayoutEditor from "@/components/CertificateLayoutEditor";
 import { logAudit } from "@/lib/audit";
 
 const slugify = (s: string) => s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
@@ -44,6 +45,7 @@ const blankProgram = () => ({
   footer_text: "Certificat conjoint vérifiable en ligne via QR code.",
   display_order: 0,
   active: true,
+  layout: null as CertificateLayout | null,
 });
 
 const blankCert = () => ({
@@ -305,6 +307,7 @@ const AdminPartnerCertificates = () => {
         footer_text: studentsFor.footer_text,
         primary_color: studentsFor.primary_color,
         background_image_url: studentsFor.template_bg_url,
+        layout: studentsFor.layout,
       },
     });
     doc.save(`certificat-${cert.code}.pdf`);
@@ -328,6 +331,7 @@ const AdminPartnerCertificates = () => {
         footer_text: form.footer_text,
         primary_color: form.primary_color,
         background_image_url: form.template_bg_url,
+        layout: form.layout,
       },
     });
     window.open(doc.output("bloburl"), "_blank");
@@ -474,13 +478,14 @@ const AdminPartnerCertificates = () => {
         </div>
         <Dialog open={dlgOpen} onOpenChange={setDlgOpen}>
           <DialogTrigger asChild><Button onClick={openNew}><Plus className="h-4 w-4 mr-1" />Nouveau programme</Button></DialogTrigger>
-          <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+          <DialogContent className="max-w-5xl max-h-[90vh] overflow-y-auto">
             <DialogHeader><DialogTitle>{editing ? "Modifier le programme" : "Nouveau programme conjoint"}</DialogTitle></DialogHeader>
             <Tabs defaultValue="general">
-              <TabsList className="grid grid-cols-4 w-full">
+              <TabsList className="grid grid-cols-5 w-full">
                 <TabsTrigger value="general">Général</TabsTrigger>
-                <TabsTrigger value="cms"><FileText className="h-4 w-4 mr-1" />Contenu CMS</TabsTrigger>
-                <TabsTrigger value="template">Modèle certificat</TabsTrigger>
+                <TabsTrigger value="cms"><FileText className="h-4 w-4 mr-1" />Contenu</TabsTrigger>
+                <TabsTrigger value="template">Modèle</TabsTrigger>
+                <TabsTrigger value="layout"><LayoutTemplate className="h-4 w-4 mr-1" />Mise en page</TabsTrigger>
                 <TabsTrigger value="settings">Réglages</TabsTrigger>
               </TabsList>
 
@@ -591,6 +596,28 @@ const AdminPartnerCertificates = () => {
                 </div>
               </TabsContent>
 
+              <TabsContent value="layout" className="pt-3">
+                <CertificateLayoutEditor
+                  value={form.layout}
+                  onChange={(l) => setForm({ ...form, layout: l })}
+                  backgroundUrl={form.template_bg_url}
+                  primaryColor={form.primary_color}
+                  sampleData={{
+                    code: "IEBC-DEMO-1234",
+                    studentName: "Jean Dupont",
+                    cursusTitle: `${form.name || "Programme conjoint"} — ${form.partner_name || "Partenaire"}`,
+                    score: 0, total: 0,
+                    issuedAt: new Date().toISOString(),
+                    verifyUrl: `${window.location.origin}/verify-partner/DEMO`,
+                    template: {
+                      header_title: form.header_title,
+                      signatory_name: form.signatory_name,
+                      signatory_title: form.signatory_title,
+                      footer_text: form.footer_text,
+                    },
+                  }}
+                />
+              </TabsContent>
 
               <TabsContent value="settings" className="space-y-3 pt-3">
                 <div><Label>Ordre d'affichage</Label><Input type="number" value={form.display_order || 0} onChange={(e) => setForm({ ...form, display_order: Number(e.target.value) })} /></div>

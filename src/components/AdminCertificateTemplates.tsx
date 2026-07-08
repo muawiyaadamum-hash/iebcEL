@@ -9,9 +9,11 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
-import { Plus, Pencil, Trash2, Eye, Star, Loader2 } from "lucide-react";
-import { generateCertificatePdf, generateCertificateCode } from "@/lib/certificate";
+import { Plus, Pencil, Trash2, Eye, Star, Loader2, LayoutTemplate } from "lucide-react";
+import { generateCertificatePdf, generateCertificateCode, CertificateLayout } from "@/lib/certificate";
+import CertificateLayoutEditor from "@/components/CertificateLayoutEditor";
 import { logAudit } from "@/lib/audit";
 
 const blank = () => ({
@@ -24,9 +26,11 @@ const blank = () => ({
   footer_text: "Ce certificat est vérifiable en ligne via son code unique et son QR code.",
   primary_color: "#0F4C81",
   background_image_url: null as string | null,
+  layout: null as CertificateLayout | null,
   active: true,
   is_default: false,
 });
+
 
 const readAsCompressedDataUrl = (file: File): Promise<string> =>
   new Promise((resolve, reject) => {
@@ -119,55 +123,80 @@ const AdminCertificateTemplates = () => {
         </div>
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild><Button onClick={openNew}><Plus className="h-4 w-4 mr-1" />Nouveau modèle</Button></DialogTrigger>
-          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogContent className="max-w-5xl max-h-[90vh] overflow-y-auto">
             <DialogHeader><DialogTitle>{editing ? "Modifier le modèle" : "Nouveau modèle"}</DialogTitle></DialogHeader>
-            <div className="space-y-3">
-              <div><Label>Nom (interne)</Label><Input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} /></div>
-              <div className="grid grid-cols-2 gap-3">
-                <div><Label>Titre du certificat</Label><Input value={form.header_title} onChange={(e) => setForm({ ...form, header_title: e.target.value })} /></div>
-                <div><Label>Couleur principale</Label><Input type="color" value={form.primary_color} onChange={(e) => setForm({ ...form, primary_color: e.target.value })} /></div>
-              </div>
-              <div><Label>Nom de l'institution</Label><Input value={form.institution_name} onChange={(e) => setForm({ ...form, institution_name: e.target.value })} /></div>
-              <div><Label>Sous-titre institution</Label><Input value={form.institution_subtitle} onChange={(e) => setForm({ ...form, institution_subtitle: e.target.value })} /></div>
-              <div className="grid grid-cols-2 gap-3">
-                <div><Label>Signataire (nom affiché)</Label><Input value={form.signatory_name} onChange={(e) => setForm({ ...form, signatory_name: e.target.value })} /></div>
-                <div><Label>Titre du signataire</Label><Input value={form.signatory_title} onChange={(e) => setForm({ ...form, signatory_title: e.target.value })} /></div>
-              </div>
-              <div><Label>Mention légale / pied de page</Label><Textarea rows={2} value={form.footer_text} onChange={(e) => setForm({ ...form, footer_text: e.target.value })} /></div>
-              <div className="space-y-2 rounded-md border p-3">
-                <Label>Image de fond du certificat (JPG, PNG — recommandé A4 paysage 1754×1240)</Label>
-                <p className="text-xs text-muted-foreground">Le nom de l'apprenant, le cursus, la note, le code, la date et le QR code seront ajoutés automatiquement par-dessus.</p>
-                <Input
-                  type="file"
-                  accept="image/jpeg,image/jpg,image/png,image/webp"
-                  onChange={async (e) => {
-                    const file = e.target.files?.[0];
-                    if (!file) return;
-                    if (file.size > 8 * 1024 * 1024) return toast.error("Image trop lourde (max 8 Mo)");
-                    try {
-                      const dataUrl = await readAsCompressedDataUrl(file);
-                      setForm({ ...form, background_image_url: dataUrl });
-                      toast.success("Image chargée");
-                    } catch { toast.error("Impossible de lire l'image"); }
+            <Tabs defaultValue="content">
+              <TabsList className="grid grid-cols-2 w-full">
+                <TabsTrigger value="content">Contenu</TabsTrigger>
+                <TabsTrigger value="layout"><LayoutTemplate className="h-4 w-4 mr-1" />Mise en page</TabsTrigger>
+              </TabsList>
+              <TabsContent value="content" className="space-y-3 pt-3">
+                <div><Label>Nom (interne)</Label><Input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} /></div>
+                <div className="grid grid-cols-2 gap-3">
+                  <div><Label>Titre du certificat</Label><Input value={form.header_title} onChange={(e) => setForm({ ...form, header_title: e.target.value })} /></div>
+                  <div><Label>Couleur principale</Label><Input type="color" value={form.primary_color} onChange={(e) => setForm({ ...form, primary_color: e.target.value })} /></div>
+                </div>
+                <div><Label>Nom de l'institution</Label><Input value={form.institution_name} onChange={(e) => setForm({ ...form, institution_name: e.target.value })} /></div>
+                <div><Label>Sous-titre institution</Label><Input value={form.institution_subtitle} onChange={(e) => setForm({ ...form, institution_subtitle: e.target.value })} /></div>
+                <div className="grid grid-cols-2 gap-3">
+                  <div><Label>Signataire (nom affiché)</Label><Input value={form.signatory_name} onChange={(e) => setForm({ ...form, signatory_name: e.target.value })} /></div>
+                  <div><Label>Titre du signataire</Label><Input value={form.signatory_title} onChange={(e) => setForm({ ...form, signatory_title: e.target.value })} /></div>
+                </div>
+                <div><Label>Mention légale / pied de page</Label><Textarea rows={2} value={form.footer_text} onChange={(e) => setForm({ ...form, footer_text: e.target.value })} /></div>
+                <div className="space-y-2 rounded-md border p-3">
+                  <Label>Image de fond du certificat (JPG, PNG — recommandé A4 paysage 1754×1240)</Label>
+                  <p className="text-xs text-muted-foreground">Le nom de l'apprenant, le cursus, la note, le code, la date et le QR code seront ajoutés automatiquement par-dessus.</p>
+                  <Input
+                    type="file"
+                    accept="image/jpeg,image/jpg,image/png,image/webp"
+                    onChange={async (e) => {
+                      const file = e.target.files?.[0];
+                      if (!file) return;
+                      if (file.size > 8 * 1024 * 1024) return toast.error("Image trop lourde (max 8 Mo)");
+                      try {
+                        const dataUrl = await readAsCompressedDataUrl(file);
+                        setForm({ ...form, background_image_url: dataUrl });
+                        toast.success("Image chargée");
+                      } catch { toast.error("Impossible de lire l'image"); }
+                    }}
+                  />
+                  {form.background_image_url && (
+                    <div className="flex items-center gap-3">
+                      <img src={form.background_image_url} alt="Aperçu fond" className="h-24 rounded border object-cover" />
+                      <Button size="sm" variant="ghost" onClick={() => setForm({ ...form, background_image_url: null })}>Retirer l'image</Button>
+                    </div>
+                  )}
+                </div>
+                <div className="flex gap-6">
+                  <div className="flex items-center gap-2"><Switch checked={form.active} onCheckedChange={(v) => setForm({ ...form, active: v })} /><Label>Actif</Label></div>
+                  <div className="flex items-center gap-2"><Switch checked={form.is_default} onCheckedChange={(v) => setForm({ ...form, is_default: v })} /><Label>Modèle par défaut</Label></div>
+                </div>
+              </TabsContent>
+              <TabsContent value="layout" className="pt-3">
+                <CertificateLayoutEditor
+                  value={form.layout}
+                  onChange={(l) => setForm({ ...form, layout: l })}
+                  backgroundUrl={form.background_image_url}
+                  primaryColor={form.primary_color}
+                  sampleData={{
+                    code: "IEBC-DEMO-1234",
+                    studentName: "Jean Dupont",
+                    cursusTitle: "Exemple — Cursus démo",
+                    score: 45, total: 50,
+                    qcmScore: 45, qcmTotal: 50, projectGrade: 85, combinedPercent: 88,
+                    issuedAt: new Date().toISOString(),
+                    verifyUrl: `${window.location.origin}/verify/DEMO`,
+                    template: form as any,
                   }}
                 />
-                {form.background_image_url && (
-                  <div className="flex items-center gap-3">
-                    <img src={form.background_image_url} alt="Aperçu fond" className="h-24 rounded border object-cover" />
-                    <Button size="sm" variant="ghost" onClick={() => setForm({ ...form, background_image_url: null })}>Retirer l'image</Button>
-                  </div>
-                )}
-              </div>
-              <div className="flex gap-6">
-                <div className="flex items-center gap-2"><Switch checked={form.active} onCheckedChange={(v) => setForm({ ...form, active: v })} /><Label>Actif</Label></div>
-                <div className="flex items-center gap-2"><Switch checked={form.is_default} onCheckedChange={(v) => setForm({ ...form, is_default: v })} /><Label>Modèle par défaut</Label></div>
-              </div>
-            </div>
+              </TabsContent>
+            </Tabs>
             <DialogFooter>
-              <Button variant="outline" onClick={() => preview(form)}><Eye className="h-4 w-4 mr-1" />Aperçu</Button>
+              <Button variant="outline" onClick={() => preview(form)}><Eye className="h-4 w-4 mr-1" />Aperçu PDF</Button>
               <Button onClick={save}>Enregistrer</Button>
             </DialogFooter>
           </DialogContent>
+
         </Dialog>
       </CardHeader>
       <CardContent>
