@@ -28,6 +28,8 @@ const PedagogicalDashboard = lazy(() => import("./pages/PedagogicalDashboard"));
 const Exam = lazy(() => import("./pages/Exam"));
 const Events = lazy(() => import("./pages/Events"));
 const VerifyCertificate = lazy(() => import("./pages/VerifyCertificate"));
+const PartnerProgram = lazy(() => import("./pages/PartnerProgram"));
+const VerifyPartnerCertificate = lazy(() => import("./pages/VerifyPartnerCertificate"));
 const LiveSession = lazy(() => import("./pages/LiveSession"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
