@@ -331,6 +331,7 @@ const AdminPartnerCertificates = () => {
         footer_text: form.footer_text,
         primary_color: form.primary_color,
         background_image_url: form.template_bg_url,
+        layout: form.layout,
       },
     });
     window.open(doc.output("bloburl"), "_blank");
