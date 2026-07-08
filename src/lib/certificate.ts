@@ -109,57 +109,58 @@ export async function generateCertificatePdf(data: CertificateData): Promise<jsP
   // Title
   doc.setTextColor(pr, pg, pb);
   doc.setFont("helvetica", "bold");
-  doc.setFontSize(34);
-  doc.text(tpl.header_title || "CERTIFICAT DE RÉUSSITE", w / 2, 160, { align: "center" });
+  doc.setFontSize(hasBg ? 26 : 34);
+  doc.text(tpl.header_title || "CERTIFICAT DE RÉUSSITE", w / 2, titleY, { align: "center" });
 
   doc.setTextColor(80);
   doc.setFont("helvetica", "normal");
-  doc.setFontSize(13);
-  doc.text("Décerné à", w / 2, 200, { align: "center" });
+  doc.setFontSize(12);
+  doc.text("Décerné à", w / 2, introY, { align: "center" });
 
   // Name
   doc.setTextColor(0);
   doc.setFont("helvetica", "bold");
-  doc.setFontSize(28);
-  doc.text(data.studentName, w / 2, 240, { align: "center" });
+  doc.setFontSize(26);
+  doc.text(data.studentName, w / 2, nameY, { align: "center" });
   doc.setDrawColor(pr, pg, pb);
   doc.setLineWidth(1);
-  doc.line(w / 2 - 180, 252, w / 2 + 180, 252);
+  doc.line(w / 2 - 180, nameLineY, w / 2 + 180, nameLineY);
 
   // Body
   doc.setFont("helvetica", "normal");
-  doc.setFontSize(13);
+  doc.setFontSize(12);
   doc.setTextColor(60);
-  doc.text("Pour avoir suivi avec succès et validé l'évaluation finale du cursus", w / 2, 285, { align: "center" });
+  doc.text("Pour avoir suivi avec succès et validé l'évaluation finale du cursus", w / 2, bodyIntroY, { align: "center" });
 
   doc.setFont("helvetica", "bold");
-  doc.setFontSize(18);
+  doc.setFontSize(16);
   doc.setTextColor(pr, pg, pb);
-  doc.text(data.cursusTitle, w / 2, 315, { align: "center" });
+  doc.text(data.cursusTitle, w / 2, cursusY, { align: "center", maxWidth: w - 240 });
 
   // Breakdown 40/60
   doc.setFont("helvetica", "normal");
-  doc.setFontSize(12);
+  doc.setFontSize(11);
   doc.setTextColor(60);
   const hasBreakdown = data.combinedPercent !== undefined && data.projectGrade !== undefined;
   if (hasBreakdown) {
     doc.text(
       `Note finale : ${data.combinedPercent}%  ·  Projet 40% : ${data.projectGrade}/100  ·  QCM 60% : ${data.qcmScore}/${data.qcmTotal}`,
       w / 2,
-      345,
+      scoreY,
       { align: "center" }
     );
-  } else {
+  } else if (data.total > 0) {
     const pct = Math.round((data.score / data.total) * 100);
-    doc.text(`Score obtenu : ${data.score} / ${data.total} (${pct}%)`, w / 2, 345, { align: "center" });
+    doc.text(`Score obtenu : ${data.score} / ${data.total} (${pct}%)`, w / 2, scoreY, { align: "center" });
   }
 
   // Footer text
   if (tpl.footer_text) {
     doc.setFontSize(9);
     doc.setTextColor(120);
-    doc.text(tpl.footer_text, w / 2, 375, { align: "center", maxWidth: w - 200 });
+    doc.text(tpl.footer_text, w / 2, footerNoteY, { align: "center", maxWidth: w - 240 });
   }
+
 
   // Footer left
   doc.setFontSize(10);
