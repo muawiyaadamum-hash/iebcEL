@@ -7,6 +7,7 @@ import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Loader2, ExternalLink, ArrowLeft, Video } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import LiveBroadcast from "@/components/LiveBroadcast";
 
 const LiveSession = () => {
   const { id } = useParams();
@@ -15,6 +16,7 @@ const LiveSession = () => {
   const [session, setSession] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [displayName, setDisplayName] = useState("Participant");
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     if (!id) return;
@@ -24,6 +26,8 @@ const LiveSession = () => {
       if (user) {
         const { data: p } = await supabase.from("profiles").select("full_name").eq("user_id", user.id).maybeSingle();
         if (p?.full_name) setDisplayName(p.full_name);
+        const { data: role } = await supabase.from("user_roles").select("role").eq("user_id", user.id).eq("role", "admin").maybeSingle();
+        setIsAdmin(!!role);
       }
       setLoading(false);
     })();
@@ -43,8 +47,19 @@ const LiveSession = () => {
     );
   }
 
-  const room = (session.room_name || `iebc-${session.id}`).replace(/[^a-zA-Z0-9-_]/g, "");
-  const jitsiUrl = `https://meet.jit.si/${room}#userInfo.displayName="${encodeURIComponent(displayName)}"&config.prejoinPageEnabled=false`;
+  if (!user) {
+    return (
+      <div className="min-h-screen bg-background"><Navbar />
+        <section className="py-20 text-center"><div className="container mx-auto px-4">
+          <h1 className="text-2xl font-bold mb-4">Connexion requise</h1>
+          <p className="text-muted-foreground mb-4">Connectez-vous pour rejoindre la session en direct.</p>
+          <Button onClick={() => navigate("/auth")}>Se connecter</Button>
+        </div></section><Footer />
+      </div>
+    );
+  }
+
+  const isBroadcaster = isAdmin || session.broadcaster_id === user.id;
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -72,14 +87,13 @@ const LiveSession = () => {
               </CardContent>
             </Card>
           ) : (
-            <div className="rounded-lg overflow-hidden border bg-card" style={{ height: "75vh", minHeight: 500 }}>
-              <iframe
-                src={jitsiUrl}
-                allow="camera; microphone; fullscreen; display-capture; autoplay"
-                className="w-full h-full border-0"
-                title={session.title}
-              />
-            </div>
+            <LiveBroadcast
+              sessionId={session.id}
+              sessionTitle={session.title}
+              isBroadcaster={isBroadcaster}
+              userId={user.id}
+              displayName={displayName}
+            />
           )}
 
           {session.description && session.provider !== "external" && (
