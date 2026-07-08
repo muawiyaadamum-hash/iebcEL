@@ -155,20 +155,16 @@ const AdminLiveSessions = () => {
                   <div><Label>Date et heure</Label><Input type="datetime-local" value={editing.scheduled_at as any || ""} onChange={(e) => setEditing({ ...editing, scheduled_at: e.target.value as any })} /></div>
                   <div><Label>Durée (min)</Label><Input type="number" value={editing.duration_minutes || 60} onChange={(e) => setEditing({ ...editing, duration_minutes: +e.target.value })} /></div>
                 </div>
-                <div><Label>Fournisseur</Label>
-                  <Select value={editing.provider || "jitsi"} onValueChange={(v: any) => setEditing({ ...editing, provider: v })}>
+                <div><Label>Mode de diffusion</Label>
+                  <Select value={editing.provider || "platform"} onValueChange={(v: any) => setEditing({ ...editing, provider: v })}>
                     <SelectTrigger><SelectValue /></SelectTrigger>
                     <SelectContent className="bg-popover">
-                      <SelectItem value="jitsi">Jitsi Meet (intégré, gratuit)</SelectItem>
+                      <SelectItem value="platform">Diffusion plateforme (caméra + partage d'écran + chat)</SelectItem>
                       <SelectItem value="external">Lien externe (Zoom / Meet / Teams)</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
-                {editing.provider === "jitsi" ? (
-                  <div><Label>Nom de la salle (optionnel)</Label>
-                    <Input value={editing.room_name || ""} onChange={(e) => setEditing({ ...editing, room_name: e.target.value })} placeholder="auto-généré si vide" />
-                  </div>
-                ) : (
+                {editing.provider === "external" && (
                   <div><Label>URL de la réunion</Label>
                     <Input value={editing.external_url || ""} onChange={(e) => setEditing({ ...editing, external_url: e.target.value })} placeholder="https://zoom.us/j/..." />
                   </div>
