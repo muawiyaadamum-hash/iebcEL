@@ -337,7 +337,7 @@ const AdminPartnerCertificates = () => {
     if (file.size > 8 * 1024 * 1024) return toast.error("Max 8 Mo");
     try {
       const url = await readAsCompressedDataUrl(file, field === "partner_logo_url" ? 400 : 1600);
-      setForm((f: any) => ({ ...f, [field]: url }));
+      setForm((f: any) => ({ ...f, [field]: url, ...(field === "template_bg_url" ? { template_source: "upload" } : {}) }));
       toast.success("Image chargée");
     } catch { toast.error("Erreur lecture image"); }
   };
