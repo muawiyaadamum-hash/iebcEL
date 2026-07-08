@@ -596,6 +596,28 @@ const AdminPartnerCertificates = () => {
                 </div>
               </TabsContent>
 
+              <TabsContent value="layout" className="pt-3">
+                <CertificateLayoutEditor
+                  value={form.layout}
+                  onChange={(l) => setForm({ ...form, layout: l })}
+                  backgroundUrl={form.template_bg_url}
+                  primaryColor={form.primary_color}
+                  sampleData={{
+                    code: "IEBC-DEMO-1234",
+                    studentName: "Jean Dupont",
+                    cursusTitle: `${form.name || "Programme conjoint"} — ${form.partner_name || "Partenaire"}`,
+                    score: 0, total: 0,
+                    issuedAt: new Date().toISOString(),
+                    verifyUrl: `${window.location.origin}/verify-partner/DEMO`,
+                    template: {
+                      header_title: form.header_title,
+                      signatory_name: form.signatory_name,
+                      signatory_title: form.signatory_title,
+                      footer_text: form.footer_text,
+                    },
+                  }}
+                />
+              </TabsContent>
 
               <TabsContent value="settings" className="space-y-3 pt-3">
                 <div><Label>Ordre d'affichage</Label><Input type="number" value={form.display_order || 0} onChange={(e) => setForm({ ...form, display_order: Number(e.target.value) })} /></div>
