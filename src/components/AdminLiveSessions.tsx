@@ -18,7 +18,7 @@ interface LiveSession {
   cursus_id: string;
   title: string;
   description: string | null;
-  provider: "jitsi" | "external";
+  provider: "platform" | "external";
   room_name: string | null;
   external_url: string | null;
   scheduled_at: string;
@@ -28,7 +28,7 @@ interface LiveSession {
 }
 
 const blank = (): Partial<LiveSession> => ({
-  title: "", description: "", provider: "jitsi", room_name: "", external_url: "",
+  title: "", description: "", provider: "platform", external_url: "",
   scheduled_at: new Date(Date.now() + 3600_000).toISOString().slice(0, 16),
   duration_minutes: 60, status: "scheduled", published: true,
 });
