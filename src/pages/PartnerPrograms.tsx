@@ -16,7 +16,7 @@ const PartnerPrograms = () => {
       const { data } = await supabase
         .from("partner_programs")
         .select("*")
-        .eq("is_active", true)
+        .eq("active", true)
         .order("display_order", { ascending: true });
       setPrograms(data || []);
       setLoading(false);
