@@ -15,6 +15,7 @@ export const translations: Translations = {
   "nav.courses": { en: "Courses", fr: "Cours" },
   "nav.about": { en: "About", fr: "À propos" },
   "nav.events": { en: "Events", fr: "Événements" },
+  "nav.partners": { en: "Partners", fr: "Partenaires" },
   "nav.register": { en: "Register", fr: "S'inscrire" },
   "nav.login": { en: "Login", fr: "Connexion" },
   "nav.dashboard": { en: "Dashboard", fr: "Tableau de bord" },
