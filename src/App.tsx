@@ -29,6 +29,7 @@ const Exam = lazy(() => import("./pages/Exam"));
 const Events = lazy(() => import("./pages/Events"));
 const VerifyCertificate = lazy(() => import("./pages/VerifyCertificate"));
 const PartnerProgram = lazy(() => import("./pages/PartnerProgram"));
+const PartnerPrograms = lazy(() => import("./pages/PartnerPrograms"));
 const VerifyPartnerCertificate = lazy(() => import("./pages/VerifyPartnerCertificate"));
 const LiveSession = lazy(() => import("./pages/LiveSession"));
 const NotFound = lazy(() => import("./pages/NotFound"));
@@ -93,6 +94,7 @@ const App = () => (
                       </ProtectedRoute>
                     } />
                     <Route path="/verify/:code" element={<VerifyCertificate />} />
+                    <Route path="/partners" element={<PartnerPrograms />} />
                     <Route path="/partners/:slug" element={<PartnerProgram />} />
                     <Route path="/verify-partner/:code" element={<VerifyPartnerCertificate />} />
                     <Route path="/live/:id" element={
