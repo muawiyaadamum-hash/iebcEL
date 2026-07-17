@@ -84,21 +84,7 @@ const [messages, setMessages] = useState<Message[]>([]);
   const scrollRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
 
-  // Auto-popup greeting after 5 seconds on first visit
-  useEffect(() => {
-    const hasSeenGreeting = sessionStorage.getItem('mtech-chatbot-greeted');
-    
-    if (!hasSeenGreeting && !hasAutoGreeted) {
-      const timer = setTimeout(() => {
-        setShowPopup(true);
-        setHasAutoGreeted(true);
-        sessionStorage.setItem('mtech-chatbot-greeted', 'true');
-        playNotificationSound();
-      }, 5000);
-      
-      return () => clearTimeout(timer);
-    }
-  }, [hasAutoGreeted]);
+  // Auto-popup greeting disabled — floating button only, user opens on demand.
 
   // Hide popup when chat is opened
   useEffect(() => {
