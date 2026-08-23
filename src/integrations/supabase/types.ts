@@ -1260,6 +1260,19 @@ export type Database = {
         Args: { _cursus_id: string; _user_id: string }
         Returns: boolean
       }
+      list_partner_laureates: {
+        Args: { _program_id: string }
+        Returns: {
+          code: string
+          expires_at: string
+          id: string
+          issued_at: string
+          score: number
+          status: Database["public"]["Enums"]["partner_cert_status"]
+          student_name: string
+          total: number
+        }[]
+      }
       verify_certificate: {
         Args: { _code: string }
         Returns: {
@@ -1267,6 +1280,22 @@ export type Database = {
           cursus_title: string
           issued_at: string
           score: number
+          student_name: string
+          total: number
+        }[]
+      }
+      verify_partner_certificate: {
+        Args: { _code: string }
+        Returns: {
+          code: string
+          expires_at: string
+          id: string
+          issued_at: string
+          notes: string
+          program_id: string
+          revoked_at: string
+          score: number
+          status: Database["public"]["Enums"]["partner_cert_status"]
           student_name: string
           total: number
         }[]
