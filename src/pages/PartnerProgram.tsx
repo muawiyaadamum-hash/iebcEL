@@ -31,7 +31,7 @@ const PartnerProgram = () => {
       const { data: p } = await supabase.from("partner_programs").select("*").eq("slug", slug).maybeSingle();
       setProgram(p);
       if (p) {
-        const { data: c } = await supabase.from("partner_certificates").select("*").eq("program_id", p.id).in("status", ["issued","expired","revoked"]).order("student_name");
+        const { data: c } = await supabase.rpc("list_partner_laureates", { _program_id: p.id });
         setCerts(c || []);
       }
       setLoading(false);

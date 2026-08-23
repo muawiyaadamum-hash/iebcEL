@@ -19,7 +19,8 @@ const VerifyPartnerCertificate = () => {
 
   useEffect(() => {
     (async () => {
-      const { data: c } = await supabase.from("partner_certificates").select("*").eq("code", code).maybeSingle();
+      const { data: rows } = await supabase.rpc("verify_partner_certificate", { _code: code as string });
+      const c = Array.isArray(rows) ? rows[0] : rows;
       setCert(c);
       if (c) {
         const { data: p } = await supabase.from("partner_programs").select("*").eq("id", c.program_id).maybeSingle();
