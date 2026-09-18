@@ -1203,6 +1203,68 @@ export type Database = {
           },
         ]
       }
+      training_reports: {
+        Row: {
+          created_at: string
+          cursus_id: string
+          file_name: string | null
+          file_path: string | null
+          id: string
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: string
+          student_note: string | null
+          submitted_at: string
+          teacher_comment: string | null
+          title: string | null
+          updated_at: string
+          user_id: string
+          version: number
+        }
+        Insert: {
+          created_at?: string
+          cursus_id: string
+          file_name?: string | null
+          file_path?: string | null
+          id?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          student_note?: string | null
+          submitted_at?: string
+          teacher_comment?: string | null
+          title?: string | null
+          updated_at?: string
+          user_id: string
+          version?: number
+        }
+        Update: {
+          created_at?: string
+          cursus_id?: string
+          file_name?: string | null
+          file_path?: string | null
+          id?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          student_note?: string | null
+          submitted_at?: string
+          teacher_comment?: string | null
+          title?: string | null
+          updated_at?: string
+          user_id?: string
+          version?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "training_reports_cursus_id_fkey"
+            columns: ["cursus_id"]
+            isOneToOne: false
+            referencedRelation: "cursus"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_roles: {
         Row: {
           created_at: string
