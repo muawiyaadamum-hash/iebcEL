@@ -17,9 +17,9 @@ export default defineConfig(({ mode }) => ({
       registerType: "autoUpdate",
       includeAssets: ["favicon.ico", "icon-192.png", "icon-512.png"],
       manifest: {
-        name: "MTech Academy - Online Learning Platform",
-        short_name: "MTech Academy",
-        description: "Professional online courses in Technology, Business, HR, and Logistics in Cameroon",
+        name: "IEBC — Centre de Formation",
+        short_name: "IEBC Formation",
+        description: "Plateforme e-learning du Centre de Formation IEBC : finance islamique, commerce international, management et technologies.",
         theme_color: "#0EA5E9",
         background_color: "#ffffff",
         display: "standalone",
