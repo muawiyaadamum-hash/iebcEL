@@ -34,10 +34,9 @@ const Register = () => {
     agreeToTerms: false
   });
 
-  // Redirect if already logged in
+  // Redirect if already logged in (declarative — avoids blank page from navigating during render)
   if (user) {
-    navigate("/dashboard");
-    return null;
+    return <Navigate to="/inscription" replace />;
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
