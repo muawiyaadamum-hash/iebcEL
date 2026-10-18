@@ -52,3 +52,46 @@ jobs:
           path: dist/
           if-no-files-found: error
           retention-days: 14
+
+  deploy-hostinger:
+    name: Deploy to Hostinger (when credentials are configured)
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    steps:
+      - name: Check Hostinger deployment secrets
+        id: credentials
+        shell: bash
+        env:
+          FTP_SERVER: ${{ secrets.HOSTINGER_FTP_SERVER }}
+          FTP_USERNAME: ${{ secrets.HOSTINGER_FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.HOSTINGER_FTP_PASSWORD }}
+          FTP_REMOTE_DIR: ${{ secrets.HOSTINGER_REMOTE_DIR }}
+        run: |
+          if [[ -n "$FTP_SERVER" && -n "$FTP_USERNAME" && -n "$FTP_PASSWORD" && -n "$FTP_REMOTE_DIR" ]]; then
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+            echo "Hostinger credentials are configured."
+          else
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::Hostinger deployment skipped. Configure HOSTINGER_FTP_SERVER, HOSTINGER_FTP_USERNAME, HOSTINGER_FTP_PASSWORD, and HOSTINGER_REMOTE_DIR repository secrets."
+          fi
+
+      - name: Download production build
+        if: steps.credentials.outputs.ready == 'true'
+        uses: actions/download-artifact@v4
+        with:
+          name: iebc-production-dist
+          path: dist/
+
+      - name: Deploy dist to Hostinger via FTPS
+        if: steps.credentials.outputs.ready == 'true'
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.HOSTINGER_FTP_SERVER }}
+          username: ${{ secrets.HOSTINGER_FTP_USERNAME }}
+          password: ${{ secrets.HOSTINGER_FTP_PASSWORD }}
+          protocol: ftps
+          port: 21
+          local-dir: dist/
+          server-dir: ${{ secrets.HOSTINGER_REMOTE_DIR }}
+          dangerous-clean-slate: false
