@@ -1,0 +1,16 @@
+# IEBC E-Learning — Apache / Hostinger SPA routing
+Options -MultiViews
+DirectoryIndex index.html
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # Do not rewrite real files or directories.
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  # React Router routes should resolve to the application entry point.
+  RewriteRule ^ index.html [L]
+</IfModule>
